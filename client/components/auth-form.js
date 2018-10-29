@@ -48,7 +48,7 @@ const mapLogin = state => {
     error: state.user.error
   }
 }
-fdf
+
 const mapSignup = state => {
   return {
     name: 'signup',
