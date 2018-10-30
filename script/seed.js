@@ -2,8 +2,8 @@
 
 const db = require('../server/db')
 const { User } = require('../server/db/models')
-const Products = require('..//server/db/models/products')
-const Category = require('..//server/db/models/category')
+const Products = require('../server/db/models/product')
+const Category = require('../server/db/models/category')
 
 
 async function seed() {
