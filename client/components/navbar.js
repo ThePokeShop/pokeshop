@@ -1,31 +1,88 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
+import {NavLink, Link} from 'react-router-dom'
 import {logout} from '../store'
 
 const Navbar = ({handleClick, isLoggedIn}) => (
-  <div>
-    <h1>BOILERMAKER</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
+  <nav
+    className="navbar is-dark is-fixed-top"
+    role="navigation"
+    aria-label="main navigation"
+  >
+    <div className="navbar-brand">
+      <a className="navbar-item" href="http://localhost:8080/">
+        <img
+          src="https://fontmeme.com/permalink/181030/daad87fcebbaa61672816a5c6bb13e9c.png"
+          width="112"
+          height="28"
+        />
+
+        <a
+          role="button"
+          className="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </a>
+      </a>
+    </div>
+    <div id="navbarBasicExample" className="navbar-menu">
+      <div className="navbar-start">
+        <a className="navbar-item">
+          <NavLink to="/home">Home</NavLink>
+        </a>
+
+        <a className="navbar-item">
+          <NavLink to="/products">Products</NavLink>
+        </a>
+
+        <a className="navbar-item">
+          <NavLink to="/campuses">Campuses</NavLink>
+        </a>
+
+        <div className="navbar-item has-dropdown is-hoverable">
+          <a className="navbar-link">More</a>
+
+          <div className="navbar-dropdown">
+            <a className="navbar-item">About</a>
+            <a className="navbar-item">Jobs</a>
+            <a className="navbar-item">Contact</a>
+          </div>
         </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
+      </div>
+      <div className="navbar-end">
+        {isLoggedIn ? (
+          <div className="navbar-item">
+            <div className="buttons">
+              <a className="button is-primary" onClick={handleClick}>
+                <strong>
+                  <Link to="/signup">Log out</Link>
+                </strong>
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className="navbar-item">
+            <div className="buttons">
+              <a className="button is-primary">
+                <strong>
+                  <Link to="/signup">Sign Up</Link>
+                </strong>
+              </a>
+              <a className="button is-light">
+                <Link to="/login">Login</Link>
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </nav>
 )
 
 /**

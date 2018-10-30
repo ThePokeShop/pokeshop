@@ -10,27 +10,56 @@ const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
+<section className="section">
+        <div className="container">
+          <div className="columns is-centered">
+            <div className="card column is-4">
+              <form onSubmit={handleSubmit} name={name} className="card-content">
+                <h1 className="is-size-3 has-text-centered">{displayName}</h1>
+                <div className="field">
+                  <label htmlFor="email" className="label">
+                    Email:
+                  </label>
+                  <div className="control">
+                    <input
+                      className="input is-fullwidth"
+                      htmlFor="email"
+                      name="email"
+                      type="email"
+                    />
+                  </div>
+                </div>
+                <div className="field">
+                  <label htmlFor="password" className="label">
+                    Password:
+                  </label>
+                  <div className="control">
+                    <input
+                      className="input is-fullwidth"
+                      htmlFor="password"
+                      name="password"
+                      type="password"
+                    />
+                  </div>
+                </div>
+                <button className="button" type="submit">
+                  {displayName}
+                </button>
+                {error && error.response && <div> {error.response.data} </div>}
+              </form>
+              <footer className="card-footer">
+                <div className="card-footer-item">
+                  <p className="is-size-4">
+                    <a target="_self" href="/auth/google">
+                      {displayName} with Google
+                    </a>
+                  </p>
+                </div>
+              </footer>
+            </div>
+          </div>
         </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
-    </div>
+      </section>
   )
 }
 
@@ -81,3 +110,6 @@ AuthForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object
 }
+
+
+
