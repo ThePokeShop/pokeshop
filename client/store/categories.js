@@ -9,7 +9,6 @@ const SET_CATEGORIES = 'SET_CATEGORIES'
 
 export const setCategories = categories => ({ type: SET_CATEGORIES, categories})
 
-
 /* ------------          REDUCER         ------------------ */
 
 export default function categoriesReducer(state = initialState, action) {
