@@ -11,24 +11,19 @@ const ADD_NEW_PRODUCT = 'ADD_NEW_PRODUCT';
 export const setProducts = products => ({type: SET_PRODUCTS, products})
 export const addNewProduct = product => ({ type: ADD_NEW_PRODUCT, product})
 
-/* ------------          HANDLER         ------------------ */
-
-const handler = {
-  [SET_PRODUCTS]: (state, action) => {
-    return action.products;
-  },
-  [ADD_NEW_PRODUCT]: (state, action) => {
-    return [...state, action.product];
-  }
-}
-
 /* ------------          REDUCER         ------------------ */
 
 export default function productsReducer(state = initialState, action) {
-  if (!handler.hasOwnProperty(action.type)) {
-    return state
+  try {
+    switch (action.type) {
+      case SET_PRODUCTS:
+        return action.products
+      default:
+        return state
+    }
+  } catch (err) {
+    console.error(err)
   }
-  return handler[action.type](state, action)
 }
 
 /* ------------       THUNK CREATORS     ------------------ */

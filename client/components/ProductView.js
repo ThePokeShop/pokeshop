@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 
 
 //keep as class instead of function component, since we will be adding more function later
-class AllProducts extends React.Component {
+class ProductView extends React.Component {
   render() {
     const {products} = this.props
     if (products.length === 0) {
@@ -24,4 +24,4 @@ const mapStateToProps = ({products}, ownProps) => {
   return {products}
 }
 
-export default connect(mapStateToProps)(AllProducts)
+export default connect(mapStateToProps)(ProductView)
