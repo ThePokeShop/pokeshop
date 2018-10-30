@@ -7,6 +7,7 @@ import Routes from './routes'
 const App = () => {
   return (
     <main>
+      <h1>BAD CHANGE</h1>
       <Navbar />
       <Routes />
       <Footer />
