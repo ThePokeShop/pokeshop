@@ -35,15 +35,20 @@ class ProductCard extends React.Component {
           <button
             className="delete"
             type="button"
-            onClick={this.removeStudentOnClick}
+            onClick={this.removeProductOnClick}
           />
         </div>
+        <a className="button is-primary" onClick={this.addProductOnClick}>Add to Cart</a>
       </div>
     );
   }
 
-  removeStudentOnClick() {
+  removeProductOnClick() {
     alert(`Selected product is now deleted`);
+    // this.props.removeStudent(this.props.product.id);
+  }
+  addProductOnClick() {
+    alert(`Selected product is now add to cart`);
     // this.props.removeStudent(this.props.product.id);
   }
 }
