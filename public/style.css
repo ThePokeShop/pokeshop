@@ -71,7 +71,7 @@ main {
   vertical-align: middle;
   
 }
-.student-list {
+.pokemon-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
