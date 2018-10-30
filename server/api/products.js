@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Product} = require('../db/models')
+const {Product, Category} = require('../db/models')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -13,7 +13,9 @@ router.get('/', async (req, res, next) => {
 router.get('/:productId', async (req, res, next) => {
   try {
     const productId = req.params.productId
-    const currentProduct = await Product.findById(productId);
+    const currentProduct = await Product.findById(productId, {
+      include: [{model: Category}]
+    });
     if (currentProduct) {
       res.json(currentProduct);
     } else {
@@ -24,4 +26,27 @@ router.get('/:productId', async (req, res, next) => {
   }
 })
 
+router.post('/', async (req, res, next) => {
+  const {title, price, imageUrl, stockQuantity, categoryId} = req.body;
+  const newProduct = { title, price, categoryId, stockQuantity};
+  if (imageUrl) newProduct.imageUrl = imageUrl;
+  try {
+    const product = await Product.create(newProduct);
+    if (categoryId.length > 0) product.setCategory(categoryId);
+    res.json(product);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// router.put('/:productId', async (req, res, next) => {
+//   const newProduct = {
+//     title: req.body.title,
+//     price: req.body.price,
+//     imageUrl: req.body.imageUrl,
+//     stockQuantity: req.body.stockQuantity
+//   };
+
+
+// })
 module.exports = router;

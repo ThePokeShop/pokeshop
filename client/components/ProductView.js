@@ -11,8 +11,7 @@ class ProductView extends React.Component {
       return <div>No Products</div>
     } else {
       return (
-          //Still need to change CSS!!
-        <div className="need to add">
+        <div className="section tile is-ancestor">
           {products.map(product => (
             <ProductCard key={product.id} product={product} />
           ))}

@@ -20,6 +20,9 @@ class CurrentProduct extends React.Component {
           //Still need to change CSS!!
         <div className="need to add">
           {currentProduct.title}
+          {currentProduct.imageUrl}
+          {currentProduct.price}
+          {currentProduct.stockQuantity}
         </div>
       )
     }

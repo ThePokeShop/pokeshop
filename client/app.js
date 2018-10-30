@@ -1,15 +1,16 @@
 import React from 'react'
 
-import {Navbar} from './components'
+import {Navbar, Footer} from './components'
 import Routes from './routes'
+
 
 const App = () => {
   return (
-    <div>
-      <h1>Testing testing</h1>
+    <main>
       <Navbar />
       <Routes />
-    </div>
+      <Footer />
+    </main>
   )
 }
 
