@@ -3,7 +3,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 
-const Products = db.define('product', {
+const Product = db.define('product', {
   title: {
     type: Sequelize.STRING,
     allowNull: false
@@ -27,4 +27,4 @@ const Products = db.define('product', {
     defaultValue: "https://upload.wikimedia.org/wikipedia/en/3/39/Pokeball.PNG"
   }
 })
-module.exports = Products
+module.exports = Product
