@@ -14,7 +14,10 @@ router.get('/:productId', async (req, res, next) => {
   try {
     const productId = req.params.productId
     const currentProduct = await Product.findById(productId, {
-      include: [{model: Category}]
+      include: [{
+        model: Category,
+        as: 'Category'
+      }]
     });
     if (currentProduct) {
       res.json(currentProduct);

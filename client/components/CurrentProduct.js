@@ -1,6 +1,6 @@
 import React from 'react'
 // import ProductCard from './ProductCard'
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {fetchSingleProduct} from '../store';
 
 
@@ -19,10 +19,13 @@ class CurrentProduct extends React.Component {
       return (
           //Still need to change CSS!!
         <div className="need to add">
+           {/* <ProductCard /> */}
+
           {currentProduct.title}
-          {currentProduct.imageUrl}
+          <img src={currentProduct.imageUrl}/>
           {currentProduct.price}
           {currentProduct.stockQuantity}
+          {currentProduct.Category.map(category => category.categoryType)}
         </div>
       )
     }

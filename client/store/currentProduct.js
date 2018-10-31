@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const initialState = {};
+const initialState = null;
 /* -----------------    ACTION TYPES    ------------------ */
 
 const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT';
@@ -15,7 +15,7 @@ export default function currentProductReducer(state = initialState, action) {
   try {
     switch (action.type) {
       case SET_CURRENT_PRODUCT:
-        return action.product
+        return {...action.product};
       default:
         return state
     }
