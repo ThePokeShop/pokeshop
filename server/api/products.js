@@ -63,8 +63,8 @@ router.get('/:productId', async (req, res, next) => {
 router.put('/:productId', async (req, res, next) => {
   const productId = req.params.productId
   // ignores id in request body - not sure if RESTful
-  const {title, price, imageUrl, stockQuantity, categoryId} = req.body
-  const newData = {title, price, categoryId, stockQuantity}
+  const { title, price, imageUrl, stockQuantity, categoryId } = req.body
+  const newData = { title, price, categoryId, stockQuantity }
   console.log('newData: ', newData);
   if (imageUrl) newData.imageUrl = imageUrl
   try {
