@@ -39,14 +39,23 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// router.put('/:productId', async (req, res, next) => {
-//   const newProduct = {
-//     title: req.body.title,
-//     price: req.body.price,
-//     imageUrl: req.body.imageUrl,
-//     stockQuantity: req.body.stockQuantity
-//   };
-
-
-// })
+router.put('/:productId', async (req, res, next) => {
+  const productId = req.params.productId;
+  // ignores id in request body - not sure if RESTful
+  const {title, price, imageUrl, stockQuantity, categoryId} = req.body;
+  const newData = { title, price, categoryId, stockQuantity};
+  if (imageUrl) newData.imageUrl = imageUrl;
+  try {
+    const product = await Product.findById(productId);
+    if (product) {
+      await product.update(newData);
+      await product.setCategory(categoryId);
+      res.json(product);
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (err) {
+    next (err);
+  }
+})
 module.exports = router;
