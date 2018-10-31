@@ -42,7 +42,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         </a>
 
         <a className="navbar-item">
-          <NavLink to="/campuses">Campuses</NavLink>
+          <NavLink to="/catagories">Categories</NavLink>
         </a>
 
         <div className="navbar-item has-dropdown is-hoverable">
