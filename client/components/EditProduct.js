@@ -1,21 +1,30 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {updateSingleProduct} from '../store/index'
+import {updateSingleProduct, fetchSingleProduct} from '../store/index'
 import {withRouter} from 'react-router-dom';
-
 class EditProduct extends Component {
   constructor(props) {
     super(props)
     const {id, title, price, imageUrl, stockQuantity, Category} = props.currentProduct;
+    const categories = props.categories;
+    const categoryId = Object.values(Category).map(cat => cat.id)
+    const checkObj = {};
+    categories.forEach(category => {
+      checkObj[category.id] = (categoryId.indexOf(category.id) > -1)
+    });
     this.state = {
       id,
       title,
       price,
       imageUrl,
       stockQuantity,
-      Category,
-      categoryId: Object.values(Category).map(cat => cat.id)
+      checkObj
     }
+  }
+  componentDidMount() {
+    // invoke fetch if navigate to this page directly:
+    // const productId = this.props.match.params.productId
+    // if (!this.props.currentProduct.id) this.props.fetchSingleProduct(productId);
   }
 
   handleChange = event => {
@@ -26,17 +35,31 @@ class EditProduct extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-    console.log('this.state: ', this.state)
-    await this.props.updateSingleProduct(this.state);
+    const categoryId = Object.keys(this.state.checkObj).filter(key => this.state.checkObj[key]);
+    const productData = {...this.state, categoryId};
+    await this.props.updateSingleProduct(productData);
     this.props.history.push(`/products/${this.state.id}`);
   }
 
+  handleCheck = (event) => {
+    // toggles state.checkObj[categoryid] boolean
+    const categoryId = event.target.name;
+    const previousCheckObj = {...this.state.checkObj}
+    const prevCheckVal = previousCheckObj[categoryId];
+    this.setState({
+      checkObj: {
+        ...previousCheckObj,
+        [categoryId]: !prevCheckVal
+      }
+    })
+  }
+
   render() {
-    const {name, title, price, imageUrl, stockQuantity, displayName, Category} = this.state;
+    const {name, title, price, imageUrl, stockQuantity, displayName, checkObj} = this.state;
     const handleChange = this.handleChange;
     const handleSubmit = this.handleSubmit;
     const categories = this.props.categories;
-
+    const handleCheck = this.handleCheck;
     return (
       <section className="section">
         <div className="container">
@@ -108,6 +131,17 @@ class EditProduct extends Component {
                     />
                   </div>
                 </div>
+                <div className="field">
+                  <p className="has-text-centered">Categories:</p>
+                  {categories.map(category => {
+                    return (
+                      <label key = {category.id} className="checkbox">
+                        <input type="checkbox" name={category.id} checked={checkObj[category.id]} onChange={handleCheck}/>
+                        {category.categoryType}
+                      </label>
+                    );
+                  })}
+                </div>
                 <button className="button" type="submit">
                   Submit
                 </button>
@@ -131,7 +165,8 @@ const mapDispatch = (dispatch, ownProps) => {
     updateSingleProduct: (productData) => {
       dispatch(updateSingleProduct(productData));
       // ownProps.history.push('/products');
-    }
+    },
+    fetchSingleProduct: (productId) => dispatch(fetchSingleProduct(productId))
   }
 }
 
