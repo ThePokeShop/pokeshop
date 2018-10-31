@@ -1,5 +1,5 @@
 import React from 'react'
-// import ProductCard from './ProductCard'
+import ProductCard from './ProductCard'
 import {connect} from 'react-redux';
 import {fetchSingleProduct} from '../store';
 
@@ -13,19 +13,13 @@ class CurrentProduct extends React.Component {
 
   render() {
     const {currentProduct} = this.props;
-    if (!currentProduct) {
-      return <div>There's no Pokemon with that information!</div>
+    if (!currentProduct.title) {
+      return <div>Loading...</div>
     } else {
       return (
           //Still need to change CSS!!
         <div className="need to add">
-           {/* <ProductCard /> */}
-
-          {currentProduct.title}
-          <img src={currentProduct.imageUrl}/>
-          {currentProduct.price}
-          {currentProduct.stockQuantity}
-          {currentProduct.Category.map(category => category.categoryType)}
+           <ProductCard product={currentProduct}/>
         </div>
       )
     }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const initialState = null;
+const initialState = {};
 /* -----------------    ACTION TYPES    ------------------ */
 
 const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT';
