@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {Product, Category} = require('../db/models')
+const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -16,6 +17,19 @@ router.get('/', async (req, res, next) => {
       ]
     })
     res.json(products)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/', loginRequired, adminGateway, async (req, res, next) => {
+  const {title, price, imageUrl, stockQuantity, categoryId} = req.body
+  const newProduct = {title, price, categoryId, stockQuantity}
+  if (imageUrl) newProduct.imageUrl = imageUrl
+  try {
+    const product = await Product.create(newProduct)
+    if (categoryId.length > 0) product.setCategory(categoryId)
+    res.json(product)
   } catch (err) {
     next(err)
   }
@@ -41,19 +55,6 @@ router.get('/:productId', async (req, res, next) => {
     } else {
       res.sendStatus(404)
     }
-  } catch (err) {
-    next(err)
-  }
-})
-
-router.post('/', async (req, res, next) => {
-  const {title, price, imageUrl, stockQuantity, categoryId} = req.body
-  const newProduct = {title, price, categoryId, stockQuantity}
-  if (imageUrl) newProduct.imageUrl = imageUrl
-  try {
-    const product = await Product.create(newProduct)
-    if (categoryId.length > 0) product.setCategory(categoryId)
-    res.json(product)
   } catch (err) {
     next(err)
   }

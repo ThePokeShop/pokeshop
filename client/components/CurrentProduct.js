@@ -10,6 +10,8 @@ class CurrentProduct extends React.Component {
   componentDidMount() {
     const productId = this.props.match.params.productId
     this.props.fetchSingleProduct(productId)
+    console.log('yo totally rendering man'
+    )
   }
 
   render() {
@@ -18,7 +20,9 @@ class CurrentProduct extends React.Component {
     if (!currentProduct.title) {
       return <div>Loading...</div>
     } else {
+      console.log('curret prod', currentProduct)
       return (
+
           //Still need to change CSS!!
         <div className="section container">
            <ProductCard product={currentProduct}/>
