@@ -11,13 +11,14 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     aria-label="main navigation"
   >
     <div className="navbar-brand">
-      <a className="navbar-item" href="http://localhost:8080/">
-        <img
-          src="https://fontmeme.com/permalink/181030/daad87fcebbaa61672816a5c6bb13e9c.png"
-          width="112"
-          height="28"
-        />
-
+      <a className="navbar-item">
+        <NavLink to="/home">
+          <img
+            src="https://fontmeme.com/permalink/181030/daad87fcebbaa61672816a5c6bb13e9c.png"
+            width="112"
+            height="28"
+          />
+        </NavLink>
         <a
           role="button"
           className="navbar-burger burger"
@@ -42,7 +43,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         </a>
 
         <a className="navbar-item">
-          <NavLink to="/campuses">Campuses</NavLink>
+          <NavLink to="/catagories">Categories</NavLink>
         </a>
 
         <div className="navbar-item has-dropdown is-hoverable">
