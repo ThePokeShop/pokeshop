@@ -40,7 +40,7 @@ class ProductView extends React.Component {
         <div className="main-content columns is-fullheight">
           <CategoryPanel />
           <div className="container column">
-            <div className="tile is-ancestor" style={{"flex-wrap": 'row'}}>
+            <div className="tile is-ancestor" style={{"flexwrap": 'row'}}>
             {filterProduct.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
