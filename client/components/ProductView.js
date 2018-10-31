@@ -1,11 +1,10 @@
 import React from 'react'
 import ProductCard from './ProductCard'
-import { connect } from 'react-redux'
+import {connect} from 'react-redux'
 import CategoryPanel from './CategoryPanel'
 
 //keep as class instead of function component, since we will be adding more function later
 class ProductView extends React.Component {
-
   filterProduct = () => {
     let filter = []
     this.props.products.forEach(product => {
@@ -22,28 +21,34 @@ class ProductView extends React.Component {
   }
 
   render() {
-
-    const { products, categories, categoriesAreSelected } = this.props
-    if (products.length === 0) {
-      return <div>No Products</div>
-    } else {
-      const filterProduct = this.filterProduct()
+    const filterProduct = this.filterProduct()
+    if (filterProduct.length === 0) {
       return (
-        <div>
+        <div className="main-content columns is-fullheight">
           <CategoryPanel />
-          <div className="section tile is-ancestor">
+          <div className="container column">
+            <div>No Products</div>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="main-content columns is-fullheight">
+          <CategoryPanel />
+          <div className="container column">
+            <div className="tile is-ancestor" style={{"flex-wrap": 'row'}}>
             {filterProduct.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
+            </div>
           </div>
         </div>
       )
     }
   }
 }
-const mapStateToProps = ({ products, categories, categoriesAreSelected }, ownProps) => {
-  return { products, categories, categoriesAreSelected }
+const mapStateToProps = ({products, categories, categoriesAreSelected}) => {
+  return {products, categories, categoriesAreSelected}
 }
-
 
 export default connect(mapStateToProps)(ProductView)
