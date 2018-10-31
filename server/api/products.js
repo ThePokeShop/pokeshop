@@ -1,9 +1,36 @@
 const router = require('express').Router()
 const {Product, Category} = require('../db/models')
 
+
+  /:bucket/:item
+  /:bucket?page=1
+
+// api/orders.js
+router.post('/', loginRequired, (req, res, next) => {
+  const newOrder = {}
+  req.body.userId !== req.user.id
+  newOrder.userId = req.user.id
+  Order.create({
+    id: req.params.orderId,
+    userId: req.user.id,
+  })
+})
+
+router.get('/:orderId', loginRequired, (req, res, next) => {
+  Order.findOne({ where: {
+    id: req.params.orderId,
+    userId: req.user.id,
+  }})
+})
+
 router.get('/', async (req, res, next) => {
+  const page = req.params.page || 1
+  const perPage = req.params.perPage || 10
   try {
     const products = await Product.findAll({
+      limit: perPage,
+      offset: perPage * page,
+      orderBy: ['id ASC'],
       include: [
         {
           model: Category,
@@ -15,7 +42,11 @@ router.get('/', async (req, res, next) => {
         }
       ]
     })
-    res.json(products)
+    res.json({
+      page: page,
+      totalCount: await Product.count(),
+      items: products,
+    })
   } catch (err) {
     next(err)
   }
@@ -59,7 +90,27 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.put('/:productId', async (req, res, next) => {
+// server/util.js
+const { loginRequired, adminGateway } = require('../util')
+function loginRequired (req, res, next) {
+  if (req.user) {
+    next()
+  }
+  else {
+    res.send(401)
+  }
+}
+
+function adminGateway (req, res, next) {
+  if (req.user.isAdmin) {
+    next()
+  }
+  else {
+    res.send(403)
+  }
+}
+
+router.put('/:productId', loginRequired, adminGateway, async (req, res, next) => {
   const productId = req.params.productId
   // ignores id in request body - not sure if RESTful
   const {title, price, imageUrl, stockQuantity, categoryId} = req.body
