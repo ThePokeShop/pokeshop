@@ -22,8 +22,7 @@ export const updateCurrentProduct = product => ({
 export default function currentProductReducer(state = initialState, action) {
   try {
     switch (action.type) {
-      case SET_CURRENT_PRODUCT:
-        return action.product
+        return {...action.product};
       case UPDATE_CURRENT_PRODUCT:
         return action.product
       default:
