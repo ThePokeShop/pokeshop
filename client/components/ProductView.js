@@ -2,9 +2,13 @@ import React from 'react'
 import ProductCard from './ProductCard'
 import {connect} from 'react-redux'
 import CategoryPanel from './CategoryPanel'
+import {fetchProducts} from '../store/index';
 
 //keep as class instead of function component, since we will be adding more function later
 class ProductView extends React.Component {
+  componentDidMount() {
+    this.props.fetchProducts();
+  }
   filterProduct = () => {
     let filter = []
     this.props.products.forEach(product => {
@@ -50,5 +54,9 @@ class ProductView extends React.Component {
 const mapStateToProps = ({products, categories, categoriesAreSelected}) => {
   return {products, categories, categoriesAreSelected}
 }
-
-export default connect(mapStateToProps)(ProductView)
+const mapDispatchToProps =(dispatch) => {
+  return {
+    fetchProducts: () => dispatch(fetchProducts())
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ProductView)
