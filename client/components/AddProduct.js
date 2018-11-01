@@ -6,12 +6,18 @@ import {withRouter} from 'react-router-dom';
 class AddProduct extends Component {
   constructor(props) {
     super(props)
+    const categories = props.categories;
+    const checkObj = {};
+    categories.forEach(category => {
+      checkObj[category.id] = false;
+    })
     this.state = {
       title: '',
       price: 0,
       imageUrl: '',
       stockQuantity: 0,
-      categoryId: []
+      categoryId: [],
+      checkObj
     }
   }
 
@@ -23,22 +29,39 @@ class AddProduct extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-    await this.props.createNewProduct(this.state);
-    this.setState({
-      title: '',
-      price: 0,
-      imageUrl: '',
-      stockQuantity: 0,
-      categoryId: []
-    })
+    const categoryId = Object.keys(this.state.checkObj).filter(key => this.state.checkObj[key]);
+    const productData = {...this.state, categoryId};
+    await this.props.createNewProduct(productData);
+    // this.setState({
+    //   title: '',
+    //   price: 0,
+    //   imageUrl: '',
+    //   stockQuantity: 0,
+    //   categoryId: [],
+    //   checkObj:
+    // })
     this.props.history.push('/products');
   }
 
+  handleCheck = (event) => {
+    // toggles state.checkObj[categoryid] boolean
+    const categoryId = event.target.name;
+    const previousCheckObj = {...this.state.checkObj}
+    const prevCheckVal = previousCheckObj[categoryId];
+    this.setState({
+      checkObj: {
+        ...previousCheckObj,
+        [categoryId]: !prevCheckVal
+      }
+    })
+  }
+
   render() {
-    const {name, title, price, imageUrl, stockQuantity, displayName} = this.state;
+    const {name, title, price, imageUrl, stockQuantity, displayName, checkObj} = this.state;
     const handleChange = this.handleChange;
     const handleSubmit = this.handleSubmit;
-
+    const categories = this.props.categories;
+    const handleCheck = this.handleCheck;
     return (
       <section className="section">
         <div className="container">
@@ -109,6 +132,17 @@ class AddProduct extends Component {
                       onChange={handleChange}
                     />
                   </div>
+                </div>
+                <div className="field">
+                  <p className="has-text-centered">Categories:</p>
+                  {categories.map(category => {
+                    return (
+                      <label key = {category.id} className="checkbox">
+                        <input type="checkbox" name={category.id} checked={checkObj[category.id]} onChange={handleCheck}/>
+                        {category.categoryType}
+                      </label>
+                    );
+                  })}
                 </div>
                 <button className="button" type="submit">
                   Submit
