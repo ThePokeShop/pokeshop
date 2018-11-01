@@ -24,5 +24,5 @@ Order.hasOne(User);
  * instead of: const User = require('../db/models/user')
  */
 module.exports = {
-  User, Product, Category, LineItem
+  User, Product, Category, LineItem, Order
 }
