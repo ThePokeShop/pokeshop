@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {NavLink, Link} from 'react-router-dom'
-import {logout} from '../store'
-
-const Navbar = ({handleClick, isLoggedIn}) => (
+import { connect } from 'react-redux'
+import { NavLink, Link } from 'react-router-dom'
+import { logout } from '../store'
+import SearchBar from './SearchBar'
+const Navbar = ({ handleClick, isLoggedIn }) => (
   <nav
     className="navbar is-dark is-fixed-top"
     role="navigation"
@@ -56,6 +56,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           </div>
         </div>
       </div>
+      <SearchBar />
       <div className="navbar-end">
         {isLoggedIn ? (
           <div className="navbar-item">
@@ -68,19 +69,19 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             </div>
           </div>
         ) : (
-          <div className="navbar-item">
-            <div className="buttons">
-              <a className="button is-primary">
-                <strong>
-                  <Link to="/signup">Sign Up</Link>
-                </strong>
-              </a>
-              <a className="button is-light">
-                <Link to="/login">Login</Link>
-              </a>
+            <div className="navbar-item">
+              <div className="buttons">
+                <a className="button is-primary">
+                  <strong>
+                    <Link to="/signup">Sign Up</Link>
+                  </strong>
+                </a>
+                <a className="button is-light">
+                  <Link to="/login">Login</Link>
+                </a>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     </div>
   </nav>

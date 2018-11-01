@@ -15,7 +15,7 @@ class Routes extends Component {
 
   render() {
 
-    const {isLoggedIn, isAdmin} = this.props
+    const { isLoggedIn, isAdmin } = this.props
 
     return (
       <Switch>
@@ -23,16 +23,16 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route exact path="/products" component={ProductView} />
         {isAdmin &&
-           <Route exact path="/products/add" component={AddProduct} />
-          }
+          <Route exact path="/products/add" component={AddProduct} />
+        }
         <Route exact path="/products/:productId" component={CurrentProduct} />
         {isAdmin &&
-           <Route exact path="/products/:productId/edit" component={EditProduct} />
+          <Route exact path="/products/:productId/edit" component={EditProduct} />
         }
         {isLoggedIn &&
-            <Route path="/home" component={UserHome} />
-    )}
-    
+          <Route path="/home" component={UserHome} />
+        }
+
         <Route component={UnmatchedRoute} />
 
       </Switch>

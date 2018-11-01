@@ -1,22 +1,47 @@
 const router = require('express').Router()
-const {Product, Category} = require('../db/models')
-const {loginRequired, adminGateway} = require('../utils');
+const { Product, Category } = require('../db/models')
+const { loginRequired, adminGateway } = require('../utils');
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll({
-      include: [
-        {
-          model: Category,
-          as: 'Category',
-          attributes: ['id', 'categoryType'],
-          through: {
-            attributes: []
+    let searchedItem = req.query.key
+    console.log('--->> back end searchedItem', typeof searchedItem)
+    if (searchedItem) {
+      searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
+      const searchedProduct = await Product.findAll({
+        where: {
+          title: {
+            [Op.like]: `%${searchedItem}%`
           }
-        }
-      ]
-    })
-    res.json(products)
+        }, include: [
+          {
+            model: Category,
+            as: 'Category',
+            attributes: ['id', 'categoryType'],
+            through: {
+              attributes: []
+            }
+          }
+        ]
+      })
+      res.json(searchedProduct)
+    } else {
+      const products = await Product.findAll({
+        include: [
+          {
+            model: Category,
+            as: 'Category',
+            attributes: ['id', 'categoryType'],
+            through: {
+              attributes: []
+            }
+          }
+        ]
+      })
+      res.json(products)
+    }
   } catch (err) {
     next(err)
   }

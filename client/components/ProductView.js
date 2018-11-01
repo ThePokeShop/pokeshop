@@ -1,30 +1,50 @@
 import React from 'react'
 import ProductCard from './ProductCard'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import CategoryPanel from './CategoryPanel'
-import {fetchProducts} from '../store/index';
-
+import { fetchProducts } from '../store/index';
+import { destroySearch } from '../store/searchProducts'
 //keep as class instead of function component, since we will be adding more function later
 class ProductView extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
+  handleClick = () => {
+    console.log('destroy Search??')
+    this.props.destroySearch()
+  }
   filterProduct = () => {
     let filter = []
-    this.props.products.forEach(product => {
-      for (let i = 0; i < product.Category.length; i++) {
-        let cat = product.Category[i]
-        if (this.props.categoriesAreSelected[cat.id]) {
-          filter.push(product)
-          return
+    console.log('we are in product view filter product ', this.props)
+    let obj = Object.keys(this.props.searchProduct)
+    if (obj.length) {
+      this.props.searchProduct.forEach(product => {
+        for (let i = 0; i < product.Category.length; i++) {
+          let cat = product.Category[i]
+          if (this.props.categoriesAreSelected[cat.id]) {
+            filter.push(product)
+            return
+          }
         }
-      }
-    })
-    console.log('--->>>', filter)
+      })
+    } else {
+      this.props.products.forEach(product => {
+        for (let i = 0; i < product.Category.length; i++) {
+          let cat = product.Category[i]
+          if (this.props.categoriesAreSelected[cat.id]) {
+            filter.push(product)
+            return
+          }
+        }
+      })
+    }
     return filter
   }
 
   render() {
+    const searchObject = Object.keys(this.props.searchProduct)
+    console.log('we are in product view render', searchObject)
+
     const filterProduct = this.filterProduct()
     if (filterProduct.length === 0) {
       return (
@@ -40,10 +60,11 @@ class ProductView extends React.Component {
         <div className="main-content columns is-fullheight">
           <CategoryPanel />
           <div className="container column">
-            <div className="tile is-ancestor" style={{"flexwrap": 'row'}}>
-            {filterProduct.map(product => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            <div className="tile is-ancestor" style={{ "flexwrap": 'row' }}>
+              {searchObject.length ? <button onClick={this.handleClick} type='button'> CLICK ME</button> : <div />}
+              {filterProduct.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
           </div>
         </div>
@@ -51,12 +72,13 @@ class ProductView extends React.Component {
     }
   }
 }
-const mapStateToProps = ({products, categories, categoriesAreSelected}) => {
-  return {products, categories, categoriesAreSelected}
+const mapStateToProps = ({ products, categories, categoriesAreSelected, searchProduct }) => {
+  return { products, categories, categoriesAreSelected, searchProduct }
 }
-const mapDispatchToProps =(dispatch) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    fetchProducts: () => dispatch(fetchProducts())
+    fetchProducts: () => dispatch(fetchProducts()),
+    destroySearch: () => dispatch(destroySearch())
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductView)
