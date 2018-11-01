@@ -6,6 +6,7 @@ class ProductCard extends React.Component {
 
   render() {
     const { product } = this.props;
+    console.log(product.Category.categoryType)
     return (
       <div className="tile">
         <NavLink to={`/products/${product.id}`}>
@@ -26,11 +27,14 @@ class ProductCard extends React.Component {
                     Price: <strong>{`$${product.price}`}</strong>
                   </div>
                   <div className="content is-centered">Quantity: {product.stockQuantity}</div>
+                  <div className="content is-centered">Category: <strong>{product.Category.map(category => category.categoryType + " ")}</strong></div>
                 </div>
               </div>
             </div>
+            <a className="button is-primary" onClick={this.addProductOnClick}>Add to Cart</a>
           </div>
         </NavLink>
+
         <div className="media-right">
           <button
             className="delete"
@@ -38,7 +42,7 @@ class ProductCard extends React.Component {
             onClick={this.removeProductOnClick}
           />
         </div>
-        <a className="button is-primary" onClick={this.addProductOnClick}>Add to Cart</a>
+
       </div>
     );
   }
