@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const { Product, Category } = require('../db/models')
+const {Product, Category} = require('../db/models')
+const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -46,7 +47,7 @@ router.get('/:productId', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', loginRequired, adminGateway, async (req, res, next) => {
   const { title, price, imageUrl, stockQuantity, categoryId } = req.body
   const newProduct = { title, price, stockQuantity }
   if (imageUrl) newProduct.imageUrl = imageUrl
