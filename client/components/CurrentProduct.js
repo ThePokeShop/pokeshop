@@ -8,19 +8,23 @@ import {Link} from 'react-router-dom'
 //keep as class instead of function component, since we will be adding more function later
 class CurrentProduct extends React.Component {
   componentDidMount() {
-    const productId = this.props.match.params.productId
-    this.props.fetchSingleProduct(productId)
-    console.log('yo totally rendering man'
-    )
+    const productId = this.props.match.params.productId;
+    if (productId == Number(productId) ) {
+      this.props.fetchSingleProduct(productId);
+    }
   }
 
   render() {
-    const productId = this.props.match.params.productId
+    const productId = this.props.match.params.productId;
+    if (productId != Number(productId) ) {
+      return (
+        <div>404</div>
+      ) //<Notfound/>
+    }
     const {currentProduct} = this.props;
     if (!currentProduct.title) {
-      return <div>Loading...</div>
+      return <div>Loading...</div>;
     } else {
-      console.log('curret prod', currentProduct)
       return (
 
           //Still need to change CSS!!
@@ -29,7 +33,7 @@ class CurrentProduct extends React.Component {
            <Link to={`/products/${productId}/edit`} >Edit this Product</Link>
         </div>
 
-      )
+      );
     }
   }
 }
