@@ -22,23 +22,27 @@ export const toggleCategorySelected = id => ({
 /* ------------          REDUCER         ------------------ */
 
 const initialState = {}
-const checkObj = {}
+let allTrueObj = {}
+let allFalseObj = {}
 
 export default function categoriesAreSelectedReducer(state = initialState, action) {
   try {
     switch (action.type) {
       case SET_CATEGORIES:
         action.categories.forEach(category => {
-          checkObj[category.id] = true
+          allTrueObj[category.id] = true
         })
-        return checkObj
+        action.categories.forEach(category => {
+          allFalseObj[category.id] = false
+        })
+        return allTrueObj
       case TOGGLE_CATEGORY_SELECTED:
         return { ...state, [action.id]: !state[action.id] }
       case SET_CATEGORIES_TRUE:
-         checkObj.mapValues(checkObj, () => true)
-      return checkObj
+        return {...allTrueObj}
 
       case SET_CATEGORIES_FALSE:
+        return {...allFalseObj}
       default:
         return state;
     }

@@ -6,7 +6,6 @@ class ProductCard extends React.Component {
 
   render() {
     const { product } = this.props;
-    console.log(product.Category.categoryType)
     return (
       <div className="tile">
         <NavLink to={`/products/${product.id}`}>

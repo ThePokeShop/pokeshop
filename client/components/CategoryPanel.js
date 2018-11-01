@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {toggleCategorySelected, setCategoriesTrue} from '../store/index'
+import {toggleCategorySelected, setCategoriesTrue, setCategoriesFalse} from '../store/index'
 
 //this needs to be a func comp
 
@@ -11,6 +11,9 @@ const CategoryPanel = props => {
   }
   const handleClick = () => {
     props.setCategoriesTrue()
+  }
+  const handleClickFalse =() =>{
+    props.setCategoriesFalse()
   }
   const {categoriesAreSelected, categories} = props
   return (
@@ -44,7 +47,7 @@ const CategoryPanel = props => {
         <button
           className="button is-link is-outlined is-fullwidth"
           type="button"
-          onClick={handleClick}
+          onClick={handleClickFalse}
         >
           Uncheck All
         </button>
@@ -69,7 +72,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => ({
   toggleCategorySelected: id => dispatch(toggleCategorySelected(id)),
-  resetCategories: () => dispatch(setCategoriesTrue())
+  setCategoriesTrue: () => dispatch(setCategoriesTrue()),
+  setCategoriesFalse: () => dispatch(setCategoriesFalse())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryPanel)
