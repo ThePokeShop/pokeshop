@@ -72,7 +72,7 @@ router.post('/', loginRequired, adminGateway, async (req, res, next) => {
   }
 })
 
-router.put('/:productId', async (req, res, next) => {
+router.put('/:productId', loginRequired, adminGateway, async (req, res, next) => {
   const productId = req.params.productId
   // ignores id in request body - not sure if RESTful
   const { title, price, imageUrl, stockQuantity, categoryId } = req.body
