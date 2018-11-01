@@ -11,4 +11,5 @@ export { Login, Signup } from './auth-form'
 export { default as Footer } from './footer'
 export { default as AddProduct } from './AddProduct'
 export { default as EditProduct } from './EditProduct'
+export { default as UnmatchedRoute } from './UnmatchedRoute'
 
