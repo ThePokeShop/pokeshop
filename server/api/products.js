@@ -22,19 +22,6 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.post('/', loginRequired, adminGateway, async (req, res, next) => {
-  const {title, price, imageUrl, stockQuantity, categoryId} = req.body
-  const newProduct = {title, price, categoryId, stockQuantity}
-  if (imageUrl) newProduct.imageUrl = imageUrl
-  try {
-    const product = await Product.create(newProduct)
-    if (categoryId.length > 0) product.setCategory(categoryId)
-    res.json(product)
-  } catch (err) {
-    next(err)
-  }
-})
-
 router.get('/:productId', async (req, res, next) => {
   try {
     const productId = req.params.productId
@@ -55,6 +42,31 @@ router.get('/:productId', async (req, res, next) => {
     } else {
       res.sendStatus(404)
     }
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/', loginRequired, adminGateway, async (req, res, next) => {
+  const { title, price, imageUrl, stockQuantity, categoryId } = req.body
+  const newProduct = { title, price, stockQuantity }
+  if (imageUrl) newProduct.imageUrl = imageUrl
+  try {
+    const product = await Product.create(newProduct)
+    if (categoryId.length > 0) await product.setCategory(categoryId)
+    const updatedProduct = await Product.findById(product.id, {
+      include: [
+        {
+          model: Category,
+          as: 'Category',
+          attributes: ['id', 'categoryType'],
+          through: {
+            attributes: []
+          }
+        }
+      ]
+    })
+    res.json(updatedProduct);
   } catch (err) {
     next(err)
   }
