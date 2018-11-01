@@ -32,7 +32,6 @@ class Routes extends Component {
         {isLoggedIn &&
             <Route path="/home" component={UserHome} />
         }
-
         <Route component={UnmatchedRoute} />
 
       </Switch>

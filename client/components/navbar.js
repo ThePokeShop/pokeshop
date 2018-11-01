@@ -11,7 +11,7 @@ const Navbar = ({handleClick, isLoggedIn}) => (
     aria-label="main navigation"
   >
     <div className="navbar-brand">
-      <a className="navbar-item">
+      <div className="navbar-item">
         <NavLink to="/home">
           <img
             src="https://fontmeme.com/permalink/181030/daad87fcebbaa61672816a5c6bb13e9c.png"
@@ -19,7 +19,8 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             height="28"
           />
         </NavLink>
-        <a
+        </div>
+        <div
           role="button"
           className="navbar-burger burger"
           aria-label="menu"
@@ -29,30 +30,30 @@ const Navbar = ({handleClick, isLoggedIn}) => (
           <span aria-hidden="true" />
           <span aria-hidden="true" />
           <span aria-hidden="true" />
-        </a>
-      </a>
+        
+      </div>
     </div>
     <div id="navbarBasicExample" className="navbar-menu">
       <div className="navbar-start">
-        <a className="navbar-item">
+        <div className="navbar-item">
           <NavLink to="/home">Home</NavLink>
-        </a>
+        </div>
 
-        <a className="navbar-item">
+        <div className="navbar-item">
           <NavLink to="/products">Products</NavLink>
-        </a>
+        </div>
 
-        <a className="navbar-item">
+        <div className="navbar-item">
           <NavLink to="/catagories">Categories</NavLink>
-        </a>
+        </div>
 
         <div className="navbar-item has-dropdown is-hoverable">
-          <a className="navbar-link">More</a>
+          <div className="navbar-link">More</div>
 
           <div className="navbar-dropdown">
-            <a className="navbar-item">About</a>
-            <a className="navbar-item">Jobs</a>
-            <a className="navbar-item">Contact</a>
+            <div className="navbar-item">About</div>
+            <div className="navbar-item">Jobs</div>
+            <div className="navbar-item">Contact</div>
           </div>
         </div>
       </div>
@@ -60,24 +61,24 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         {isLoggedIn ? (
           <div className="navbar-item">
             <div className="buttons">
-              <a className="button is-primary" onClick={handleClick}>
+              <div className="button is-primary" onClick={handleClick}>
                 <strong>
                   <Link to="/signup">Log out</Link>
                 </strong>
-              </a>
+              </div>
             </div>
           </div>
         ) : (
           <div className="navbar-item">
             <div className="buttons">
-              <a className="button is-primary">
+              <div className="button is-primary">
                 <strong>
                   <Link to="/signup">Sign Up</Link>
                 </strong>
-              </a>
-              <a className="button is-light">
+              </div>
+              <div className="button is-light">
                 <Link to="/login">Login</Link>
-              </a>
+              </div>
             </div>
           </div>
         )}
