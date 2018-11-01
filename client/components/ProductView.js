@@ -9,13 +9,10 @@ class ProductView extends React.Component {
   componentDidMount() {
     this.props.fetchProducts();
   }
-  handleClick = () => {
-    console.log('destroy Search??')
-    this.props.destroySearch()
-  }
+
   filterProduct = () => {
+    console.log('match---->>>', this.props.match.params)
     let filter = []
-    console.log('we are in product view filter product ', this.props)
     let obj = Object.keys(this.props.searchProduct)
     if (obj.length) {
       this.props.searchProduct.forEach(product => {
@@ -42,9 +39,6 @@ class ProductView extends React.Component {
   }
 
   render() {
-    const searchObject = Object.keys(this.props.searchProduct)
-    console.log('we are in product view render', searchObject)
-
     const filterProduct = this.filterProduct()
     if (filterProduct.length === 0) {
       return (
@@ -61,7 +55,6 @@ class ProductView extends React.Component {
           <CategoryPanel />
           <div className="container column">
             <div className="tile is-ancestor" style={{ "flexwrap": 'row' }}>
-              {searchObject.length ? <button onClick={this.handleClick} type='button'> CLICK ME</button> : <div />}
               {filterProduct.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}

@@ -9,11 +9,10 @@ export const searchProduct = (product) => ({
 export const destroySearch = () => ({
   type: DESTROY_SEARCH
 })
+//change the
 export const searchedProduct = (searchedItem) => async dispatch => {
   try {
-    console.log('we are in thunk', searchedItem)
     const { data } = await axios.get(`/api/products?key=${searchedItem}`)
-    console.log('data from get', data);
     dispatch(searchProduct(data))
   } catch (err) {
     console.error(err)

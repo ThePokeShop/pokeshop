@@ -6,8 +6,8 @@ const Op = Sequelize.Op
 
 router.get('/', async (req, res, next) => {
   try {
+    console.log('req.query ->>>>>>>>', req.query);
     let searchedItem = req.query.key
-    console.log('--->> back end searchedItem', typeof searchedItem)
     if (searchedItem) {
       searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
       const searchedProduct = await Product.findAll({
