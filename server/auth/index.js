@@ -40,6 +40,7 @@ router.post('/signup', async (req, res, next) => {
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
       res.status(401).send('User already exists')
+      return
     } else {
       next(err)
     }
@@ -69,10 +70,13 @@ router.post('/signup', async (req, res, next) => {
       }</a><p>This link will expire in twelve hours.</p>`
     }
     transporter.sendMail(mailOptions, err => {
-      if (err) return res.status(500).send({msg: err.message})
-      res
+      if (err) {
+        res.status(500).send({msg: err.message})
+      } else {
+        res
         .status(200)
         .send('A verification email has been sent to ' + user.email + '.')
+      }
     })
   } catch (err) {
     console.error(err);
@@ -96,16 +100,25 @@ router.get('/confirmation/:token', async (req, res, next) => {
   try {
     const token = req.params.token
     const emailToken = await EmailToken.findOne({where: {emailToken: token}})
-    if (emailToken === null) return res.status(400).send('Token not found.')
+    if (emailToken === null) {
+      res.status(400).send('Token not found.')
+      return
+    }
 
     const user = await User.findById(emailToken.userId)
     // token has already been checked
-    if (emailToken.wasVerified)
-      return res.status(400).send('Token already used')
-    if (emailToken.wasVerified === false)
-      return res.status(400).send('Token already expired.')
-    if (!user)
-      return res.status(400).send('Unable to find a user for this token')
+    if (emailToken.wasVerified) {
+      res.status(400).send('Token already used')
+      return
+    }
+    if (emailToken.wasVerified === false) {
+      res.status(400).send('Token already expired.')
+      return
+    }
+    if (!user) {
+      res.status(400).send('Unable to find a user for this token')
+      return
+    }
 
     // token hasn't been checked yet
     const timeDiff = new Date() - emailToken.updatedAt
@@ -114,10 +127,12 @@ router.get('/confirmation/:token', async (req, res, next) => {
         user.update({isEmailVerified: true}),
         emailToken.update({wasVerified: true})
       ])
-      return req.login(user, err => (err ? next(err) : res.json(user)))
+      req.login(user, err => (err ? next(err) : res.json(user)))
+      return
     } else {
       await emailToken.update({wasVerified: false})
-      return res.status(400).send('Token expired.')
+      res.status(400).send('Token expired.')
+      return
     }
   } catch (err) {
     console.error(err)
