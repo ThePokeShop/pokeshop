@@ -14,11 +14,11 @@ export class SearchBar extends Component {
     console.log('this state value ====>>', this.state.value)
   }
   handleClick = () => {
-    this.props.searchedProduct(this.state.value);
+    // this.props.searchedProduct(this.state.value);
     this.setState({
       value: ''
     })
-    history.push(`/products?key=${this.state.value}`)
+    history.push(`/products/search?key=${this.state.value}`)
   }
   render() {
     return (

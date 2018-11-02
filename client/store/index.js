@@ -9,6 +9,7 @@ import categories from './categories'
 import categoriesAreSelected from './categoriesAreSelected'
 import searchProduct from './searchProducts'
 
+
 const reducer = combineReducers({ user, products, currentProduct, categories, categoriesAreSelected, searchProduct })
 
 const middleware = composeWithDevTools(

@@ -6,10 +6,31 @@ const Op = Sequelize.Op
 
 router.get('/', async (req, res, next) => {
   try {
-    console.log('req.query ->>>>>>>>', req.query);
+    const products = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          as: 'Category',
+          attributes: ['id', 'categoryType'],
+          through: {
+            attributes: []
+          }
+        }
+      ]
+    })
+    res.json(products)
+  } catch (err) {
+    next(err)
+  }
+})
+router.get('/search', async (req, res, next) => {
+  try {
     let searchedItem = req.query.key
     if (searchedItem) {
+      console.log('searched item', searchedItem);
+
       searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
+      console.log('searched item after slice', searchedItem);
       const searchedProduct = await Product.findAll({
         where: {
           title: {
@@ -27,26 +48,11 @@ router.get('/', async (req, res, next) => {
         ]
       })
       res.json(searchedProduct)
-    } else {
-      const products = await Product.findAll({
-        include: [
-          {
-            model: Category,
-            as: 'Category',
-            attributes: ['id', 'categoryType'],
-            through: {
-              attributes: []
-            }
-          }
-        ]
-      })
-      res.json(products)
     }
   } catch (err) {
     next(err)
   }
 })
-
 router.get('/:productId', async (req, res, next) => {
   try {
     const productId = req.params.productId

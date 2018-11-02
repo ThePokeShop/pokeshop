@@ -9,20 +9,16 @@ export const searchProduct = (product) => ({
 export const destroySearch = () => ({
   type: DESTROY_SEARCH
 })
-//change the
 export const searchedProduct = (searchedItem) => async dispatch => {
   try {
-    const { data } = await axios.get(`/api/products?key=${searchedItem}`)
+
+    const { data } = await axios.get(`/api/products/search?key=${searchedItem}`)
+
     dispatch(searchProduct(data))
   } catch (err) {
     console.error(err)
   }
 }
-
-
-//create a new button for clearing the dom and rerendering that part
-//
-
 const initialState = {}
 export default function searchProductReducer(state = initialState, action) {
   switch (action.type) {
