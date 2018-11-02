@@ -5,6 +5,7 @@ const {loginRequired, adminGateway} = require('../utils');
 router.get('/', async (req, res, next) => {
   try {
     const products = await Product.findAll({
+      order:['id'],
       include: [
         {
           model: Category,

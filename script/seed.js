@@ -11,8 +11,8 @@ async function seed() {
     User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
     User.create({ email: 'murphy@email.com', password: '123' })
   ])
-  const catTypes = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground',
-    'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon']
+  const catTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
+  'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon']
   const categories = await Promise.all(catTypes.map(categoryType => Category.create({ categoryType })))
   const products = await Promise.all([
     Product.create({ title: 'Pikachu', price: 10.44, stockQuantity: 3 }),
