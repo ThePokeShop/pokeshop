@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const { User, Product, Category } = require('../server/db/models')
+const { User, Product, Category } = require('../server/db/models');
 
 async function seed() {
   await db.sync({ force: true })
@@ -12,16 +12,20 @@ async function seed() {
     User.create({ email: 'murphy@email.com', password: '123' })
   ])
   const catTypes = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground',
-    'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon']
-  const categories = await Promise.all(catTypes.map(categoryType => Category.create({ categoryType })))
+    'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon'];
+
+  const categories = await Promise.all(catTypes.map(categoryType => Category.create({ categoryType })));
+
   const products = await Promise.all([
     Product.create({ title: 'Pikachu', price: 10.44, stockQuantity: 3 }),
     Product.create({ title: 'Raichu', price: 3.44, stockQuantity: 31 })
-  ])
+  ]);
+
   await Promise.all([
     products[0].setCategory([categories[0]]),
     products[1].setCategory([categories[0]])
   ]);
+
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
 }
