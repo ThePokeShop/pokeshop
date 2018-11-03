@@ -20,7 +20,6 @@ class ProductView extends React.Component {
         }
       }
     })
-    console.log('--->>>', filter)
     return filter
   }
 

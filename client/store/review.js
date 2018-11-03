@@ -5,11 +5,12 @@ import axios from 'axios'
 const initialState = {}
 /* -----------------    ACTION TYPES    ------------------ */
 
+const SET_REVIEW = 'SET_REVIEW'
 const ADD_NEW_REVIEW = 'ADD_NEW_REVIEW';
 
 /* ------------     ACTION CREATORS      ------------------ */
 
-
+// export const set
 export const addNewReview = review => ({ type: ADD_NEW_REVIEW, review})
 
 /* ------------          REDUCER         ------------------ */

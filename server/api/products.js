@@ -40,9 +40,10 @@ router.get('/:productId', async (req, res, next) => {
           }
         },
         {
+          
           model: Review,
+          order:['id'],
           include:[{
-            order:['id'],
             model: User}
           ]
         }

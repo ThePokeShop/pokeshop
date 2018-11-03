@@ -62,6 +62,7 @@ class Review extends React.Component {
               <img src="https://bulma.io/images/placeholders/128x128.png" />
             </p>
           </figure> */}
+          
           <form onSubmit={this.handleSubmit}>
             <div className="media-content">
               <div className="field">
