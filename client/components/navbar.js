@@ -44,9 +44,9 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
           <NavLink to="/products" onClick={() => destroy()}>Products</NavLink>
         </div>
 
-        <div className="navbar-item">
-          <NavLink to="/catagories">Categories</NavLink>
-        </div>
+        <a className="navbar-item">
+          <NavLink to="/categories">Categories</NavLink>
+        </a>
 
         <div className="navbar-item has-dropdown is-hoverable">
           <div className="navbar-link">More</div>

@@ -4,10 +4,9 @@ const db = require('../db');
 
 const Order = db.define('order', {
   status: {
-    type: Sequelize.ENUM('in progress', 'purchased', 'delivered'),
-    validate: {
-      defaultValue: 'in progress'
-    }
+    type: Sequelize.ENUM('active', 'created', 'shipped', 'cancelled', 'delivered'),
+    allowNull: false,
+    defaultValue: 'active'
   },
   shippingAddress: {
     type: Sequelize.STRING,
