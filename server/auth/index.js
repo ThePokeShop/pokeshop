@@ -63,9 +63,9 @@ router.post('/signup', async (req, res, next) => {
       subject: 'Account Verification Token',
       html: `<p>Hello, ${
         user.name
-      }!</p><p>Please verify your account by clicking the link:</p><a href="${url}/auth/confirmation/${
+      }!</p><p>Please verify your account by clicking the link:</p><a href="${url}/signup/confirm?token=${
         token.emailToken
-      }">${url}/auth/confirmation/${
+      }">${url}/signup/confirm?token=${
         token.emailToken
       }</a><p>This link will expire in twelve hours.</p>`
     }
@@ -74,10 +74,9 @@ router.post('/signup', async (req, res, next) => {
         res.status(500).send({msg: err.message})
       } else {
         res
-        .status(200)
-        .send('A verification email has been sent to ' + user.email + '.')
-      }
-    })
+        .sendStatus(201).redirect(`${url}/signup/success`)
+              }
+    });
   } catch (err) {
     console.error(err);
     next(err)
@@ -101,22 +100,22 @@ router.get('/confirmation/:token', async (req, res, next) => {
     const token = req.params.token
     const emailToken = await EmailToken.findOne({where: {emailToken: token}})
     if (emailToken === null) {
-      res.status(400).send('Token not found.')
+      res.status(400).send({message: 'Token not found.'})
       return
     }
 
     const user = await User.findById(emailToken.userId)
     // token has already been checked
     if (emailToken.wasVerified) {
-      res.status(400).send('Token already used')
+      res.status(400).send({message: 'Token already used'});
       return
     }
     if (emailToken.wasVerified === false) {
-      res.status(400).send('Token already expired.')
+      res.status(400).send({message: 'Token already expired.'})
       return
     }
     if (!user) {
-      res.status(400).send('Unable to find a user for this token')
+      res.status(400).send({message: 'Unable to find a user for this token'});
       return
     }
 
@@ -127,11 +126,12 @@ router.get('/confirmation/:token', async (req, res, next) => {
         user.update({isEmailVerified: true}),
         emailToken.update({wasVerified: true})
       ])
-      req.login(user, err => (err ? next(err) : res.json(user)))
+      res.status(202).send({message: `${user.email} verified.`})
+      // req.login(user, err => (err ? next(err) : res.json(user)))
       return
     } else {
       await emailToken.update({wasVerified: false})
-      res.status(400).send('Token expired.')
+      res.status(400).send({message: 'Token expired.'})
       return
     }
   } catch (err) {
@@ -171,9 +171,9 @@ router.get('/resend/:userId', async (req, res, next) => {
       subject: 'Account Verification Token',
       html: `<p>Hello, ${
         user.name
-      }!</p><p>Please verify your account by clicking the link:</p><a href="${url}/auth/confirmation/${
+      }!</p><p>Please verify your account by clicking the link:</p><a href="${url}/signup/confirm?token=${
         token.emailToken
-      }">${url}/auth/confirmation/${
+      }">${url}/signup/confirm?token=${
         token.emailToken
       }</a><p>This link will expire in twelve hours.</p>`
     }
