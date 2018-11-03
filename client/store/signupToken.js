@@ -6,6 +6,7 @@ import history from '../history'
  */
 const SET_TOKEN = 'SET_TOKEN'
 const REMOVE_TOKEN = 'REMOVE_TOKEN'
+const SET_TOKEN_STATUS_MESSAGE = 'SET_TOKEN_STATUS_MESSAGE'
 const SET_TOKEN_ERROR_MESSAGE = 'SET_TOKEN_ERROR_MESSAGE'
 const SET_TOKEN_SUCCESS_MESSAGE = 'SET_TOKEN_SUCCESS_MESSAGE'
 /**
@@ -16,6 +17,7 @@ const defaultToken = {
   errorMessage: '',
   pending: true,
   successMessage: '',
+  statusMessage: ''
 };
 
 /**
@@ -35,7 +37,12 @@ const setTokenSuccessMessage = (successMessage) => {
     successMessage
   }
 }
-
+const setTokenStatusMessage = (statusMessage) => {
+  return {
+    type: SET_TOKEN_STATUS_MESSAGE,
+    statusMessage
+  }
+}
 /**
  * THUNK CREATORS
  */
@@ -45,6 +52,16 @@ export const verifyToken = (token) => async dispatch => {
     const {data} = await axios.get(`/auth/confirmation/${token}`)
     console.dir(data);
     dispatch(setTokenSuccessMessage(data.message));
+  } catch (err) {
+    console.error(err.response)
+    dispatch(setTokenErrorMessage(err.response.data.message));
+  }
+}
+
+export const resendToken = (token) => async dispatch => {
+  try {
+    const {data} = await axios.get(`/auth/resend/${token}`);
+    dispatch(setTokenStatusMessage(data.message));
   } catch (err) {
     console.error(err.response)
     dispatch(setTokenErrorMessage(err.response.data.message));
@@ -73,6 +90,12 @@ export default function(state = defaultToken, action) {
       return {
         ...state,
         successMessage: action.successMessage,
+        pending: false
+      }
+    case SET_TOKEN_STATUS_MESSAGE:
+      return {
+        ...state,
+        statusMessage: action.statusMessage,
         pending: false
       }
     default:

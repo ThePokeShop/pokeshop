@@ -107,15 +107,15 @@ router.get('/confirmation/:token', async (req, res, next) => {
     const user = await User.findById(emailToken.userId)
     // token has already been checked
     if (emailToken.wasVerified) {
-      res.status(400).send({message: 'Token already used'});
+      res.status(400).send({message: 'Token already used.'});
       return
     }
     if (emailToken.wasVerified === false) {
-      res.status(400).send({message: 'Token already expired.'})
+      res.status(400).send({message: 'Token expired.'})
       return
     }
     if (!user) {
-      res.status(400).send({message: 'Unable to find a user for this token'});
+      res.status(400).send({message: 'Unable to find a user for this token.'});
       return
     }
 
@@ -140,16 +140,17 @@ router.get('/confirmation/:token', async (req, res, next) => {
   }
 })
 
-router.get('/resend/:userId', async (req, res, next) => {
-  const userId = req.params.userId
+router.get('/resend/:oldEmailToken', async (req, res, next) => {
+  const oldEmailToken = req.params.oldEmailToken
   try {
-    const user = await User.findById(userId)
-    if (user === null) return res.status(400).send('User not found')
+    const oldToken = await EmailToken.findOne({where: {emailToken: oldEmailToken}})
+    const user = await oldToken.getUser();
+    if (user === null) return res.status(400).send({message: 'User not found.'});
     if (user.isEmailVerified)
-      return res.status(400).send('User already verified')
+      return res.status(400).send({message: 'User already verified'})
 
     const token = await EmailToken.create({
-      userId: userId,
+      userId: user.id,
       emailToken: crypto.randomBytes(16).toString('hex')
     })
     const transporter = nodemailer.createTransport({
@@ -178,10 +179,10 @@ router.get('/resend/:userId', async (req, res, next) => {
       }</a><p>This link will expire in twelve hours.</p>`
     }
     transporter.sendMail(mailOptions, err => {
-      if (err) return res.status(500).send({msg: err.message})
+      if (err) return res.status(500).send({message: err.message})
       res
         .status(200)
-        .send('A verification email has been sent to ' + user.email + '.')
+        .send({message: 'A verification email has been sent to ' + user.email + '.'});
     })
   } catch (err) {
     console.error(err)
