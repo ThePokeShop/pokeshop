@@ -17,6 +17,7 @@ Category.belongsToMany(Product, { through: 'CategoryProducts' });
 LineItem.belongsTo(Product);
 Order.hasMany(LineItem);
 Order.belongsTo(User);
+User.hasMany(Order);
 
 EmailToken.belongsTo(User); // each email token has a userId key
 User.hasMany(EmailToken);  // not sure if has many
