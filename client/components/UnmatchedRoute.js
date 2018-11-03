@@ -10,7 +10,7 @@ const UnmatchedRoute = () => {
     // </figure>
 
     <div className='body'>
-      <div class="container">
+      <div className="container">
         <div className="error">
           <p className="p">4</p>
           <span className="dracula">
