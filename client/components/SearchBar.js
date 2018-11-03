@@ -11,7 +11,6 @@ export class SearchBar extends Component {
   }
   handleChange = (event) => {
     this.setState({ value: event.target.value })
-    console.log('this state value ====>>', this.state.value)
   }
   handleClick = () => {
     // this.props.searchedProduct(this.state.value);

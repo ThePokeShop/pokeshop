@@ -23,8 +23,6 @@ class SearchProductView extends React.Component {
   }
   filterProduct = () => {
     let filter = []
-    // this.props.searchedProduct(this.props.location.search.slice(5))
-    // console.log('this is my filter', typeof this.props.location.search.slice(5))
     let obj = Object.keys(this.props.searchProduct)
     if (obj.length) {
       this.props.searchProduct.forEach(product => {

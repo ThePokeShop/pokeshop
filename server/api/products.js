@@ -27,10 +27,7 @@ router.get('/search', async (req, res, next) => {
   try {
     let searchedItem = req.query.key
     if (searchedItem) {
-      console.log('searched item', searchedItem);
-
       searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
-      console.log('searched item after slice', searchedItem);
       const searchedProduct = await Product.findAll({
         where: {
           title: {
@@ -108,7 +105,7 @@ router.put('/:productId', loginRequired, adminGateway, async (req, res, next) =>
   // ignores id in request body - not sure if RESTful
   const { title, price, imageUrl, stockQuantity, categoryId } = req.body
   const newData = { title, price, categoryId, stockQuantity }
-  console.log('newData: ', newData);
+
   if (imageUrl) newData.imageUrl = imageUrl
   try {
     const product = await Product.findById(productId)
