@@ -4,33 +4,35 @@ const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
-    let options = {};
-    let {where, include} = options;
-    include = [{model: LineItem}];
-    where = {};
+    let where = {};
 
-    let isAdmin = req.user.isAdmin;
-    let userId = req.user.id;
-    const status = req.query.status;
-    const statusVals = ['created', 'active', 'shipped', 'cancelled', 'delivered'];
-
-    if (!isAdmin) {
-      where.userId = userId;
-      options.include = include;
-    };
-    if (statusVals.includes(status)) {
-      where.status = status;
-    } else {
+    const orderStatus = req.query.status;
+    const viewAsAdmin = req.query.viewAsAdmin === 'true';
+    const statusVals = ['active', 'created', 'shipped', 'cancelled', 'delivered'];
+    if(orderStatus && !statusVals.includes(orderStatus)){
       res.sendStatus(400);
+      return;
     }
+    if (req.user) {
+      const isAdmin = req.user.isAdmin;
+      const userId = req.user.id;
+      if (!viewAsAdmin || !isAdmin) {
+        where.userId = userId;
+      }
+    } else {
+      where.userId = null;
+      // where.sessionId =
+    }
+    if (orderStatus) {
+      where.status = orderStatus;
+    }
+    let options = {
+      where,
+      include: [{model: LineItem}]
+    };
 
     const orders = await Order.findAll(options);
-    if (orders) {
-      res.status(200);
-      res.send(orders)
-    } else {
-      res.sendStatus(404);
-    }
+    res.json(orders);
   } catch(err) {
     next(err);
   }
@@ -41,9 +43,10 @@ router.get('/:orderId', async (req, res, next) => {
     const orderId = req.params.orderId;
     const userId = req.user.id;
     const isAdmin = req.user.isAdmin;
-    let where = {orderId};
-    const include = [{model: LineItem}];
-    let options = {where, include};
+    let options = {
+      where: {orderId},
+      include: [{model: LineItem}]};
+    let {where} = options;
 
     if (!isAdmin) {
       where.userId = userId;

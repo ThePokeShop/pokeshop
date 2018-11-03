@@ -7,7 +7,7 @@ const LineItem = db.define('lineItem', {
     type: Sequelize.DECIMAL(10, 2),
     allowNull: false,
     validate: {
-      min: 0,
+      min: 0
     }
   },
   quantity: {

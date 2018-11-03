@@ -4,10 +4,9 @@ const db = require('../db');
 
 const Order = db.define('order', {
   status: {
-    type: Sequelize.ENUM('created', 'active', 'shipped', 'cancelled', 'delivered'),
-    validate: {
-      defaultValue: 'created'
-    }
+    type: Sequelize.ENUM('active', 'created', 'shipped', 'cancelled', 'delivered'),
+    allowNull: false,
+    defaultValue: 'active'
   },
   shippingAddress: {
     type: Sequelize.STRING,
@@ -16,13 +15,6 @@ const Order = db.define('order', {
   billingAddress: {
     type: Sequelize.STRING,
     allowNull: true
-  },
-  isLoggedIn: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    validate: {
-      defaultValue: false
-    }
   }
 })
 module.exports = Order;
