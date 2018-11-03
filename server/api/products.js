@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Product, Category} = require('../db/models')
+const {Product, Category, Review} = require('../db/models')
 const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
@@ -14,6 +14,9 @@ router.get('/', async (req, res, next) => {
           through: {
             attributes: []
           }
+        },
+         {
+          model: Review
         }
       ]
     })
@@ -35,6 +38,9 @@ router.get('/:productId', async (req, res, next) => {
           through: {
             attributes: []
           }
+        },
+        {
+          model: Review
         }
       ]
     })

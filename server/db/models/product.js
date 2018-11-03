@@ -25,6 +25,10 @@ const Product = db.define('product', {
   imageUrl: {
     type: Sequelize.STRING,
     defaultValue: "https://upload.wikimedia.org/wikipedia/en/3/39/Pokeball.PNG"
+  },
+  description:{
+    type: Sequelize.TEXT
   }
+  
 })
 module.exports = Product

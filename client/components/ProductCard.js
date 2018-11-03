@@ -6,6 +6,9 @@ class ProductCard extends React.Component {
 
   render() {
     const { product } = this.props;
+    const ratingArr = []
+    product.reviews.forEach(review => ratingArr.push(review.rating))
+    const averageRating = ratingArr.reduce((a,b) => (a + b)/ratingArr.length)
     return (
       <div className="tile">
         <NavLink to={`/products/${product.id}`}>
@@ -27,7 +30,7 @@ class ProductCard extends React.Component {
                   </div>
                   <div className="content is-centered">Quantity: {product.stockQuantity}</div>
                   <div className="content is-centered">Category: <strong>{product.Category.map(category => category.categoryType + " ")}</strong></div>
-                  <div className="content is-centered">Rating: <strong>5 (hard coded)</strong></div>
+                  <div className="content is-centered">Rating: <strong>{averageRating}</strong></div>
                 </div>
               </div>
             </div>
