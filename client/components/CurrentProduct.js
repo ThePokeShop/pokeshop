@@ -24,6 +24,7 @@ class CurrentProduct extends React.Component {
       const ratingArr = []
       currentProduct.reviews.forEach(review => ratingArr.push(review.rating))
       const averageRating = ratingArr.reduce((a,b) => (a + b)/ratingArr.length)
+      const fixedRating =averageRating.toFixed(2)
       return (
         <div>
       <div className="tile is-parent">
@@ -48,7 +49,7 @@ class CurrentProduct extends React.Component {
                 </p>
                 <p>
                   <small>Rating:  </small>
-                  <strong>{averageRating} </strong>
+                  <strong>{fixedRating} </strong>
                 </p>
               </div>
 
@@ -66,6 +67,7 @@ class CurrentProduct extends React.Component {
           </article>
           </div>
         </div>
+        
         <div className='tile is-parent'>
         <strong>Reviews: </strong>
         <div className="section container">
