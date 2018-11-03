@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute } from './components'
+import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute, SearchProductView } from './components'
 import { me, fetchProducts, fetchCategories } from './store'
 
 /**
@@ -15,22 +15,23 @@ class Routes extends Component {
 
   render() {
 
-    const {isLoggedIn, isAdmin} = this.props
+    const { isLoggedIn, isAdmin } = this.props
 
     return (
       <Switch>
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path='/products/search' component={SearchProductView} />
         <Route exact path="/products" component={ProductView} />
         {isAdmin &&
-           <Route exact path="/products/add" component={AddProduct} />
-          }
+          <Route exact path="/products/add" component={AddProduct} />
+        }
         <Route exact path="/products/:productId" component={CurrentProduct} />
         {isAdmin &&
-           <Route exact path="/products/:productId/edit" component={EditProduct} />
+          <Route exact path="/products/:productId/edit" component={EditProduct} />
         }
         {isLoggedIn &&
-            <Route path="/home" component={UserHome} />
+          <Route path="/home" component={UserHome} />
         }
 
         <Route component={UnmatchedRoute} />
