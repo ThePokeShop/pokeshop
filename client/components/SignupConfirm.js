@@ -44,10 +44,7 @@ class SignupConfirm extends Component {
             <div className="box">
               <h1 className="title">{errorMessage || successMessage}</h1>
               {isEmailValid && (
-                <React.Fragment>
-                  <br />
                   <Link to="/login">Click here to log in.</Link>
-                </React.Fragment>
               )}
               {isTokenExpired && this.renderIfTokenExpired()}
             </div>
@@ -62,17 +59,14 @@ class SignupConfirm extends Component {
     const handleResend = this.handleResend
     if (statusMessage === '') {
       return (
-        <React.Fragment>
-          <br />
           <a className="is-size-5" onClick={handleResend}>Click here to send new token.</a>
-        </React.Fragment>
       )
     } else {
       return (
         <React.Fragment>
-          <br />
           <h1 className="subtitle">{statusMessage}</h1>
-        </React.Fragment>
+          {statusMessage.includes('verified') && (<Link to="/login">Click here to log in.</Link>)}
+          </React.Fragment>
       )
     }
   }
