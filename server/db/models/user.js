@@ -36,6 +36,14 @@ const User = db.define('user', {
   isAdmin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false
+  },
+  isEmailVerified: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  name: {
+    type: Sequelize.STRING,
+    defaultValue: 'Pokemon Trainer',
   }
 })
 
