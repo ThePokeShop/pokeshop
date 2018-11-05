@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {NavLink, Link} from 'react-router-dom'
-import {logout} from '../store'
-
-const Navbar = ({handleClick, isLoggedIn}) => (
+import { connect } from 'react-redux'
+import { NavLink, Link } from 'react-router-dom'
+import { logout } from '../store'
+import SearchBar from './SearchBar'
+import { destroySearch } from '../store/searchProducts'
+const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
   <nav
     className="navbar is-dark is-fixed-top"
     role="navigation"
@@ -19,18 +20,18 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             height="28"
           />
         </NavLink>
-        </div>
-        <div
-          role="button"
-          className="navbar-burger burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-        >
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-          <span aria-hidden="true" />
-        
+      </div>
+      <div
+        role="button"
+        className="navbar-burger burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbarBasicExample"
+      >
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+
       </div>
     </div>
     <div id="navbarBasicExample" className="navbar-menu">
@@ -40,11 +41,11 @@ const Navbar = ({handleClick, isLoggedIn}) => (
         </div>
 
         <div className="navbar-item">
-          <NavLink to="/products">Products</NavLink>
+          <NavLink to="/products" onClick={() => destroy()}>Products</NavLink>
         </div>
 
         <div className="navbar-item">
-          <NavLink to="/catagories">Categories</NavLink>
+          <NavLink to="/categories">Categories</NavLink>
         </div>
 
         <div className="navbar-item has-dropdown is-hoverable">
@@ -56,19 +57,23 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             <div className="navbar-item">Contact</div>
           </div>
         </div>
+        <div className="navbar-item is-center"><SearchBar /></div>
       </div>
-      <div className="navbar-end">
-        {isLoggedIn ? (
-          <div className="navbar-item">
-            <div className="buttons">
-              <div className="button is-primary" onClick={handleClick}>
-                <strong>
-                  <Link to="/signup">Log out</Link>
-                </strong>
-              </div>
+    </div>
+
+    {/* <SearchBar /> */}
+    <div className="navbar-end">
+      {isLoggedIn ? (
+        <div className="navbar-item">
+          <div className="buttons">
+            <div className="button is-primary" onClick={handleClick}>
+              <strong>
+                <Link to="/signup">Log out</Link>
+              </strong>
             </div>
           </div>
-        ) : (
+        </div>
+      ) : (
           <div className="navbar-item">
             <div className="buttons">
               <div className="button is-primary">
@@ -82,9 +87,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
             </div>
           </div>
         )}
-      </div>
     </div>
-  </nav>
+
+  </nav >
 )
 
 /**
@@ -100,6 +105,9 @@ const mapDispatch = dispatch => {
   return {
     handleClick() {
       dispatch(logout())
+    },
+    destroy() {
+      dispatch(destroySearch())
     }
   }
 }
@@ -107,8 +115,8 @@ const mapDispatch = dispatch => {
 export default connect(mapState, mapDispatch)(Navbar)
 
 /**
- * PROP TYPES
- */
+* PROP TYPES
+*/
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired

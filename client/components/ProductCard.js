@@ -15,7 +15,7 @@ class ProductCard extends React.Component {
         <NavLink to={`/products/${product.id}`}>
           <div className="card">
             <div className="card-image">
-              <figure className="image is-256x256">
+              <figure className="image is-96x96">
                 <img src={product.imageUrl} alt="Placeholder image" />
               </figure>
             </div>

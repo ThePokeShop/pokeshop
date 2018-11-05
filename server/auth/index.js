@@ -1,6 +1,12 @@
 const router = require('express').Router()
 const User = require('../db/models/user')
+const nodemailer = require('nodemailer')
+const crypto = require('crypto')
+const EmailToken = require('../db/models/emailToken')
+const Sequelize = require('sequelize')
 module.exports = router
+
+// defines URL for testing/production
 
 router.post('/login', async (req, res, next) => {
   try {
@@ -11,6 +17,9 @@ router.post('/login', async (req, res, next) => {
     } else if (!user.correctPassword(req.body.password)) {
       console.log('Incorrect password for user:', req.body.email)
       res.status(401).send('Wrong username and/or password')
+    } else if (!user.isEmailVerified) {
+      console.log('Email is not verified for user: ', req.body.email)
+      res.status(401).send('Email has not been verified yet')
     } else {
       req.login(user, err => (err ? next(err) : res.json(user)))
     }
@@ -19,16 +28,58 @@ router.post('/login', async (req, res, next) => {
   }
 })
 
+// creates a token and sends a link containing token to email address
 router.post('/signup', async (req, res, next) => {
+  let url =
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:8080'
+      : 'https://the-poke-shop.herokuapp.com'
+  let user
   try {
-    const user = await User.create(req.body)
-    req.login(user, err => (err ? next(err) : res.json(user)))
+    user = await User.create(req.body)
   } catch (err) {
     if (err.name === 'SequelizeUniqueConstraintError') {
       res.status(401).send('User already exists')
+      return
     } else {
       next(err)
     }
+  }
+  try {
+    const token = await EmailToken.create({
+      userId: user.id,
+      emailToken: crypto.randomBytes(16).toString('hex')
+    })
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+    const mailOptions = {
+      from: 'no-reply@the-poke-shop.herokuapp.com',
+      to: user.email,
+      subject: 'Account Verification Token',
+      html: `<p>Hello, ${
+        user.name
+      }!</p><p>Please verify your account by clicking the link:</p><a href="${url}/signup/confirm?token=${
+        token.emailToken
+      }">${url}/signup/confirm?token=${
+        token.emailToken
+      }</a><p>This link will expire in twelve hours.</p>`
+    }
+    transporter.sendMail(mailOptions, err => {
+      if (err) {
+        res.status(500).send({msg: err.message})
+      } else {
+        res
+        .sendStatus(201).redirect(`${url}/signup/success`)
+              }
+    });
+  } catch (err) {
+    console.error(err);
+    next(err)
   }
 })
 
@@ -43,3 +94,98 @@ router.get('/me', (req, res) => {
 })
 
 router.use('/google', require('./google'))
+
+router.get('/confirmation/:token', async (req, res, next) => {
+  try {
+    const token = req.params.token
+    const emailToken = await EmailToken.findOne({where: {emailToken: token}})
+    if (emailToken === null) {
+      res.status(400).send({message: 'Token not found.'})
+      return
+    }
+
+    const user = await User.findById(emailToken.userId)
+    // token has already been checked
+    if (emailToken.wasVerified) {
+      res.status(400).send({message: 'Token already used.'});
+      return
+    }
+    if (emailToken.wasVerified === false) {
+      res.status(400).send({message: 'Token expired.'})
+      return
+    }
+    if (!user) {
+      res.status(400).send({message: 'Unable to find a user for this token.'});
+      return
+    }
+
+    // token hasn't been checked yet
+    const timeDiff = new Date() - emailToken.updatedAt
+    if (timeDiff / 3600000 <= 12) {
+      await Promise.all([
+        user.update({isEmailVerified: true}),
+        emailToken.update({wasVerified: true})
+      ])
+      res.status(202).send({message: `${user.email} verified.`})
+      // req.login(user, err => (err ? next(err) : res.json(user)))
+      return
+    } else {
+      await emailToken.update({wasVerified: false})
+      res.status(400).send({message: 'Token expired.'})
+      return
+    }
+  } catch (err) {
+    console.error(err)
+    next(err)
+  }
+})
+
+router.get('/resend/:oldEmailToken', async (req, res, next) => {
+  const oldEmailToken = req.params.oldEmailToken
+  try {
+    const oldToken = await EmailToken.findOne({where: {emailToken: oldEmailToken}})
+    const user = await oldToken.getUser();
+    if (user === null) return res.status(400).send({message: 'User not found.'});
+    if (user.isEmailVerified)
+      return res.status(400).send({message: 'User already verified'})
+
+    const token = await EmailToken.create({
+      userId: user.id,
+      emailToken: crypto.randomBytes(16).toString('hex')
+    })
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_ADDRESS,
+        pass: process.env.EMAIL_PASSWORD
+      }
+    })
+
+    const url =
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8080'
+        : 'https://the-poke-shop.herokuapp.com'
+
+    const mailOptions = {
+      from: 'no-reply@the-poke-shop.herokuapp.com',
+      to: user.email,
+      subject: 'Account Verification Token',
+      html: `<p>Hello, ${
+        user.name
+      }!</p><p>Please verify your account by clicking the link:</p><a href="${url}/signup/confirm?token=${
+        token.emailToken
+      }">${url}/signup/confirm?token=${
+        token.emailToken
+      }</a><p>This link will expire in twelve hours.</p>`
+    }
+    transporter.sendMail(mailOptions, err => {
+      if (err) return res.status(500).send({message: err.message})
+      res
+        .status(200)
+        .send({message: 'A verification email has been sent to ' + user.email + '.'});
+    })
+  } catch (err) {
+    console.error(err)
+    next(err);
+  }
+})
