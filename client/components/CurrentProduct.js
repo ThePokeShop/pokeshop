@@ -1,15 +1,22 @@
 import React from 'react'
 import ProductCard from './ProductCard'
 import {connect} from 'react-redux'
-import {fetchSingleProduct} from '../store'
+import {fetchSingleProduct, fetchReview} from '../store'
 import {Link} from 'react-router-dom'
 import Review from './review'
 //keep as class instead of function component, since we will be adding more function later
 class CurrentProduct extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
     const productId = this.props.match.params.productId
     if (productId == Number(productId)) {
-      this.props.fetchSingleProduct(productId)
+      await this.props.fetchSingleProduct(productId)
+      await this.props.fetchReview(productId)
+    }
+  }
+  async componentDidUpdate(prevProps){
+    const productId = this.props.match.params.productId
+    if(this.props.reviews.length !== prevProps.reviews.length){
+      await this.props.fetchReview(productId)
     }
   }
   render() {
@@ -17,12 +24,13 @@ class CurrentProduct extends React.Component {
     if (productId != Number(productId)) {
       return <div>404</div> //<Notfound/>
     }
-    const {currentProduct} = this.props
+    const {currentProduct, reviews} = this.props
+  
     if (!currentProduct.title) {
       return <div>Loading...</div>
     } else {
       const ratingArr = []
-      currentProduct.reviews.forEach(review => ratingArr.push(review.rating))
+      reviews.forEach(review => ratingArr.push(review.rating))
       const averageRating = ratingArr.reduce((a,b) => (a + b)/ratingArr.length)
       const fixedRating =averageRating.toFixed(2)
       return (
@@ -71,7 +79,7 @@ class CurrentProduct extends React.Component {
         <div className='tile is-parent'>
         <strong>Reviews: </strong>
         <div className="section container">
-        <Review currentProduct={currentProduct} />
+        <Review reviews={reviews} currentProduct={currentProduct} />
         </div>
         </div>
         </div>
@@ -81,12 +89,14 @@ class CurrentProduct extends React.Component {
 }
 const mapStateToProps = state => {
   return {
-    currentProduct: state.currentProduct
+    currentProduct: state.currentProduct,
+    reviews: state.review
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
-    fetchSingleProduct: id => dispatch(fetchSingleProduct(id))
+    fetchSingleProduct: id => dispatch(fetchSingleProduct(id)),
+    fetchReview: id => dispatch(fetchReview(id))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentProduct)

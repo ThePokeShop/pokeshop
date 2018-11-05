@@ -38,14 +38,6 @@ router.get('/:productId', async (req, res, next) => {
           through: {
             attributes: []
           }
-        },
-        {
-          
-          model: Review,
-          order:['id'],
-          include:[{
-            model: User}
-          ]
         }
       ]
     })

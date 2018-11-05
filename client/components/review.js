@@ -34,11 +34,12 @@ class Review extends React.Component {
     })
   }
   render() {
-    const {currentProduct} = this.props
+    const {reviews} = this.props
+    console.log("in review comp",this.props)
     const isEnable = this.state.rating != 0 && this.state.content.length > 0
     return (
       <div>
-        {currentProduct.reviews.map(review => (
+        {reviews.map(review => (
           <article key={review.id} className="media">
             <figure className="media-left">
               <p className="image is-64x64">
