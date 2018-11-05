@@ -6,7 +6,25 @@ const Op = Sequelize.Op
 
 router.get('/', async (req, res, next) => {
   try {
-    const products = await Product.findAll({
+    // which page # to return - default 1
+    let page = parseInt(req.query.page, 20);
+    if (isNaN(page) || page < 1) {
+      page = 1;
+    }
+    // items per request - default 20, max 50
+    let limit = parseInt(req.query.limit, 20);
+    if (isNaN(limit)) {
+      limit = 20;
+    } else if (limit > 50) {
+      limit = 50;
+    } else if (limit < 1 ) {
+      limit = 1;
+    }
+    const numberOfProducts = Product.count();
+    let offset = (page - 1) * limit;
+    const options = {
+      offset,
+      limit,
       include: [
         {
           model: Category,
@@ -16,8 +34,20 @@ router.get('/', async (req, res, next) => {
             attributes: []
           }
         }
-      ]
-    })
+      ],
+      order: [['id', 'ASC']] // might be configurable?
+    }
+    if (req.query.key) {
+      let searchedItem = req.query.key
+      searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
+      options.where = {
+        title: {
+          [Op.like]: `%${searchedItem}%`
+        }
+      }
+    }
+
+    const products = await Product.findAll(options)
     res.json(products)
   } catch (err) {
     next(err)
