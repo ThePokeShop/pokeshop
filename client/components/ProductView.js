@@ -2,11 +2,8 @@ import React from 'react'
 import ProductCard from './ProductCard'
 import {connect} from 'react-redux'
 import CategoryPanel from './CategoryPanel'
-// import { fetchProducts } from '../store/index';
 import {fetchPaginatedProducts} from '../store/index'
-import { Link } from 'react-router-dom'
-// import { destroySearch } from '../store/searchProducts'
-
+import PageSelector from './PageSelector'
 
 //keep as class instead of function component, since we will be adding more function later
 class ProductView extends React.Component {
@@ -18,7 +15,7 @@ class ProductView extends React.Component {
     this.setState({loading: false})
   }
 
-  componentDidUpdate = async (prevProps) => {
+  componentDidUpdate = async prevProps => {
     if (this.props.location !== prevProps.location) {
       const urlParamStr = this.props.location.search.slice(1)
       this.setState({loading: true})
@@ -45,17 +42,19 @@ class ProductView extends React.Component {
   }
 
   render() {
-    const paginatedProducts = this.props.paginatedProducts
-    const filterProduct = this.filterProduct(paginatedProducts.products)
-    const loading = this.state.loading;
-    if (loading) return (
-      <div className="main-content columns is-fullheight">
+    const loading = this.state.loading
+    if (loading) {
+      return (
+        <div className="main-content columns is-fullheight">
           <CategoryPanel />
           <div className="container column">
             <div className="is-3">Loading...</div>
           </div>
         </div>
-    )
+      )
+    }
+    const paginatedProducts = this.props.paginatedProducts
+    const filterProduct = this.filterProduct(paginatedProducts.products)
     if (filterProduct.length === 0) {
       return (
         <div className="main-content columns is-fullheight">
@@ -65,74 +64,38 @@ class ProductView extends React.Component {
           </div>
         </div>
       )
-    } else {
-      return (
-        <div className="main-content columns is-fullheight">
-          <CategoryPanel />
-          <div className="container column">
+    }
+    const {page, pageCount, limit, key, products, count} = paginatedProducts
+    const offset = (page - 1) * limit;
+    const startProdNum = offset + 1
+    const endProdNum = offset + products.length;
+    const foundResultsMessage = `Found ${count} products. Displaying results ${startProdNum} to ${endProdNum}`
+    return (
+      <div className="main-content columns is-fullheight">
+        <CategoryPanel />
+        <div className="container column">
+          <div className="container">
+            <PageSelector />
             <div className="container">
-              {this.renderPageSelect()}
-              <div
-                className="section tile is-ancestor"
-                style={{flexwrap: 'row'}}
-              >
-                {filterProduct.map(product => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
+              <p className="is-size-5 has-text-left">{foundResultsMessage}</p>
+            </div>
+            <div
+              className="section tile is-ancestor"
+              style={{flexwrap: 'row'}}
+            >
+              {filterProduct.map(product => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
           </div>
         </div>
-      )
-    }
-  }
-  renderPageSelect() {
-    const {page, limit, pageCount, key} = this.props.paginatedProducts
-    if (pageCount < 1) return null
-    let paramUrl = '/products?'
-    if (key) paramUrl += `key=${key}&`;
-    paramUrl += `limit=${limit}&page=`;
-    const prevPageUrl = `${paramUrl}${page-1}`;
-    const nextPageUrl = `${paramUrl}${page+1}`;
-    return (
-      <nav className="pagination" role="navigation" aria-label="pagination">
-        {page > 1 && (<Link to={prevPageUrl} className="pagination-previous">
-          Previous
-        </Link>)}
-        {page < pageCount && (<Link to={nextPageUrl} className="pagination-next">
-          Next
-        </Link>)}
-        <ul className="pagination-list">
-          {new Array(pageCount).fill('').map((_, idx) => {
-            const pageNum = idx + 1
-            const isCurrent = (page === pageNum) ? 'is-current' : null;
-            const ariaLabel = (isCurrent) ? `Page ${pageNum}` : `Goto page ${pageNum}`;
-            const paramUrlWithNum = `${paramUrl}${pageNum}`
-            return (
-              <li key={pageNum}>
-                <Link to={paramUrlWithNum} className={`pagination-link ${isCurrent}`} aria-label={ariaLabel}>
-                  {pageNum}
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
+      </div>
     )
   }
 }
-const mapStateToProps = ({
-  // products,
-  // categories,
-  categoriesAreSelected,
-  // searchProduct,
-  paginatedProducts
-}) => {
+const mapStateToProps = ({categoriesAreSelected, paginatedProducts}) => {
   return {
-    // products,
-    // categories,
     categoriesAreSelected,
-    // searchProduct,
     paginatedProducts
   }
 }
