@@ -2,25 +2,25 @@
 
 const db = require('../server/db')
 const { User, Product, Category, Order, LineItem } = require('../server/db/models');
-const productSeed = require('./productSeed.json');
-
+const productSeed = require('./productSeed.json')
 async function seed() {
   await db.sync({ force: true })
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({ email: 'cody@email.com', password: '123', isAdmin: true, isEmailVerified: true, name: 'Cody' }),
-    User.create({ email: 'murphy@email.com', password: '123', isEmailVerified: true, name: 'Murphy' })
+    User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
+    User.create({ email: 'murphy@email.com', password: '123' })
   ])
-  const catTypes = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground',
-    'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon'];
+  const catTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
+    'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon'];
 
-  const categories = await Promise.all(catTypes.map(categoryType => Category.create({ categoryType })));
+  const categories = await Promise.all(catTypes.sort().map(categoryType => Category.create({ categoryType })));
 
   const orders = await Promise.all([
     Order.create({ status: 'active', userId: users[1].id }),
     Order.create({ status: 'active', userId: users[0].id })
   ]);
+
 
   let products = await Promise.all(productSeed.map(product =>
     Product.create({ title: product.title, price: (Math.random() * 20).toFixed(2), stockQuantity: Math.floor(Math.random() * 100), description: product.description, imageUrl: product.imageUrl })
@@ -41,9 +41,9 @@ async function seed() {
     }),
   ]);
 
-  await Promise.all([products.forEach(product => {
-    product.addCategory(categories[Math.ceil(Math.random() * 18)])
-  })])
+  await Promise.all(products.map(product => {
+    return product.addCategory(categories[Math.ceil(Math.random() * 18)])
+  }))
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
@@ -61,7 +61,7 @@ async function runSeed() {
     process.exitCode = 1
   } finally {
     console.log('closing db connection')
-    // await db.close()
+    await db.close()
     console.log('db connection closed')
   }
 }
