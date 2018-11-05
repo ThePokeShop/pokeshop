@@ -24,23 +24,6 @@ class ProductView extends React.Component {
     }
   }
 
-  // filterProduct = products => {
-  //   let filter = []
-  //   let productCount = Object.keys(products)
-  //   if (productCount.length) {
-  //     products.forEach(product => {
-  //       for (let i = 0; i < product.Category.length; i++) {
-  //         let cat = product.Category[i]
-  //         if (this.props.categoriesAreSelected[cat.id]) {
-  //           filter.push(product)
-  //           return
-  //         }
-  //       }
-  //     })
-  //   }
-  //   return filter
-  // }
-
   render() {
     const loading = this.state.loading
     if (loading) {
@@ -54,7 +37,6 @@ class ProductView extends React.Component {
       )
     }
     const paginatedProducts = this.props.paginatedProducts
-    // const filterProduct = this.filterProduct(paginatedProducts.products)
     if (paginatedProducts.products.length === 0) {
       return (
         <div className="main-content columns is-fullheight">
@@ -65,14 +47,14 @@ class ProductView extends React.Component {
         </div>
       )
     }
-    const {page, pageCount, limit, key, products, count} = paginatedProducts
+    const {page, pageCount, limit, key, products, count, catIds} = paginatedProducts
     const offset = (page - 1) * limit;
     const startProdNum = offset + 1
     const endProdNum = offset + products.length;
     const foundResultsMessage = `Found ${count} products. Displaying results ${startProdNum} to ${endProdNum}`
     return (
       <div className="main-content columns is-fullheight">
-        <CategoryPanel location={this.props.location}/>
+        <CategoryPanel location={this.props.location} searchKey={key}/>
         <div className="container column">
           <div className="container">
             <PageSelector />

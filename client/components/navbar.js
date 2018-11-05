@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { NavLink, Link } from 'react-router-dom'
 import { logout } from '../store'
 import SearchBar from './SearchBar'
-import { destroySearch } from '../store/searchProducts'
+import { destroySearch, setCategoriesTrue } from '../store/'
 const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
   <nav
     className="navbar is-dark is-fixed-top"
@@ -106,8 +106,9 @@ const mapDispatch = dispatch => {
     handleClick() {
       dispatch(logout())
     },
-    destroy() {
-      dispatch(destroySearch())
+    destroy: async () => {
+      await dispatch(destroySearch())
+      await dispatch(setCategoriesTrue())
     }
   }
 }

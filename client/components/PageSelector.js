@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 const PageSelector = props => {
-  const {page, limit, pageCount, key} = props.paginatedProducts
+  const {page, limit, pageCount, key, catIds} = props.paginatedProducts
   if (pageCount < 1) return null
   let paramUrl = '/products?'
   if (key) paramUrl += `key=${key}&`;
+  if (catIds) paramUrl +=`catIds=${JSON.stringify(catIds)}&`
   paramUrl += `limit=${limit}&page=`;
   const prevPageUrl = `${paramUrl}${page-1}`;
   const nextPageUrl = `${paramUrl}${page+1}`;

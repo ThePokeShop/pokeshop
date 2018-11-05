@@ -10,7 +10,7 @@ import {Link} from 'react-router-dom'
 const CategoryPanel = props => {
   // util function to create a new query string
 
-  const {categoriesAreSelected, categories, location} = props
+  const {categoriesAreSelected, categories, location, searchKey} = props
   const params = location.search.slice(1).split('&')
 
   const handleCheck = event => {
@@ -35,21 +35,31 @@ const CategoryPanel = props => {
     return `?${returnParams.join('&')}`
   }
   const submitUrl = linkBuilder(params, filteredCat)
+  const keyRemover = (currentParams) => {
+    const returnParams = currentParams
+      .filter(param => !param.startsWith('key='))
+    return `?${returnParams.join('&')}`
+  }
+  const keyRemoveUrl = keyRemover(params)
 
   return (
     <nav className="panel column is-2 is-fullheight is-narrow">
       <p className="panel-heading">Product Filter</p>
+      {searchKey && (
+        <p className="panel-block">
+          <p className="control has-icons-right">
+            Search Term: {searchKey}
+            <Link to={keyRemoveUrl}>
+              <span className="panel-icon is-right">
+                <i className="delete" />
+              </span>
+            </Link>
+          </p>
+        </p>
+      )}
       <p className="panel-tabs">
-        <a className="is-active">Categories</a>
+        <p className="is-active is-size-5">Categories</p>
       </p>
-      <div className="panel-block">
-        {/* <p className="control has-icons-left">
-          <input className="input is-small" type="text" placeholder="search" />
-          <span className="icon is-small is-left">
-            <i className="fas fa-search" aria-hidden="true" />
-          </span>
-        </p> */}
-      </div>
       {categories.map(category => {
         return (
           <label className="panel-block" key={category.id}>
@@ -65,7 +75,7 @@ const CategoryPanel = props => {
       })}
       <div className="panel-block">
         <button
-          className="button is-link is-outlined is-fullwidth"
+          className="button is-outlined is-fullwidth"
           type="button"
           onClick={handleClickFalse}
         >
@@ -74,22 +84,20 @@ const CategoryPanel = props => {
       </div>
       <div className="panel-block">
         <button
-          className="button is-link is-outlined is-fullwidth"
+          className="button is-outlined is-fullwidth"
           type="button"
           onClick={handleClick}
         >
-          Reset Filter
+          Check All
         </button>
       </div>
       <div className="panel-block">
-        <Link to={submitUrl}>
-          <button
-            className="button is-link is-outlined is-fullwidth"
-            type="button"
-          >
-            Filter Results
-          </button>
-        </Link>
+        <button
+          className="button is-link is-outlined is-fullwidth"
+          type="button"
+        >
+          <Link to={submitUrl}>Apply Filter </Link>
+        </button>
       </div>
     </nav>
   )

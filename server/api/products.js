@@ -35,16 +35,16 @@ router.get('/', async (req, res, next) => {
   let searchedItem = req.query.key
   try {
     if (!req.query.catIds) {
-      // which page # to return - default 1
       options.offset = offset
       options.limit = limit
-      if (searchedItem)
+      if (searchedItem) {
         searchedItem =
           searchedItem.slice(0, 1).toUpperCase() +
           searchedItem.slice(1).toLowerCase()
-      options.where = {
-        title: {
-          [Op.like]: `%${searchedItem}%`
+        options.where = {
+          title: {
+            [Op.like]: `%${searchedItem}%`
+          }
         }
       }
       products = await Product.findAndCountAll(options)
@@ -60,10 +60,20 @@ router.get('/', async (req, res, next) => {
     } else if (req.query.catIds) {
       // filter products the hard way w/o sequelize
       let categoryCount = await Category.count()
-      let catIds, response, count
-      let filteredProducts = []
-      catIds = JSON.parse(req.query.catIds).map(catId => +catId)
+      if (searchedItem) {
+        searchedItem =
+          searchedItem.slice(0, 1).toUpperCase() +
+          searchedItem.slice(1).toLowerCase()
+        options.where = {
+          title: {
+            [Op.like]: `%${searchedItem}%`
+          }
+        }
+      }
       products = await Product.findAll(options)
+      let catIds, response, count
+      catIds = JSON.parse(req.query.catIds).map(catId => +catId)
+      let filteredProducts = []
       products.forEach(product => {
         for (let i = 0; i < product.Category.length; i++) {
           let cat = product.Category[i]
