@@ -6,10 +6,18 @@ class ProductCard extends React.Component {
 
   render() {
     const { product } = this.props;
-    const ratingArr = []
-    product.reviews.forEach(review => ratingArr.push(review.rating))
-    const averageRating = ratingArr.reduce((a,b) => (a + b)/ratingArr.length)
-    const fixRating = averageRating.toFixed(2)
+     const ratingArr = []
+     let averageRating
+     let fixRating
+     if (product.reviews.length) {
+      product.reviews.forEach(review => ratingArr.push(review.rating))
+      if (ratingArr.length) {
+       averageRating = ratingArr.reduce((a, b) => (a + b)) / ratingArr.length
+       fixRating = averageRating.toFixed(2)
+      }
+     } else {
+      fixRating = 'No rating yet'
+     }
     return (
       <div className="tile">
         <NavLink to={`/products/${product.id}`}>

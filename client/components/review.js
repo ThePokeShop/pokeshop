@@ -1,16 +1,18 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {createNewReview} from '../store'
+import {createNewReview, fetchReview} from '../store'
 
 class Review extends React.Component {
   state = {
     rating: 0,
     content: ''
   }
-// component(){
-//     this.handleSubmit()
-// }
 
+async componentDidUpdate(prevProps){
+    if(this.props.reviews.length !== prevProps.reviews.length){
+      await this.props.fetchReview(this.props.currentProduct.id)
+    }
+  }
 
 
   handleChange = event => {
@@ -35,7 +37,6 @@ class Review extends React.Component {
   }
   render() {
     const {reviews} = this.props
-    console.log("in review comp",this.props)
     const isEnable = this.state.rating != 0 && this.state.content.length > 0
     return (
       <div>
@@ -119,7 +120,8 @@ const mapDispatchToProps = dispatch => {
   return {
     createNewReview: (reviewData, productId) => {
       return dispatch(createNewReview(reviewData, productId))
-    }
+    },
+    fetchReview: id => dispatch(fetchReview(id))
   }
 }
 

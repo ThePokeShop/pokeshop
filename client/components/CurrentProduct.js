@@ -13,12 +13,6 @@ class CurrentProduct extends React.Component {
       await this.props.fetchReview(productId)
     }
   }
-  async componentDidUpdate(prevProps){
-    const productId = this.props.match.params.productId
-    if(this.props.reviews.length !== prevProps.reviews.length){
-      await this.props.fetchReview(productId)
-    }
-  }
   render() {
     const productId = this.props.match.params.productId
     if (productId != Number(productId)) {
@@ -30,9 +24,17 @@ class CurrentProduct extends React.Component {
       return <div>Loading...</div>
     } else {
       const ratingArr = []
-      reviews.forEach(review => ratingArr.push(review.rating))
-      const averageRating = ratingArr.reduce((a,b) => (a + b)/ratingArr.length)
-      const fixedRating =averageRating.toFixed(2)
+      let averageRating
+      let fixedRating
+      if (reviews.length) {
+       reviews.forEach(review => ratingArr.push(review.rating))
+       if (ratingArr.length) {
+        averageRating = ratingArr.reduce((a, b) => (a + b)) / ratingArr.length
+        fixedRating = averageRating.toFixed(2)
+       }
+      } else {
+       fixedRating = 'No rating yet'
+      }
       return (
         <div>
       <div className="tile is-parent">
@@ -60,6 +62,7 @@ class CurrentProduct extends React.Component {
                   <strong>{fixedRating} </strong>
                 </p>
               </div>
+              <div className="content is-centered">Category: <strong>{currentProduct.Category.map(category => category.categoryType + " ")}</strong></div>
 
               <p>
                 <small>Description:  </small>

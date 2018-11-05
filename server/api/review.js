@@ -21,17 +21,24 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.post('/:productId', loginRequired, async (req, res, next) => {
+router.post('/', loginRequired, async (req, res, next) => {
   //destructure just to make sure what is in the review
   const {content, rating} = req.body
   const {id} = req.user.dataValues
   const userId = id
-  const productId = req.params.productId
+  const productId = req.query.productId
   const newReview = {content, rating, userId, productId}
 
   try {
     const review = await Review.create(newReview)
-    res.json(review)
+    const reviewWithUser = await Review.findById(review.id, {
+        include:[
+            {
+                model:User
+            }
+        ]
+    })
+    res.json(reviewWithUser)
   } catch (err) {
     next(err)
   }

@@ -21,7 +21,7 @@ export default function reviewsReducer(state = initialState, action) {
       case SET_REVIEW:
        return action.reviews
       case ADD_NEW_REVIEW:
-        return [...state, ...action.review]
+        return [...state, action.review]
       default:
         return state
     }
@@ -43,7 +43,7 @@ export const fetchReview = (productId) => async dispatch => {
 
 export const createNewReview = (reviewData, productId) => async dispatch => {
   try {
-    const response = await axios.post(`/api/review/${productId}`, reviewData);
+    const response = await axios.post(`/api/review?productId=${productId}`, reviewData);
     const action = addNewReview(response.data)
     dispatch(action)
   } catch (err) {

@@ -1,7 +1,7 @@
 'use strict'
 
 const db = require('../server/db')
-const { User, Product, Category, Order, LineItem } = require('../server/db/models');
+const { User, Product, Category, Order, LineItem, Review } = require('../server/db/models');
 const productSeed = require('./productSeed.json')
 async function seed() {
   await db.sync({force: true})
@@ -12,32 +12,7 @@ async function seed() {
     User.create({email: 'murphy@email.com', password: '123'})
   ])
 
-  const review = await Promise.all([
-    Review.create({
-      content: 'this pokemon is nice',
-      rating: 5,
-      productId: 1,
-      userId: 1
-    }),
-    Review.create({
-      content: 'this pokemon is so useless',
-      rating: 1,
-      productId: 2,
-      userId: 2
-    }),
-    Review.create({
-      content: 'this pokemon is big',
-      rating: 3,
-      productId: 1,
-      userId: 2
-    }),
-    Review.create({
-      content: 'this pokemon is small',
-      rating: 4,
-      productId: 2,
-      userId: 1
-    })
-  ])
+  
   const catTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
     'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon'];
 
@@ -69,9 +44,35 @@ async function seed() {
   ]);
 
   await Promise.all(products.map(product => {
-    return product.addCategory(categories[Math.ceil(Math.random() * 18)])
+    return product.addCategory(categories[Math.floor(Math.random() * catTypes.length)])
   }))
 
+  const review = await Promise.all([
+    Review.create({
+      content: 'this pokemon is nice',
+      rating: 5,
+      productId: 1,
+      userId: 1
+    }),
+    Review.create({
+      content: 'this pokemon is so useless',
+      rating: 1,
+      productId: 2,
+      userId: 2
+    }),
+    Review.create({
+      content: 'this pokemon is big',
+      rating: 3,
+      productId: 1,
+      userId: 2
+    }),
+    Review.create({
+      content: 'this pokemon is small',
+      rating: 4,
+      productId: 2,
+      userId: 1
+    })
+  ])
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
 }
