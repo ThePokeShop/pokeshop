@@ -1,70 +1,71 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
+import { withRouter } from 'react-router';
+import { addToCart } from '../store';
 
-class ProductCard extends React.Component {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (product, currentOrderId) => dispatch(addToCart(product, currentOrderId)),
+  }
+};
 
-  render() {
-    const { product } = this.props;
-    return (
-      <div className="tile">
-        <NavLink to={`/products/${product.id}`}>
-          <div className="card">
-            <div className="card-image">
-              <figure className="image is-256x256">
-                <img src={product.imageUrl} alt="Placeholder image" />
-              </figure>
-            </div>
-            <div className="card-content">
-              <div className="media">
-                <div className="media-content">
-                  <p className="title is-4 is-centered">
-                    {product.title}
-                  </p>
-                  <div className="content is-centered">ID: {product.id}</div>
-                  <div className="content is-centered">
-                    Price: <strong>{`$${product.price}`}</strong>
-                  </div>
-                  <div className="content is-centered">Quantity: {product.stockQuantity}</div>
-                  <div className="content is-centered">Category: <strong>{product.Category.map(category => category.categoryType + " ")}</strong></div>
+const mapStateToProps = state => {
+  return {
+    currentOrderId: state.orders.currentOrderId
+  }
+};
+
+const ProductCard = (props) => {
+
+  const handleAddProduct = (event) => {
+    event.preventDefault();
+    props.addToCart(props.product, props.currentOrderId);
+  }
+
+  return (
+    <div className="tile">
+      <NavLink to={`/products/${props.product.id}`}>
+        <div className="card">
+          <div className="card-image">
+            <figure className="image is-256x256">
+              <img src={props.product.imageUrl} alt="Placeholder image" />
+            </figure>
+          </div>
+          <div className="card-content">
+            <div className="media">
+              <div className="media-content">
+                <p className="title is-4 is-centered">
+                  {props.product.title}
+                </p>
+                <div className="content is-centered">ID: {props.product.id}</div>
+                <div className="content is-centered">
+                  Price: <strong>{`$${props.product.price}`}</strong>
                 </div>
+                <div className="content is-centered">Quantity: {props.product.stockQuantity}</div>
+                <div className="content is-centered">Category: <strong>{props.product.Category.map(category => category.categoryType + " ")}</strong></div>
               </div>
             </div>
-            <a className="button is-primary" onClick={this.addProductOnClick}>Add to Cart</a>
           </div>
-        </NavLink>
-
-        <div className="media-right">
-          <button
-            className="delete"
-            type="button"
-            onClick={this.removeProductOnClick}
-          />
+          <a className="button is-primary" onClick={handleAddProduct}>Add to Cart</a>
         </div>
+      </NavLink>
 
+      <div className="media-right">
+        <button
+          className="delete"
+          type="button"
+          onClick={addToCart}
+        />
       </div>
-    );
-  }
 
-  removeProductOnClick() {
-    alert(`Selected product is now deleted`);
-    // this.props.removeStudent(this.props.product.id);
-  }
-  addProductOnClick() {
-    alert(`Selected product is now add to cart`);
-    // this.props.removeStudent(this.props.product.id);
-  }
+    </div>
+  );
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
-//set null since pass from allstudent
-// const mapState = null;
-
-// const mapDispatch = { removeStudent };
-
-// export default connect(
-//   mapState,
-//   mapDispatch
-// )(ProdcutCard);
-export default ProductCard;
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProductCard));

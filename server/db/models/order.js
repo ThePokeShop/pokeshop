@@ -15,6 +15,10 @@ const Order = db.define('order', {
   billingAddress: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  sid: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 })
 module.exports = Order;

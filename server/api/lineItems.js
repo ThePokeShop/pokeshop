@@ -4,9 +4,18 @@ module.exports = router
 
 router.post('/', async (req, res, next) => {
   try {
-    const {quantity, totalPrice, productId} = req.body;
-    const newItem = await LineItem.create({quantity, totalPrice, productId});
-    res.json(newItem)
+    const {quantity, totalPrice, productId, orderId} = req.body;
+    const lineItem = await LineItem.findOne({where:{productId, orderId}});
+    if (lineItem) {
+      const qtyIncrement = quantity+lineItem.quantity;
+      const newTotalPrice = qtyIncrement * (totalPrice/quantity)
+      const updatedItem = await lineItem.update({quantity: qtyIncrement, totalPrice: newTotalPrice, productId, orderId});
+      res.json(updatedItem);
+    } else {
+      const newItem = await LineItem.create({quantity, totalPrice, productId, orderId});
+      res.json(newItem);
+    }
+
   } catch (err) {
     next(err)
   }

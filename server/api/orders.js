@@ -43,7 +43,7 @@ router.get('/:orderId', async (req, res, next) => {
     const userId = req.user.id;
     const isAdmin = req.user.isAdmin;
     let options = {
-      where: {orderId},
+      where: {id: orderId},
       include: [{model: LineItem}]};
     let {where} = options;
 
@@ -75,6 +75,21 @@ router.put('/:orderId', loginRequired, adminGateway, async (req, res, next) => {
     }
   } catch(err) {
     next(err)
+  }
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const userId = req.user.id || null;
+    const sid = req.session.sid;
+    let data = {
+      userId,
+      sid
+    };
+    const newOrder = await Order.create(data);
+    res.status(200).send(newOrder);
+  } catch(err) {
+    next(err);
   }
 });
 
