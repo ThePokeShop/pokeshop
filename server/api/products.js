@@ -7,12 +7,12 @@ const Op = Sequelize.Op
 router.get('/', async (req, res, next) => {
   try {
     // which page # to return - default 1
-    let page = parseInt(req.query.page, 20);
+    let page = parseInt(req.query.page, 10);
     if (isNaN(page) || page < 1) {
       page = 1;
     }
     // items per request - default 20, max 50
-    let limit = parseInt(req.query.limit, 20);
+    let limit = parseInt(req.query.limit, 10);
     if (isNaN(limit)) {
       limit = 20;
     } else if (limit > 50) {

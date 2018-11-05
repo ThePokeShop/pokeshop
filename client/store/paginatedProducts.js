@@ -30,7 +30,11 @@ export default function paginatedProductsReducer(state = initialState, action) {
 /* ------------       THUNK CREATORS     ------------------ */
 export const fetchPaginatedProducts = (queryStr) => async dispatch => {
   try {
-    const response = await axios.get(`/api/products?${queryStr}`)
+    const response = await axios.get(`/api/products?${queryStr}`, {
+      validateStatus: function (status) {
+        return status < 400; // Reject only if the status code is greater than or equal to 500
+      }
+    })
     const action = setPaginatedProductsState(response.data)
     dispatch(action)
   } catch (err) {
