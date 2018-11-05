@@ -17,7 +17,7 @@ export class SearchBar extends Component {
     this.setState({
       value: ''
     })
-    history.push(`/products/search?key=${this.state.value}`)
+    history.push(`/products?key=${this.state.value}`)
   }
   render() {
     return (

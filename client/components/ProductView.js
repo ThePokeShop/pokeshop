@@ -11,19 +11,9 @@ import { Link } from 'react-router-dom'
 //keep as class instead of function component, since we will be adding more function later
 class ProductView extends React.Component {
   state = {loading: true}
+
   async componentDidMount() {
-    // const queryObj = {}
-    const urlParamStr = this.props.location.search.slice(1) // get params from URL
-    // const urlParamArr = urlParamStr.split('&') // split into array
-    // urlParamArr.forEach(param => {
-    //   // loop over each parameter
-    //   const idxEqlSign = param.indexOf('=')
-    //   // end this loop if eqls sign not found, or at ends
-    //   if (idxEqlSign < 1 || idxEqlSign === param.length - 1) return undefined
-    //   const paramName = param.slice(0, idxEqlSign)
-    //   const paramVal = param.slice(idxEqlSign + 1)
-    //   queryObj[paramName] = paramVal // push params into queryObj
-    // })
+    const urlParamStr = this.props.location.search.slice(1)
     await this.props.fetchPaginatedProducts(urlParamStr)
     this.setState({loading: false})
   }
@@ -132,17 +122,17 @@ class ProductView extends React.Component {
   }
 }
 const mapStateToProps = ({
-  products,
-  categories,
+  // products,
+  // categories,
   categoriesAreSelected,
-  searchProduct,
+  // searchProduct,
   paginatedProducts
 }) => {
   return {
-    products,
-    categories,
+    // products,
+    // categories,
     categoriesAreSelected,
-    searchProduct,
+    // searchProduct,
     paginatedProducts
   }
 }
@@ -150,7 +140,6 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchPaginatedProducts: queryObj =>
       dispatch(fetchPaginatedProducts(queryObj))
-    // destroySearch: () => dispatch(destroySearch())
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductView)
