@@ -79,10 +79,7 @@ class ProductView extends React.Component {
             <div className="container">
               <p className="is-size-5 has-text-left">{foundResultsMessage}</p>
             </div>
-            <div
-              className="section tile is-ancestor"
-              style={{flexwrap: 'row'}}
-            >
+            <div id='listOfPokemons' className="section tile is-ancestor" >
               {filterProduct.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
