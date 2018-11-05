@@ -20,7 +20,6 @@ router.get('/', async (req, res, next) => {
     } else if (limit < 1 ) {
       limit = 1;
     }
-    const numberOfProducts = Product.count();
     let offset = (page - 1) * limit;
     const options = {
       offset,
@@ -47,8 +46,16 @@ router.get('/', async (req, res, next) => {
       }
     }
 
-    const products = await Product.findAll(options)
-    res.json(products)
+    const products = await Product.findAndCountAll(options)
+    const response = {
+      count: products.count,
+      pageCount: Math.ceil(products.count/limit),
+      key: req.query.key,
+      page,
+      limit,
+      products: products.rows
+    };
+    res.json(response);
   } catch (err) {
     next(err)
   }
