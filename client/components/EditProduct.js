@@ -60,6 +60,15 @@ class EditProduct extends Component {
     const handleSubmit = this.handleSubmit;
     const categories = this.props.categories;
     const handleCheck = this.handleCheck;
+    function oneTrue(obj)
+    {
+      for(var o in obj)
+          if(obj[o]) return true;
+        
+      return false;
+    }
+    const isEnable = this.state.title && oneTrue(checkObj)
+
     return (
       <section className="section">
         <div className="container">
@@ -142,7 +151,7 @@ class EditProduct extends Component {
                     );
                   })}
                 </div>
-                <button className="button" type="submit">
+                <button className="button" type="submit" disabled={!isEnable}>
                   Submit
                 </button>
               </form>

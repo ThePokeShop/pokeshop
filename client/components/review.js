@@ -8,12 +8,11 @@ class Review extends React.Component {
     content: ''
   }
 
-async componentDidUpdate(prevProps){
-    if(this.props.reviews.length !== prevProps.reviews.length){
+  async componentDidUpdate(prevProps) {
+    if (this.props.reviews.length !== prevProps.reviews.length) {
       await this.props.fetchReview(this.props.currentProduct.id)
     }
   }
-
 
   handleChange = event => {
     this.setState({
@@ -59,15 +58,15 @@ async componentDidUpdate(prevProps){
         ))}
 
         <article className="media">
-          {/* <figure className="media-left">
+          <figure className="media-left">
             <p className="image is-64x64">
-              <img src="https://bulma.io/images/placeholders/128x128.png" />
+              <img src="https://pre00.deviantart.net/fb6f/th/pre/i/2013/340/9/4/ash_ketchum__simplistic__by_geoffery10-d6wxngu.png" />
             </p>
-          </figure> */}
-          
+          </figure>
+
           <form onSubmit={this.handleSubmit}>
-            <div className="media-content">
-              <div className="field">
+            <div className="media-content container is-widescreen">
+              <div className="field" >
                 <p className="control">
                   <textarea
                     className="textarea"
@@ -77,16 +76,16 @@ async componentDidUpdate(prevProps){
                   />
                 </p>
               </div>
-
+            </div>
               {/* {let the user choose rating!} */}
-              <div className='control'>
-              <div className="select is-medium">
-                
+            <div className="field">
+              <div className="control">
+                <div className="select is-medium">
                   <select
                     value={this.state.rating}
                     onChange={this.handleRating}
                   >
-                    <option value={0}>  --select rating--  </option>
+                    <option value={0}> --select rating-- </option>
                     <option value={5}>★★★★★</option>
                     <option value={4}>★★★★</option>
                     <option value={3}>★★★</option>
@@ -94,10 +93,16 @@ async componentDidUpdate(prevProps){
                     <option value={1}>★</option>
                     ))}
                   </select>
-                  </div>
+                </div>
               </div>
               <div>
-                  {this.props.isLoggedIn ? <span/> : <div className='notification is-warning'>Please login to leave a review for this product!</div>}
+                {this.props.isLoggedIn ? (
+                  <span />
+                ) : (
+                  <div className="notification is-warning">
+                    Please login to leave a review for this product!
+                  </div>
+                )}
               </div>
               <div className="field">
                 <p className="control">
@@ -114,7 +119,7 @@ async componentDidUpdate(prevProps){
   }
 }
 const mapStateToProps = state => ({
-    isLoggedIn: !!state.user.id
+  isLoggedIn: !!state.user.id
 })
 const mapDispatchToProps = dispatch => {
   return {
