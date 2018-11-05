@@ -2,22 +2,21 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router';
-import { fetchOrders } from '../store';
+import { fetchSingleOrder } from '../store';
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: (active) => dispatch(fetchOrders(active))
+    fetchSingleOrder: (orderId) => dispatch(fetchSingleOrder(orderId))
   }
 }
 
 const componentDidMount = () => {
-  this.props.fetchOrders();
+  this.props.fetchSingleOrder(this.props.currentOrderId);
 }
 
 const mapStateToProps = state => {
   return {
-    cart: state.order,
-    orders: state.orders
+    currentOrderId: state.order.id
   }
 }
 

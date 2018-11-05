@@ -47,13 +47,9 @@ export const fetchOrders = (status = null) => {
 };
 
 export const fetchSingleOrder = (orderId) => {
-  return async (dispatch) => {
-    try {
-      const { data } = await axios.get(`/api/orders/${orderId}`);
-      dispatch(setOrder(data));
-    } catch(err) {
-      console.error(err);
-    }
+return async (dispatch) => {
+    const { data } = await axios.get(`/api/orders/${orderId}`);
+    dispatch(setOrder(data));
   }
 };
 
@@ -99,6 +95,16 @@ export const addToCart = (product, currentOrderId) => {
     dispatch(setCurrentOrderId(orderId));
   }
 };
+
+export const getCurrentOrder = () => {
+  return async (dispatch) => {
+    const {data} = await axios.get(`/api/orders?status=active`);
+    dispatch(setOrders(data));
+    if (data.length) {
+      dispatch(setCurrentOrderId(data[0].id));
+    }
+  }
+}
 
 export const updateQuantity = (quantity, lineItemId) => {
   return async (dispatch) => {
