@@ -83,10 +83,16 @@ router.get('/', async (req, res, next) => {
           }
         }
       })
+      let paginatedFiltered = []
+      for (let prodIdx = offset; prodIdx < filteredProducts.length; prodIdx++) {
+        let product = filteredProducts[prodIdx];
+        paginatedFiltered.push(product);
+        if (paginatedFiltered.length === limit) break
+      }
       count = filteredProducts.length
       response = {
         count,
-        products: filteredProducts.slice(offset),
+        products: paginatedFiltered,
         pageCount: Math.ceil(count / limit),
         key: req.query.key,
         catIds,

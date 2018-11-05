@@ -57,7 +57,7 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
             <div className="navbar-item">Contact</div>
           </div>
         </div>
-        <div className="navbar-item is-center"><SearchBar /></div>
+        <div className="navbar-item is-center"><SearchBar destroy = {destroy} /></div>
       </div>
     </div>
 

@@ -13,6 +13,27 @@ const CategoryPanel = props => {
   const {categoriesAreSelected, categories, location, searchKey} = props
   const params = location.search.slice(1).split('&')
 
+  // generate URLs
+  const filteredCat = Object.keys(categoriesAreSelected).filter(
+    id => categoriesAreSelected[id]
+  )
+  const linkBuilder = (currentParams, catIds) => {
+    let returnParams = currentParams.filter(param => !param.startsWith('catIds='))
+    if (catIds.length < categories.length) returnParams = returnParams.concat(`catIds=${JSON.stringify(catIds)}`)
+    return `?${returnParams.join('&')}`
+  }
+  const submitUrl = linkBuilder(params, filteredCat)
+  const keyRemover = currentParams => {
+    const returnParams = currentParams.filter(
+      param => !param.startsWith('key=')
+    )
+    return `?${returnParams.join('&')}`
+  }
+  const keyRemoveUrl = keyRemover(params)
+
+  // disable apply filter btn if catIds empty
+  const applyBtnDisabled = filteredCat.length === 0;
+  // handle events
   const handleCheck = event => {
     const id = event.target.name
     props.toggleCategorySelected(id)
@@ -23,24 +44,9 @@ const CategoryPanel = props => {
   const handleClickFalse = () => {
     props.setCategoriesFalse()
   }
-
-  const filteredCat = Object.keys(categoriesAreSelected).filter(
-    id => categoriesAreSelected[id]
-  )
-
-  const linkBuilder = (currentParams, catIds) => {
-    const returnParams = currentParams
-      .filter(param => !param.startsWith('catIds='))
-      .concat(`catIds=${JSON.stringify(catIds)}`)
-    return `?${returnParams.join('&')}`
+  const handleApply = () => {
+    props.history.push(submitUrl)
   }
-  const submitUrl = linkBuilder(params, filteredCat)
-  const keyRemover = (currentParams) => {
-    const returnParams = currentParams
-      .filter(param => !param.startsWith('key='))
-    return `?${returnParams.join('&')}`
-  }
-  const keyRemoveUrl = keyRemover(params)
 
   return (
     <nav className="panel column is-2 is-fullheight is-narrow">
@@ -95,8 +101,10 @@ const CategoryPanel = props => {
         <button
           className="button is-link is-outlined is-fullwidth"
           type="button"
+          onClick={handleApply}
+          disabled={applyBtnDisabled}
         >
-          <Link to={submitUrl}>Apply Filter </Link>
+          Apply Filter
         </button>
       </div>
     </nav>
