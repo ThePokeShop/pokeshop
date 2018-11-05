@@ -58,7 +58,7 @@ class ProductView extends React.Component {
     if (filterProduct.length === 0) {
       return (
         <div className="main-content columns is-fullheight">
-          <CategoryPanel key = "no-products"/>
+          <CategoryPanel />
           <div className="container column">
             <div>No Products</div>
           </div>
@@ -72,7 +72,7 @@ class ProductView extends React.Component {
     const foundResultsMessage = `Found ${count} products. Displaying results ${startProdNum} to ${endProdNum}`
     return (
       <div className="main-content columns is-fullheight">
-        <CategoryPanel key="products-loaded"/>
+        <CategoryPanel />
         <div className="container column">
           <div className="container">
             <PageSelector />

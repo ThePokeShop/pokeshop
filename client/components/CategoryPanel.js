@@ -1,15 +1,10 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {
-  toggleCategorySelected,
-  setCategoriesTrue,
-  setCategoriesFalse
-} from '../store/index'
+import {toggleCategorySelected, setCategoriesTrue, setCategoriesFalse} from '../store/index'
 
 //this needs to be a func comp
 
 const CategoryPanel = props => {
-  const {categoriesAreSelected, categories} = props
   const handleCheck = event => {
     const id = event.target.name
     props.toggleCategorySelected(id)
@@ -17,14 +12,10 @@ const CategoryPanel = props => {
   const handleClick = () => {
     props.setCategoriesTrue()
   }
-  const handleClickFalse = () => {
+  const handleClickFalse =() =>{
     props.setCategoriesFalse()
   }
-  const handleSubmit = event => {
-    event.preventDefault()
-    let filteredCat = categoriesAreSelected.keys.filter(id => categoriesAreSelected[id])
-    console.log(`catId=${filteredCat}`)
-  }
+  const {categoriesAreSelected, categories} = props
   return (
     <nav className="panel column is-2 is-fullheight is-narrow">
       <p className="panel-heading">Product Filter</p>
@@ -32,12 +23,12 @@ const CategoryPanel = props => {
         <a className="is-active">Categories</a>
       </p>
       <div className="panel-block">
-        {/* <p className="control has-icons-left">
+        <p className="control has-icons-left">
           <input className="input is-small" type="text" placeholder="search" />
           <span className="icon is-small is-left">
             <i className="fas fa-search" aria-hidden="true" />
           </span>
-        </p> */}
+        </p>
       </div>
       {categories.map(category => {
         return (
@@ -68,15 +59,6 @@ const CategoryPanel = props => {
           onClick={handleClick}
         >
           Reset Filter
-        </button>
-      </div>
-      <div className="panel-block">
-        <button
-          className="button is-link is-outlined is-fullwidth"
-          type="button"
-          onClick={handleSubmit}
-        >
-          Filter Results
         </button>
       </div>
     </nav>
