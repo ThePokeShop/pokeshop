@@ -1,61 +1,90 @@
 const router = require('express').Router()
-const { Product, Category } = require('../db/models')
-const { loginRequired, adminGateway } = require('../utils');
+const {Product, Category} = require('../db/models')
+const {loginRequired, adminGateway} = require('../utils')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
 router.get('/', async (req, res, next) => {
-  try {
-    // which page # to return - default 1
-    let page = parseInt(req.query.page, 10);
-    if (isNaN(page) || page < 1) {
-      page = 1;
-    }
-    // items per request - default 20, max 50
-    let limit = parseInt(req.query.limit, 10);
-    if (isNaN(limit)) {
-      limit = 20;
-    } else if (limit > 50) {
-      limit = 50;
-    } else if (limit < 1 ) {
-      limit = 1;
-    }
-    let offset = (page - 1) * limit;
-    const options = {
-      offset,
-      limit,
-      include: [
-        {
-          model: Category,
-          as: 'Category',
-          attributes: ['id', 'categoryType'],
-          through: {
-            attributes: []
-          }
+  let page = parseInt(req.query.page, 10)
+  if (isNaN(page) || page < 1) {
+    page = 1
+  }
+  // items per request - default 20, max 50
+  let limit = parseInt(req.query.limit, 10)
+  if (isNaN(limit)) {
+    limit = 20
+  } else if (limit > 50) {
+    limit = 50
+  } else if (limit < 1) {
+    limit = 1
+  }
+  let offset = (page - 1) * limit
+  const options = {
+    include: [
+      {
+        model: Category,
+        as: 'Category',
+        attributes: ['id', 'categoryType'],
+        through: {
+          attributes: []
         }
-      ],
-      order: [['id', 'ASC']] // might be configurable?
-    }
-    if (req.query.key) {
-      let searchedItem = req.query.key
-      searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
+      }
+    ],
+    order: [['id', 'ASC']] // might be configurable?
+  }
+  let searchedItem = req.query.key
+  try {
+    if (!req.query.catIds) {
+      // which page # to return - default 1
+      options.offset = offset
+      options.limit = limit
+      if (searchedItem)
+        searchedItem =
+          searchedItem.slice(0, 1).toUpperCase() +
+          searchedItem.slice(1).toLowerCase()
       options.where = {
         title: {
           [Op.like]: `%${searchedItem}%`
         }
       }
+      products = await Product.findAndCountAll(options)
+      response = {
+        count: products.count,
+        pageCount: Math.ceil(products.count / limit),
+        key: req.query.key,
+        page,
+        limit,
+        products: products.rows
+      }
+      res.json(response)
+    } else if (req.query.catIds) {
+      // filter products the hard way w/o sequelize
+      let categoryCount = await Category.count()
+      let catIds, response, count
+      let filteredProducts = []
+      catIds = JSON.parse(req.query.catIds).map(catId => +catId)
+      products = await Product.findAll(options)
+      products.forEach(product => {
+        for (let i = 0; i < product.Category.length; i++) {
+          let cat = product.Category[i]
+          if (catIds.includes(cat.id)) {
+            filteredProducts.push(product)
+            return
+          }
+        }
+      })
+      count = filteredProducts.length
+      response = {
+        count,
+        products: filteredProducts.slice(offset),
+        pageCount: Math.ceil(count / limit),
+        key: req.query.key,
+        catIds,
+        page,
+        limit
+      }
+      res.json(response)
     }
-
-    const products = await Product.findAndCountAll(options)
-    const response = {
-      count: products.count,
-      pageCount: Math.ceil(products.count/limit),
-      key: req.query.key,
-      page,
-      limit,
-      products: products.rows
-    };
-    res.json(response);
   } catch (err) {
     next(err)
   }
@@ -64,13 +93,16 @@ router.get('/search', async (req, res, next) => {
   try {
     let searchedItem = req.query.key
     if (searchedItem) {
-      searchedItem = searchedItem.slice(0, 1).toUpperCase() + searchedItem.slice(1).toLowerCase()
+      searchedItem =
+        searchedItem.slice(0, 1).toUpperCase() +
+        searchedItem.slice(1).toLowerCase()
       const searchedProduct = await Product.findAll({
         where: {
           title: {
             [Op.like]: `%${searchedItem}%`
           }
-        }, include: [
+        },
+        include: [
           {
             model: Category,
             as: 'Category',
@@ -113,8 +145,8 @@ router.get('/:productId', async (req, res, next) => {
 })
 
 router.post('/', loginRequired, adminGateway, async (req, res, next) => {
-  const { title, price, imageUrl, stockQuantity, categoryId } = req.body
-  const newProduct = { title, price, stockQuantity }
+  const {title, price, imageUrl, stockQuantity, categoryId} = req.body
+  const newProduct = {title, price, stockQuantity}
   if (imageUrl) newProduct.imageUrl = imageUrl
   try {
     const product = await Product.create(newProduct)
@@ -131,42 +163,47 @@ router.post('/', loginRequired, adminGateway, async (req, res, next) => {
         }
       ]
     })
-    res.json(updatedProduct);
+    res.json(updatedProduct)
   } catch (err) {
     next(err)
   }
 })
 
-router.put('/:productId', loginRequired, adminGateway, async (req, res, next) => {
-  const productId = req.params.productId
-  // ignores id in request body - not sure if RESTful
-  const { title, price, imageUrl, stockQuantity, categoryId } = req.body
-  const newData = { title, price, categoryId, stockQuantity }
+router.put(
+  '/:productId',
+  loginRequired,
+  adminGateway,
+  async (req, res, next) => {
+    const productId = req.params.productId
+    // ignores id in request body - not sure if RESTful
+    const {title, price, imageUrl, stockQuantity, categoryId} = req.body
+    const newData = {title, price, categoryId, stockQuantity}
 
-  if (imageUrl) newData.imageUrl = imageUrl
-  try {
-    const product = await Product.findById(productId)
-    if (product) {
-      await product.update(newData)
-      await product.setCategory(categoryId)
-      const updatedProduct = await Product.findById(productId, {
-        include: [
-          {
-            model: Category,
-            as: 'Category',
-            attributes: ['id', 'categoryType'],
-            through: {
-              attributes: []
+    if (imageUrl) newData.imageUrl = imageUrl
+    try {
+      const product = await Product.findById(productId)
+      if (product) {
+        await product.update(newData)
+        await product.setCategory(categoryId)
+        const updatedProduct = await Product.findById(productId, {
+          include: [
+            {
+              model: Category,
+              as: 'Category',
+              attributes: ['id', 'categoryType'],
+              through: {
+                attributes: []
+              }
             }
-          }
-        ]
-      })
-      res.json(updatedProduct); // matches get request to api/products/:productId
-    } else {
-      res.sendStatus(404)
+          ]
+        })
+        res.json(updatedProduct) // matches get request to api/products/:productId
+      } else {
+        res.sendStatus(404)
+      }
+    } catch (err) {
+      next(err)
     }
-  } catch (err) {
-    next(err)
   }
-})
+)
 module.exports = router

@@ -24,29 +24,29 @@ class ProductView extends React.Component {
     }
   }
 
-  filterProduct = products => {
-    let filter = []
-    let productCount = Object.keys(products)
-    if (productCount.length) {
-      products.forEach(product => {
-        for (let i = 0; i < product.Category.length; i++) {
-          let cat = product.Category[i]
-          if (this.props.categoriesAreSelected[cat.id]) {
-            filter.push(product)
-            return
-          }
-        }
-      })
-    }
-    return filter
-  }
+  // filterProduct = products => {
+  //   let filter = []
+  //   let productCount = Object.keys(products)
+  //   if (productCount.length) {
+  //     products.forEach(product => {
+  //       for (let i = 0; i < product.Category.length; i++) {
+  //         let cat = product.Category[i]
+  //         if (this.props.categoriesAreSelected[cat.id]) {
+  //           filter.push(product)
+  //           return
+  //         }
+  //       }
+  //     })
+  //   }
+  //   return filter
+  // }
 
   render() {
     const loading = this.state.loading
     if (loading) {
       return (
         <div className="main-content columns is-fullheight">
-          <CategoryPanel />
+          <CategoryPanel {...this.props}/>
           <div className="container column">
             <div className="is-3">Loading...</div>
           </div>
@@ -54,11 +54,11 @@ class ProductView extends React.Component {
       )
     }
     const paginatedProducts = this.props.paginatedProducts
-    const filterProduct = this.filterProduct(paginatedProducts.products)
-    if (filterProduct.length === 0) {
+    // const filterProduct = this.filterProduct(paginatedProducts.products)
+    if (paginatedProducts.products.length === 0) {
       return (
         <div className="main-content columns is-fullheight">
-          <CategoryPanel />
+          <CategoryPanel location={this.props.location}/>
           <div className="container column">
             <div>No Products</div>
           </div>
@@ -72,7 +72,7 @@ class ProductView extends React.Component {
     const foundResultsMessage = `Found ${count} products. Displaying results ${startProdNum} to ${endProdNum}`
     return (
       <div className="main-content columns is-fullheight">
-        <CategoryPanel />
+        <CategoryPanel location={this.props.location}/>
         <div className="container column">
           <div className="container">
             <PageSelector />
@@ -80,7 +80,7 @@ class ProductView extends React.Component {
               <p className="is-size-5 has-text-left">{foundResultsMessage}</p>
             </div>
             <div id='listOfPokemons' className="section tile is-ancestor" >
-              {filterProduct.map(product => (
+              {products.map(product => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

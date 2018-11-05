@@ -8,8 +8,8 @@ async function seed() {
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
-    User.create({ email: 'murphy@email.com', password: '123' })
+    User.create({ email: 'cody@email.com', password: '123', isAdmin: true, isEmailVerified: true }),
+    User.create({ email: 'murphy@email.com', password: '123', isEmailVerified: true })
   ])
   const catTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
     'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon'];
@@ -42,7 +42,7 @@ async function seed() {
   ]);
 
   await Promise.all(products.map(product => {
-    return product.addCategory(categories[Math.ceil(Math.random() * 18)])
+    return product.addCategory(categories[Math.floor(Math.random() * catTypes.length)])
   }))
 
   console.log(`seeded ${users.length} users`)
