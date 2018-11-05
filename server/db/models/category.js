@@ -5,8 +5,8 @@ const db = require('../db')
 
 const Category = db.define('category', {
   categoryType: {
-    type: Sequelize.ENUM('normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground',
-      'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon')
+    type: Sequelize.ENUM('Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
+      'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon')
   }
 })
 

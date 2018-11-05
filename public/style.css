@@ -321,3 +321,7 @@ button.go-back {
 }
 button:hover {box-shadow: 0 0 20px 0 #C0D7DD;}
 
+#listOfPokemons {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  }

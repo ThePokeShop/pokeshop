@@ -2,19 +2,19 @@
 
 const db = require('../server/db')
 const { User, Product, Category, Order, LineItem } = require('../server/db/models');
-
+const productSeed = require('./productSeed.json')
 async function seed() {
   await db.sync({ force: true })
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({ email: 'cody@email.com', password: '123', isAdmin: true, isEmailVerified: true, name: 'Cody' }),
-    User.create({ email: 'murphy@email.com', password: '123', isEmailVerified: true, name: 'Murphy' })
+    User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
+    User.create({ email: 'murphy@email.com', password: '123' })
   ])
-  const catTypes = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground',
-    'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon'];
+  const catTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
+    'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon'];
 
-  const categories = await Promise.all(catTypes.map(categoryType => Category.create({ categoryType })));
+  const categories = await Promise.all(catTypes.sort().map(categoryType => Category.create({ categoryType })));
 
   const orders = await Promise.all([
     Order.create({status: 'active', userId: users[1].id}),
@@ -22,21 +22,21 @@ async function seed() {
     Order.create({status: 'shipped', userId: users[1].id})
   ]);
 
-  const products = await Promise.all([
-    Product.create({ title: 'Pikachu', price: 10.44, stockQuantity: 3 }),
-    Product.create({ title: 'Raichu', price: 3.44, stockQuantity: 31 })
-  ]);
 
+  let products = await Promise.all(productSeed.map(product =>
+    Product.create({ title: product.title, price: (Math.random() * 20).toFixed(2), stockQuantity: Math.floor(Math.random() * 100), description: product.description, imageUrl: product.imageUrl })
+  )
+  )
   const lineItems = await Promise.all([
     LineItem.create({
       quantity: 2,
-      totalPrice: ((products[0].price)*2),
+      totalPrice: ((products[0].price) * 2),
       productId: products[0].id,
       orderId: orders[0].id
     }),
     LineItem.create({
       quantity: 10,
-      totalPrice: ((products[0].price)*10),
+      totalPrice: ((products[0].price) * 10),
       productId: products[0].id,
       orderId: orders[1].id
     }),
@@ -48,10 +48,9 @@ async function seed() {
     })
   ]);
 
-  await Promise.all([
-    products[0].setCategory([categories[0]]),
-    products[1].setCategory([categories[0]])
-  ]);
+  await Promise.all(products.map(product => {
+    return product.addCategory(categories[Math.ceil(Math.random() * 18)])
+  }))
 
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)
