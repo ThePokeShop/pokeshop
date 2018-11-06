@@ -114,10 +114,12 @@ const orderReducer = (state = orderState, action) => {
         let newObj = {...state}
         const {orders} = action
         console.log('action.orders console logging', action.orders)
-        orders.forEach(order => {
-          //order.total = calculateTotal(order);
-          newObj[order.id.toString()] = order
-        })
+        if (orders.length) {
+          orders.forEach(order => {
+            //order.total = calculateTotal(order);
+            newObj[order.id.toString()] = order
+          })
+        }
         return {...newObj}
       }
       case SET_ORDER: {

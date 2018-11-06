@@ -4,6 +4,19 @@ const {loginRequired, adminGateway} = require('../utils')
 
 router.get('/', async (req, res, next) => {
   try {
+    if (!req.user) {
+      let sid = req.session.id;
+      console.log('sid...', sid)
+      let guestOrder = await Order.findAll({
+        where: {
+          sid: sid,
+          status: 'active'
+        },
+        include: [{model: LineItem}]
+      })
+      res.json(guestOrder);
+      return
+    }
     const orderStatus = req.query.status
     const viewAsAdmin = req.query.viewAsAdmin === 'true'
     const statusVals = [
@@ -26,9 +39,6 @@ router.get('/', async (req, res, next) => {
       if (!viewAsAdmin || !isAdmin) {
         where.userId = userId
       }
-    } else {
-      where.userId = null
-      // where.sessionId =
     }
     if (orderStatus) {
       where.status = orderStatus
@@ -48,6 +58,21 @@ router.get('/', async (req, res, next) => {
 router.get('/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId
+    if (!req.user) {
+      let sid = req.session.id;
+      console.log('sid...', sid)
+      let guestOrder = await Order.findOne({
+        where: {
+          sid: sid,
+          id: orderId,
+          status: 'active'
+        },
+        include: [{model: LineItem,
+        include: [{model: Product}]}]
+      })
+      res.json(guestOrder);
+      return
+    }
     const userId = req.user.id
     const isAdmin = req.user.isAdmin
 
