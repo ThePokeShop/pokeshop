@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const {Product, Category, Review, User} = require('../db/models')
-const {loginRequired, adminGateway} = require('../utils')
+const { Product, Category, Review, User } = require('../db/models')
+const { loginRequired, adminGateway } = require('../utils')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -23,20 +23,20 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', loginRequired, async (req, res, next) => {
   //destructure just to make sure what is in the review
-  const {content, rating} = req.body
-  const {id} = req.user.dataValues
+  const { content, rating } = req.body
+  const { id } = req.user.dataValues
   const userId = id
   const productId = req.query.productId
-  const newReview = {content, rating, userId, productId}
+  const newReview = { content, rating, userId, productId }
 
   try {
     const review = await Review.create(newReview)
     const reviewWithUser = await Review.findById(review.id, {
-        include:[
-            {
-                model:User
-            }
-        ]
+      include: [
+        {
+          model: User
+        }
+      ]
     })
     res.json(reviewWithUser)
   } catch (err) {
@@ -47,9 +47,9 @@ router.post('/', loginRequired, async (req, res, next) => {
 router.put('/:productId', loginRequired, async (req, res, next) => {
   const productId = req.params.productId
   // ignores id in request body - not sure if RESTful
-  const {title, price, imageUrl, stockQuantity, categoryId} = req.body
-  const newData = {title, price, categoryId, stockQuantity}
-  console.log('newData: ', newData)
+  const { title, price, imageUrl, stockQuantity, categoryId } = req.body
+  const newData = { title, price, categoryId, stockQuantity }
+
   if (imageUrl) newData.imageUrl = imageUrl
   try {
     const product = await Product.findById(productId)

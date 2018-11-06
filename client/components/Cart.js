@@ -1,11 +1,12 @@
 
 import React from 'react'
-import {Link} from 'react-router-dom'
-import {connect} from 'react-redux'
-import {withRouter} from 'react-router'
-import {fetchSingleOrder, getCurrentOrder} from '../store'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
+import { fetchSingleOrder, getCurrentOrder } from '../store'
 import Checkout from './Checkout'
 import history from '../history'
+import TakeMoney from './CheckoutStripe'
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -25,22 +26,24 @@ class Cart extends React.Component {
     loading: true
   }
   async componentDidMount() {
-    this.setState({loading: true})
+    this.setState({ loading: true })
     await this.props.getCurrentOrder()
     if (this.props.currentOrderId) {
       await this.props.fetchSingleOrder(this.props.currentOrderId)
     }
-    this.setState({loading: false})
+    this.setState({ loading: false })
   }
   async componentDidUpdate(prevProps) {
     if (prevProps.currentOrderId !== this.props.currentOrderId) {
-      this.setState({loading: true})
-      await this.props.fetchSingleOrder(this.props.currentOrderId)
-      this.setState({loading: false})
+      this.setState({ loading: true })
+      if (this.props.currentOrderId) {
+        await this.props.fetchSingleOrder(this.props.currentOrderId)
+        this.setState({ loading: false })
+      }
     }
   }
   render() {
-    const {currentOrderId, currentOrder} = this.props
+    const { currentOrderId, currentOrder } = this.props
     const loading = this.state.loading
     if (loading) {
       return (
@@ -77,7 +80,7 @@ class Cart extends React.Component {
               </thead>
               <tbody>
                 {currentOrder.lineItems.map(item => {
-                  let {product, quantity, totalPrice} = item
+                  let { product, quantity, totalPrice } = item
                   return (
                     <tr key={item.id}>
                       <td>
@@ -122,11 +125,7 @@ class Cart extends React.Component {
               <p>Total: ${currentOrder.total}</p>
             </div>
             <div className="panel-block">
-               <Link to="/checkout">
-              <button type="button" className="button is-warning is-fullwidth">
-                Checkout
-              </button>
-</Link>
+              <TakeMoney price={currentOrder.total} currentOrderId={currentOrderId} lineItems={currentOrder.lineItems} />
             </div>
           </div>
         </div>
