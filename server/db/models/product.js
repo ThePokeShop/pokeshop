@@ -28,7 +28,10 @@ const Product = db.define('product', {
   },
   description:{
     type: Sequelize.TEXT
+  },
+  visibleToUser:{
+    type: Sequelize.BOOLEAN,
+    defaultValue: true
   }
-  
 })
 module.exports = Product

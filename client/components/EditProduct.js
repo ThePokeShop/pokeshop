@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom';
 class EditProduct extends Component {
   constructor(props) {
     super(props)
-    const {id, title, price, imageUrl, stockQuantity, Category} = props.currentProduct;
+    const {id, title, price, imageUrl, stockQuantity, Category, visibleToUser} = props.currentProduct;
     const categories = props.categories;
     const categoryId = Object.values(Category).map(cat => cat.id)
     const checkObj = {};
@@ -18,7 +18,8 @@ class EditProduct extends Component {
       price,
       imageUrl,
       stockQuantity,
-      checkObj
+      checkObj,
+      visibleToUser
     }
   }
   componentDidMount() {
@@ -53,6 +54,12 @@ class EditProduct extends Component {
       }
     })
   }
+  handleCheckAdmin = () => {
+    this.setState({
+      visibleToUser: !this.state.visibleToUser
+
+    })
+  }
 
   render() {
     const {name, title, price, imageUrl, stockQuantity, displayName, checkObj} = this.state;
@@ -68,7 +75,6 @@ class EditProduct extends Component {
       return false;
     }
     const isEnable = this.state.title && oneTrue(checkObj)
-
     return (
       <section className="section">
         <div className="container">
@@ -150,6 +156,12 @@ class EditProduct extends Component {
                       </label>
                     );
                   })}
+                </div>
+                <div className="field">
+                  <p className="has-text-centered"> Visible to user:</p>
+                      <label key = {this.props.currentProduct.id} className="checkbox">
+                        <input type="checkbox" name={this.props.currentProduct.id} checked={this.state.visibleToUser} onChange={this.handleCheckAdmin}/>
+                      </label>
                 </div>
                 <button className="button" type="submit" disabled={!isEnable}>
                   Submit

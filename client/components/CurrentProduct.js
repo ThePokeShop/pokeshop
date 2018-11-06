@@ -18,7 +18,8 @@ class CurrentProduct extends React.Component {
     if (productId != Number(productId)) {
       return <div>404</div> //<Notfound/>
     }
-    const {currentProduct, reviews} = this.props
+    const {currentProduct, reviews, isAdmin} = this.props
+    const enableView=(currentProduct.visibleToUser || isAdmin )
 
     if (!currentProduct.title) {
       return <div>Loading...</div>
@@ -37,92 +38,106 @@ class CurrentProduct extends React.Component {
       }
       return (
         <div>
-          <div className="tile is-parent">
-            <div className="section container">
-              <article className="media">
-                <figure className="media-left">
-                  <p className="image is-128x128">
-                    <img src={currentProduct.imageUrl} />
-                  </p>
-                  <button className="delete" type="button" />
-                  <Link to={`/products/${productId}/edit`}>
-                    <a className="button is-primary">Edit Product</a>
+          {enableView ? (
+            <div>
+              <nav
+                className="pagination"
+                role="navigation"
+                aria-label="pagination"
+              >
+                {
+                  <Link to="/products" className="pagination-previous">
+                    {'< '}All products
                   </Link>
-                </figure>
-                <div className="media-content">
-                  <div className="content">
-                    <p>
-                      <h2>
-                        <strong>{currentProduct.title}</strong>
-                      </h2>
-                    </p>
-                    <p>
-                      Product Id: <strong>{currentProduct.id}</strong>
-                    </p>
-                    <p>
-                      Quantity:
-                      <strong>{currentProduct.stockQuantity} </strong>
-                    </p>
-                    <p>
-                      Rating:
-                      <strong>{fixedRating} </strong>
-                    </p>
-                  </div>
-                  <div className="content is-centered">
-                    Category:{' '}
-                    <strong>
-                      {currentProduct.Category.map(
-                        category => category.categoryType + ' '
-                      )}
-                    </strong>
-                  </div>
+                }
+              </nav>
+              <div className="tile is-parent">
+                <div className="section container">
+                  <article className="media">
+                    <figure className="media-left">
+                      <p className="image is-128x128">
+                        <img src={currentProduct.imageUrl} />
+                      </p>
+                      
+                      {isAdmin && <Link to={`/products/${productId}/edit`}>
+                        <a className="button is-primary">Edit Product</a>
+                      </Link>}
+                    </figure>
+                    <div className="media-content">
+                      <div className="content">
+                        <p>
+                          <h2>
+                            <strong>{currentProduct.title}</strong>
+                          </h2>
+                        </p>
+                        <p>
+                          Product Id: <strong>{currentProduct.id}</strong>
+                        </p>
+                        <p>
+                          Quantity:
+                          <strong>{currentProduct.stockQuantity} </strong>
+                        </p>
+                        <p>
+                          Rating:
+                          <strong>{fixedRating} </strong>
+                        </p>
+                      </div>
+                      <div className="content is-centered">
+                        Category:{' '}
+                        <strong>
+                          {currentProduct.Category.map(
+                            category => category.categoryType + ' '
+                          )}
+                        </strong>
+                      </div>
 
-                  <p>
-                    Description:
-                    <strong>{currentProduct.description}</strong>
-                  </p>
-                </div>
-                <div className="media-right">
-                  <div className="card">
-                    <div className="card-image content is-centered">
-                      <p className="title is-4 is-centered">
-                        {' '}
-                        Price: ${currentProduct.price}
+                      <p>
+                        Description:
+                        <strong>{currentProduct.description}</strong>
                       </p>
                     </div>
-                    <div className="card-content is-centered">
-                      <div className="media">
-                        <div className="media-content container is-centered">
-                          {currentProduct.stockQuantity ? (
-                            <a
-                              className="button is-primary"
-                              onClick={this.addProductOnClick}
-                            >
-                              Add to Cart
-                            </a>
-                          ) : (
-                            <a
-                              className="button is-danger"
-                              onClick={this.addProductOnClick} disabled
-                            >
-                              Out of Stock
-                            </a>
-                          )}
-                        </div>
+                    <div className="media-right">
+                      <div className="panel-block">
+                        <p className="title is-4 is-centered">
+                          {' '}
+                          Price: ${currentProduct.price}
+                        </p>
+                      </div>
+                      <div className="panel-block">
+                        {currentProduct.stockQuantity ? (
+                          <a
+                            className="button is-primary is-fullwidth"
+                            onClick={this.addProductOnClick}
+                          >
+                            Add to Cart
+                          </a>
+                        ) : (
+                          <a
+                            className="button is-danger is-fullwidth"
+                            onClick={this.addProductOnClick}
+                            disabled
+                          >
+                            Out of Stock
+                          </a>
+                        )}
                       </div>
                     </div>
-                  </div>
+                  </article>
                 </div>
-              </article>
-            </div>
-          </div>
+              </div>
 
-          <div className="tile is-parent">
-            <strong>Reviews: </strong>
-            <div className="section container">
-              <Review reviews={reviews} currentProduct={currentProduct} />
+              <div className="tile is-parent">
+                <strong>Reviews: </strong>
+                <div className="section container">
+                  <Review reviews={reviews} currentProduct={currentProduct} />
+                </div>
+              </div>
             </div>
-          </div>
+          ):(<div>
+            <figure className="image">
+            <img src= "/fixed.jpg" />
+            </figure>
+          </div>)}
         </div>
       )
     }
@@ -131,7 +146,8 @@ class CurrentProduct extends React.Component {
 const mapStateToProps = state => {
   return {
     currentProduct: state.currentProduct,
-    reviews: state.review
+    reviews: state.review,
+    isAdmin: state.user.isAdmin
   }
 }
 const mapDispatchToProps = dispatch => {

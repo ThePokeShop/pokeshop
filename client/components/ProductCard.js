@@ -3,11 +3,13 @@ import {NavLink} from 'react-router-dom'
 // import { connect } from "react-redux";
 
 class ProductCard extends React.Component {
+
   render() {
     const {product} = this.props
     const ratingArr = []
     let averageRating
     let fixRating
+    const isHidden = !product.visibleToUser
     if (product.reviews) {
       product.reviews.forEach(review => ratingArr.push(review.rating))
       if (ratingArr.length) {
@@ -18,7 +20,7 @@ class ProductCard extends React.Component {
       fixRating = 'No rating yet'
     }
     return (
-      <div className="tile">
+      <div className="tile" display="none">
         <NavLink to={`/products/${product.id}`}>
           <div className="card">
             <div className="card-image content is-centered">
@@ -60,25 +62,16 @@ class ProductCard extends React.Component {
                 Out of Stock
               </a>
             )}
+            {isHidden &&<div className="text is-danger">Hidden from user</div>}
           </div>
-          <div className="media-right">
-          <button
-            className="delete"
-            type="button"
-            onClick={this.removeProductOnClick}
-          />
-        </div>
         </NavLink>
-
+        
+        
 
       </div>
     )
   }
 
-  removeProductOnClick() {
-    alert(`Selected product is now deleted`)
-    // this.props.removeStudent(this.props.product.id);
-  }
   addProductOnClick() {
     alert(`Selected product is now add to cart`)
     // this.props.removeStudent(this.props.product.id);
