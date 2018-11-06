@@ -117,8 +117,7 @@ class Cart extends React.Component {
               </tfoot>
             </table>
           </div>
-          <div className="column is-2 is-offset-1
-">
+          <div className="column is-2 is-offset-1">
             <div className="panel-block">
               <p>Total: ${currentOrder.total}</p>
             </div>
