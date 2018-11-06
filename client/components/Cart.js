@@ -5,6 +5,7 @@ import {withRouter} from 'react-router'
 import {fetchSingleOrder} from '../store'
 import Checkout from './Checkout'
 import history from '../history'
+
 const mapDispatchToProps = dispatch => {
   return {
     fetchSingleOrder: orderId => dispatch(fetchSingleOrder(orderId))
@@ -17,46 +18,112 @@ const mapStateToProps = state => {
   }
 }
 class Cart extends React.Component {
-  state = {}
-  componentDidMount() {
+  state = {
+    loading: true
+  }
+  async componentDidMount() {
     if (this.props.currentOrderId) {
-      this.props.fetchSingleOrder(this.props.currentOrderId)
+      this.setState({loading: true})
+      await this.props.fetchSingleOrder(this.props.currentOrderId)
+      this.setState({loading: false})
     }
   }
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (prevProps.currentOrderId !== this.props.currentOrderId) {
-      this.props.fetchSingleOrder(this.props.currentOrderId)
+      this.setState({loading: true})
+      await this.props.fetchSingleOrder(this.props.currentOrderId)
+      this.setState({loading: false})
     }
   }
   render() {
     const {currentOrderId, currentOrder} = this.props
-    if (currentOrder) {
-      if (currentOrder.lineItems[0].product) {
-        let total = 0
-        return (
-          <div>
-            <ul>
-              {currentOrder.lineItems.map(item => {
-                total += Number(item.totalPrice)
-                return (
-                  <li key={item.id}>
-                    Title: {item.product.title}, Quantity:{item.quantity},
-                    Total:{item.totalPrice}
-                  </li>
-                )
-              })}
-              <strong>SubTotal: {total}</strong>
-            </ul>
-            <Link to="/checkout">
-              <button type="button">Checkout</button>
-            </Link>
+    const loading = this.state.loading
+    if (loading) {
+      return (
+        <div className="container box">
+          <div className="container box">
+            <p className="title">Loading</p>
           </div>
-        )
-      } else {
-        return <div> Loading ...</div>
-      }
+        </div>
+      )
     } else {
-      return <div>Loading...</div>
+      let total = 0
+      return (
+        <div className="section">
+          <p className="title">My Cart</p>
+          <div className="container columns">
+            <div className="box column is-9">
+              <table className="table is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentOrder.lineItems.map(item => {
+                    total += Number(item.totalPrice)
+                    let {product, quantity, totalPrice} = item
+                    return (
+                      <tr key={item.id}>
+                        <td>
+                          <div className="media">
+                            <img
+                              src={product.imageUrl}
+                              className="image is-96x96 media-left"
+                            />
+                            <div className="media-content">
+                              <Link to={`/products/${product.id}`}>
+                                <p className="is-size-4">{product.title}</p>
+                              </Link>
+                              <p className="is-size-6">
+                                {product.stockQuantity} in stock
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td>${product.price}</td>
+                        <td>
+                          <input type="number" placeholder={quantity} />
+                        </td>
+                        <td>${totalPrice}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+                <tfoot>
+                  <td />
+                  <td />
+                  <td />
+                  <td>
+                    <div>
+                      <p className="is-size-4 has-text-weight-bold">${total}</p>
+                      <Link to="/checkout">
+                        {/* <button type="button">Checkout</button> */}
+                      </Link>
+                    </div>
+                  </td>
+                </tfoot>
+              </table>
+            </div>
+            <div className="column is-2 is-offset-1 panel">
+              <div className="panel-block">
+                <p>Total: ${total}</p>
+              </div>
+              <div className="panel-block">
+                <button
+                  type="button"
+                  className="button is-warning is-fullwidth"
+                >
+                  Checkout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
     }
   }
 }

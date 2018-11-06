@@ -4,8 +4,6 @@ const {loginRequired, adminGateway} = require('../utils')
 
 router.get('/', async (req, res, next) => {
   try {
-    let where = {}
-
     const orderStatus = req.query.status
     const viewAsAdmin = req.query.viewAsAdmin === 'true'
     const statusVals = [
@@ -21,6 +19,7 @@ router.get('/', async (req, res, next) => {
       return
     }
 
+    let where = {}
     if (req.user) {
       const isAdmin = req.user.isAdmin
       const userId = req.user.id
