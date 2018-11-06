@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {Order, LineItem} = require('../db/models');
+const {Order, LineItem, Product} = require('../db/models');
 const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
@@ -42,9 +42,11 @@ router.get('/:orderId', async (req, res, next) => {
     const orderId = req.params.orderId;
     const userId = req.user.id;
     const isAdmin = req.user.isAdmin;
+
     let options = {
       where: {id: orderId},
-      include: [{model: LineItem}]};
+      include: [{model: LineItem,
+        include:[{model: Product}]}]}
     let {where} = options;
 
     if (!isAdmin) {
@@ -52,7 +54,7 @@ router.get('/:orderId', async (req, res, next) => {
     }
 
     const order = await Order.findOne(options);
-
+    console.log('----> order from orders api--->>>', order)
     if (order) {
       res.status(200);
       res.send(order);
@@ -66,6 +68,7 @@ router.get('/:orderId', async (req, res, next) => {
 
 router.put('/:orderId', loginRequired, adminGateway, async (req, res, next) => {
   const orderId = req.params.orderId;
+  console.log('----->>>>>>>>>>>>>> orders api put', req.body);
   const {status} = req.body;
   try{
     const order = await Order.findOne({where: {id: orderId}});

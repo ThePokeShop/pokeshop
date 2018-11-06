@@ -1,48 +1,80 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router';
 import { fetchSingleOrder } from '../store';
+import Checkout from './Checkout';
+import history from '../history';
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchSingleOrder: (orderId) => dispatch(fetchSingleOrder(orderId))
+    fetchSingleOrder: (orderId) => dispatch(fetchSingleOrder(orderId)),
   }
-}
-
-const componentDidMount = () => {
-  this.props.fetchSingleOrder(this.props.currentOrderId);
-}
+};
 
 const mapStateToProps = state => {
   return {
-    currentOrderId: state.order.id
+    currentOrderId: state.orders.currentOrderId, //state.order.id,
+    currentOrder: state.orders[state.orders.currentOrderId]
   }
-}
+};
 
-const Cart = (props) => {
-  componentDidMount();
-  const { orders, cart } = props;
-  let x;
+class Cart extends React.Component {
+  state = {};
 
-  if (!orders.length) {
-    x = <div>Your cart is empty.</div>
-  } else {
-    x = (
-      orders.map(order => {
-        <ul>
-          <li key={order.id}>{order.total}</li>
-        </ul>
-      })
-    )
+  componentDidMount() {
+    if (this.props.currentOrderId) {
+      this.props.fetchSingleOrder(this.props.currentOrderId);
+    }
+  };
 
-    return (
-      <div>
-        <h1>Your Cart</h1>
-        {x}
-      </div>
-    );
+  componentDidUpdate(prevProps) {
+    if (prevProps.currentOrderId !== this.props.currentOrderId) {
+      this.props.fetchSingleOrder(this.props.currentOrderId);
+    }
   }
-}
+
+  render() {
+
+    const { currentOrderId, currentOrder } = this.props;
+    if(currentOrder){
+     if (currentOrder.lineItems[0].product) {
+      let total = 0
+      return (
+        <div>
+          <ul>
+            {currentOrder.lineItems.map(
+              item => {
+                total += Number(item.totalPrice)
+                return (
+
+                <li key={item.id}>
+                  Title: {item.product.title}, Quantity:{item.quantity}, Total:{item.totalPrice}
+                </li>
+
+                )
+              }
+            )}
+            <strong>SubTotal: {total}</strong>
+          </ul>
+          <Link to='/checkout'>
+            <button type="button" >
+              Checkout
+            </button>
+          </Link>
+
+        </div>
+      )
+    }else {
+      return <div> Loading ...</div>
+    }
+   }else {
+      return (
+        <div>Loading...</div>
+      )
+    }
+
+  }
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart)
