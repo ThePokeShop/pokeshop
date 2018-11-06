@@ -1,23 +1,28 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom'
-// import { connect } from "react-redux";
+import {connect} from 'react-redux'
+import {withRouter} from 'react-router'
+import {addToCart} from '../store'
 
-class ProductCard extends React.Component {
 
-  render() {
-    const {product} = this.props
+const ProductCard = props => {
+  const handleAddProduct = event => {
+    event.preventDefault()
+    props.addToCart(props.product, props.currentOrderId)
+  }
+    const {product} = props
     const ratingArr = []
     let averageRating
     let fixRating
     const isHidden = !product.visibleToUser
-    if (product.reviews) {
+    if (product.reviews.length) {
       product.reviews.forEach(review => ratingArr.push(review.rating))
       if (ratingArr.length) {
         averageRating = ratingArr.reduce((a, b) => a + b) / ratingArr.length
         fixRating = averageRating.toFixed(2)
       }
     } else {
-      fixRating = 'No rating yet'
+      fixRating = 'No rating'
     }
     return (
       <div className="tile" display="none">
@@ -54,7 +59,7 @@ class ProductCard extends React.Component {
               </div>
             </div>
             {product.stockQuantity ? (
-              <a className="button is-primary" onClick={this.addProductOnClick}>
+              <a className="button is-primary" onClick={handleAddProduct}>
                 Add to Cart
               </a>
             ) : (
@@ -70,23 +75,22 @@ class ProductCard extends React.Component {
 
       </div>
     )
-  }
-
-  addProductOnClick() {
-    alert(`Selected product is now add to cart`)
-    // this.props.removeStudent(this.props.product.id);
-  }
 }
 
 /* -----------------    CONTAINER     ------------------ */
 
-//set null since pass from allstudent
-// const mapState = null;
+const mapStateToProps = state => {
+  return {
+    currentOrderId: state.orders.currentOrderId
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    addToCart: (product, currentOrderId) =>
+      dispatch(addToCart(product, currentOrderId))
+  }
+}
 
-// const mapDispatch = { removeStudent };
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard)
 
-// export default connect(
-//   mapState,
-//   mapDispatch
-// )(ProdcutCard);
-export default ProductCard
+

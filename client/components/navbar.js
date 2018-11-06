@@ -4,8 +4,8 @@ import {connect} from 'react-redux'
 import {NavLink, Link} from 'react-router-dom'
 import {logout} from '../store'
 import SearchBar from './SearchBar'
-import { destroySearch, setCategoriesTrue } from '../store/'
-const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
+import {destroySearch, setCategoriesTrue} from '../store/'
+const Navbar = ({handleClick, isLoggedIn, destroy}) => (
   <nav
     className="navbar is-dark is-fixed-top"
     role="navigation"
@@ -59,7 +59,7 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
           </div>
         </div>
         <div className="navbar-item is-center is-expanded has-addons">
-          <SearchBar destroy = {destroy} />
+          <SearchBar destroy={destroy} />
         </div>
       </div>
     </div>
@@ -71,10 +71,12 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
       />
       <div className="navbar-item">
-<div className="buttons">
-      <div className="fa fa-shopping-cart" style={{fontSize:"24px"}} /> 
-      <div className="badge">3</div>
-      </div>
+        <Link to='/cart'>
+          <div className="buttons">
+            <div className="fa fa-shopping-cart" style={{fontSize: '24px'}} />
+            <div className="badge">3</div>
+          </div>
+        </Link>
       </div>
       {isLoggedIn ? (
         <div className="navbar-item">

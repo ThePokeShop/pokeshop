@@ -14,6 +14,7 @@ const EmailToken = require('./emailToken');
 
 Product.belongsToMany(Category, { through: 'CategoryProducts', as: 'Category'});
 Category.belongsToMany(Product, { through: 'CategoryProducts' });
+LineItem.belongsTo(Order);
 
 LineItem.belongsTo(Product);
 Order.hasMany(LineItem);
@@ -21,6 +22,7 @@ Review.belongsTo(User);
 User.hasMany(Review)
 Review.belongsTo(Product)
 Product.hasMany(Review)
+Product.hasMany(LineItem)
 Order.belongsTo(User);
 User.hasMany(Order);
 EmailToken.belongsTo(User); // each email token has a userId key

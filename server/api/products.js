@@ -28,6 +28,8 @@ router.get('/', async (req, res, next) => {
         through: {
           attributes: []
         }
+      },{
+        model: Review
       }
     ],
     order: [['id', 'ASC']] // might be configurable?

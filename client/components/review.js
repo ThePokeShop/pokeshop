@@ -37,6 +37,14 @@ class Review extends React.Component {
   render() {
     const {reviews} = this.props
     const isEnable = this.state.rating != 0 && this.state.content.length > 0
+    const ratingStars = {
+        1: "★",
+        2: "★★",
+        3: "★★★",
+        4: "★★★★",
+        5: "★★★★★",
+      
+      }
     return (
       <div>
         {reviews.map(review => (
@@ -49,7 +57,8 @@ class Review extends React.Component {
             <div className="media-content">
               <div className="content">
                 <div>
-                  <strong>{review.user.email}</strong>
+                  <strong>{review.user.name} {review.user.id}</strong>
+                  <p>Rating: {ratingStars[review.rating]}</p>
                   <div>{review.content}</div>
                 </div>
               </div>

@@ -1,11 +1,15 @@
 import React from 'react'
 import ProductCard from './ProductCard'
 import {connect} from 'react-redux'
-import {fetchSingleProduct, fetchReview} from '../store'
+import {fetchSingleProduct, fetchReview, addToCart} from '../store'
 import {Link} from 'react-router-dom'
 import Review from './review'
 //keep as class instead of function component, since we will be adding more function later
 class CurrentProduct extends React.Component {
+  handleAddProduct = event => {
+    event.preventDefault()
+    this.props.addToCart(this.props.currentProduct, this.props.currentOrderId)
+  }
   async componentDidMount() {
     const productId = this.props.match.params.productId
     if (productId == Number(productId)) {
@@ -107,7 +111,7 @@ class CurrentProduct extends React.Component {
                         {currentProduct.stockQuantity ? (
                           <a
                             className="button is-primary is-fullwidth"
-                            onClick={this.addProductOnClick}
+                            onClick={this.handleAddProduct}
                           >
                             Add to Cart
                           </a>
@@ -142,18 +146,22 @@ class CurrentProduct extends React.Component {
       )
     }
   }
+  
 }
 const mapStateToProps = state => {
   return {
     currentProduct: state.currentProduct,
     reviews: state.review,
-    isAdmin: state.user.isAdmin
+    isAdmin: state.user.isAdmin,
+    currentOrderId: state.orders.currentOrderId
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     fetchSingleProduct: id => dispatch(fetchSingleProduct(id)),
-    fetchReview: id => dispatch(fetchReview(id))
+    fetchReview: id => dispatch(fetchReview(id)),
+    addToCart: (product, currentOrderId) =>
+      dispatch(addToCart(product, currentOrderId))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentProduct)
