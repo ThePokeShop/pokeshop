@@ -17,8 +17,8 @@ async function seed() {
   const categories = await Promise.all(catTypes.sort().map(categoryType => Category.create({ categoryType })));
 
   const orders = await Promise.all([
-    Order.create({status: 'active', userId: users[1].id}),
-    Order.create({status: 'active', userId: users[0].id}),
+    Order.create({ status: 'active', userId: users[1].id }),
+    Order.create({ status: 'active', userId: users[0].id }),
     Order.create({status: 'shipped', userId: users[1].id})
   ]);
 

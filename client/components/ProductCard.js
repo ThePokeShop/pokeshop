@@ -1,3 +1,4 @@
+
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
@@ -25,7 +26,7 @@ const ProductCard = (props) => {
 
   return (
     <div className="tile">
-      <NavLink to={`/products/${props.product.id}`}>
+     
         <div className="card">
           <div className="card-image">
             <figure className="image is-256x256">
@@ -33,6 +34,7 @@ const ProductCard = (props) => {
             </figure>
           </div>
           <div className="card-content">
+ <NavLink to={`/products/${props.product.id}`}>
             <div className="media">
               <div className="media-content">
                 <p className="title is-4 is-centered">
@@ -45,12 +47,13 @@ const ProductCard = (props) => {
                 <div className="content is-centered">Quantity: {props.product.stockQuantity}</div>
                 <div className="content is-centered">Category: <strong>{props.product.Category.map(category => category.categoryType + " ")}</strong></div>
               </div>
+ </NavLink>
+
             </div>
           </div>
           <a className="button is-primary" onClick={handleAddProduct}>Add to Cart</a>
         </div>
-      </NavLink>
-
+     
       <div className="media-right">
         <button
           className="delete"
@@ -63,9 +66,7 @@ const ProductCard = (props) => {
   );
 }
 
-/* -----------------    CONTAINER     ------------------ */
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProductCard));
+
+export default connect(mapState, mapDispatch)(ProductCard)
+// export default ProductCard;

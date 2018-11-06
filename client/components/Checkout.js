@@ -24,13 +24,6 @@ class Checkout extends Component {
     }
   }
 
-  // componentDidUpdate(prevProp) {
-  //   if(prevProps)
-
-  //   if(total !== 0){
-  //   this.setState({total})
-  //   }
-  // }
   handleEventChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value

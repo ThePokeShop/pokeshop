@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 
 const orderState = {};
@@ -84,7 +85,6 @@ export const addToCart = (product, currentOrderId) => {
       const {data} = await axios.post(`/api/orders`, {});
       orderId = data.id;
     };
-
     const itemInfo = {
       quantity,
       totalPrice: product.price * quantity,
@@ -161,3 +161,4 @@ const orderReducer = (state = orderState, action) => {
 };
 
 export default orderReducer;
+
