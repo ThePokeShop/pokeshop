@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute, SearchProductView, SignupSuccess, SignupConfirm } from './components'
-import { me, fetchProducts, fetchCategories, fetchPaginatedProducts} from './store'
+import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute, SearchProductView, SignupSuccess, SignupConfirm, LandingPage } from './components'
+import { me, fetchProducts, fetchCategories, fetchPaginatedProducts } from './store'
 
 /**
  * COMPONENT
@@ -25,6 +25,7 @@ class Routes extends Component {
         <Route path="/signup/confirm" component={SignupConfirm} />
         <Route path='/products/search' component={SearchProductView} />
         <Route exact path="/products" component={ProductView} />
+        <Route exact path='/home' component={LandingPage} />
         {isAdmin &&
           <Route exact path="/products/add" component={AddProduct} />
         }
