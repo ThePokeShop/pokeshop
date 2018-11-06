@@ -52,7 +52,7 @@ class ProductView extends React.Component {
       return (
         <div className="main-content columns is-fullheight">
           <CategoryPanel />
-          <div className="container column">
+          <div className="container column is-multiline">
             <div id='listOfPokemons' className="tile is-ancestor" >
               {filterProduct.map(product => (
                 <ProductCard key={product.id} product={product} />

@@ -21,10 +21,10 @@ export class SearchBar extends Component {
   }
   render() {
     return (
-      <div className='container'>
+      
         <div className='level'>
           <input
-            className="input is-widescreen"
+            className="input"
             type="text"
             placeholder="Search..."
             value={this.state.value}
@@ -32,7 +32,7 @@ export class SearchBar extends Component {
           />
           <button type='button' className="button is-primary" onClick={() => this.handleClick()}>Search</button>
         </div>
-      </div>
+    
     )
   }
 }

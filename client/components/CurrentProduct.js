@@ -19,7 +19,7 @@ class CurrentProduct extends React.Component {
       return <div>404</div> //<Notfound/>
     }
     const {currentProduct, reviews} = this.props
-  
+
     if (!currentProduct.title) {
       return <div>Loading...</div>
     } else {
@@ -27,64 +27,102 @@ class CurrentProduct extends React.Component {
       let averageRating
       let fixedRating
       if (reviews.length) {
-       reviews.forEach(review => ratingArr.push(review.rating))
-       if (ratingArr.length) {
-        averageRating = ratingArr.reduce((a, b) => (a + b)) / ratingArr.length
-        fixedRating = averageRating.toFixed(2)
-       }
+        reviews.forEach(review => ratingArr.push(review.rating))
+        if (ratingArr.length) {
+          averageRating = ratingArr.reduce((a, b) => a + b) / ratingArr.length
+          fixedRating = averageRating.toFixed(2)
+        }
       } else {
-       fixedRating = 'No rating yet'
+        fixedRating = 'No rating yet'
       }
       return (
         <div>
-      <div className="tile is-parent">
-        <div className="section container">
-          <article className="media">
-            <figure className="media-left">
-              <p className="image is-128x128">
-                <img src={currentProduct.imageUrl} />
-              </p>
-            </figure>
-            <div className="media-content">
-              <div className="content">
-                <p>
-                  <strong>{currentProduct.title}</strong>
-                </p>
-                <p>
-                  <small>Product Id: </small> <strong>{currentProduct.id}</strong>
-                </p>
-                <p>
-                  <small>Quantity:  </small>
-                  <strong>{currentProduct.stockQuantity} </strong>
-                </p>
-                <p>
-                  <small>Rating:  </small>
-                  <strong>{fixedRating} </strong>
-                </p>
-              </div>
-              <div className="content is-centered">Category: <strong>{currentProduct.Category.map(category => category.categoryType + " ")}</strong></div>
+          <div className="tile is-parent">
+            <div className="section container">
+              <article className="media">
+                <figure className="media-left">
+                  <p className="image is-128x128">
+                    <img src={currentProduct.imageUrl} />
+                  </p>
+                  <button className="delete" type="button" />
+                  <Link to={`/products/${productId}/edit`}>
+                    <a className="button is-primary">Edit Product</a>
+                  </Link>
+                </figure>
+                <div className="media-content">
+                  <div className="content">
+                    <p>
+                      <h2>
+                        <strong>{currentProduct.title}</strong>
+                      </h2>
+                    </p>
+                    <p>
+                      Product Id: <strong>{currentProduct.id}</strong>
+                    </p>
+                    <p>
+                      Quantity:
+                      <strong>{currentProduct.stockQuantity} </strong>
+                    </p>
+                    <p>
+                      Rating:
+                      <strong>{fixedRating} </strong>
+                    </p>
+                  </div>
+                  <div className="content is-centered">
+                    Category:{' '}
+                    <strong>
+                      {currentProduct.Category.map(
+                        category => category.categoryType + ' '
+                      )}
+                    </strong>
+                  </div>
 
-              <p>
-                <small>Description:  </small>
-                <strong>{currentProduct.description}</strong>
-              </p>
+                  <p>
+                    Description:
+                    <strong>{currentProduct.description}</strong>
+                  </p>
+                </div>
+                <div className="media-right">
+                  <div className="pricebox">
+                    <div className="card-image content is-centered">
+                      <p className="title is-4 is-centered">
+                        {' '}
+                        Pirce: ${currentProduct.price}
+                      </p>
+                    </div>
+                    <div className="card-content is-centered">
+                      <div className="media">
+                        <div className="media-content container is-centered">
+                          {currentProduct.stockQuantity ? (
+                            <a
+                              className="button is-primary"
+                              onClick={this.addProductOnClick}
+                            >
+                              Add to Cart
+                            </a>
+                          ) : (
+                            <a
+                              className="button is-danger"
+                              onClick={this.addProductOnClick} disabled
+                            >
+                              Out of Stock
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
             </div>
-            <div className="media-right">
-              <button className="delete" type="button" />
-              <Link to={`/products/${productId}/edit`}>
-                <a className="button is-primary">Edit Product</a>
-              </Link>
-            </div>
-          </article>
           </div>
-        </div>
-        
-        <div className='tile is-parent'>
-        <strong>Reviews: </strong>
-        <div className="section container">
-        <Review reviews={reviews} currentProduct={currentProduct} />
-        </div>
-        </div>
+
+          <div className="tile is-parent">
+            <strong>Reviews: </strong>
+            <div className="section container">
+              <Review reviews={reviews} currentProduct={currentProduct} />
+            </div>
+          </div>
         </div>
       )
     }

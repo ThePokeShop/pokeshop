@@ -325,3 +325,25 @@ button:hover {box-shadow: 0 0 20px 0 #C0D7DD;}
   display: grid;
   grid-template-columns: repeat(4,1fr);
   }
+
+.card {
+  height: 450px;
+  width: 250px;
+}
+.badge {
+  background-color: #6394F8;
+  border-radius: 10px;
+  color: white;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  padding: 3px 7px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.pricebox{
+  height: 250px;
+  width: 250px;
+}

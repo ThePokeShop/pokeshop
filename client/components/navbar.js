@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { NavLink, Link } from 'react-router-dom'
-import { logout } from '../store'
+import {connect} from 'react-redux'
+import {NavLink, Link} from 'react-router-dom'
+import {logout} from '../store'
 import SearchBar from './SearchBar'
-import { destroySearch } from '../store/searchProducts'
-const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
+import {destroySearch} from '../store/searchProducts'
+const Navbar = ({handleClick, isLoggedIn, destroy}) => (
   <nav
     className="navbar is-dark is-fixed-top"
     role="navigation"
@@ -31,7 +31,6 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
         <span aria-hidden="true" />
         <span aria-hidden="true" />
         <span aria-hidden="true" />
-
       </div>
     </div>
     <div id="navbarBasicExample" className="navbar-menu">
@@ -41,7 +40,9 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
         </div>
 
         <div className="navbar-item">
-          <NavLink to="/products" onClick={() => destroy()}>Products</NavLink>
+          <NavLink to="/products" onClick={() => destroy()}>
+            Products
+          </NavLink>
         </div>
 
         <div className="navbar-item">
@@ -57,12 +58,24 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
             <div className="navbar-item">Contact</div>
           </div>
         </div>
-        <div className="navbar-item is-center"><SearchBar /></div>
+        <div className="navbar-item is-center is-expanded has-addons">
+          <SearchBar />
+        </div>
       </div>
     </div>
 
     {/* <SearchBar /> */}
     <div className="navbar-end">
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      />
+      <div className="navbar-item">
+<div className="buttons">
+      <div className="fa fa-shopping-cart" style={{fontSize:"24px"}} /> 
+      <div className="badge">3</div>
+      </div>
+      </div>
       {isLoggedIn ? (
         <div className="navbar-item">
           <div className="buttons">
@@ -74,22 +87,21 @@ const Navbar = ({ handleClick, isLoggedIn, destroy }) => (
           </div>
         </div>
       ) : (
-          <div className="navbar-item">
-            <div className="buttons">
-              <div className="button is-primary">
-                <strong>
-                  <Link to="/signup">Sign Up</Link>
-                </strong>
-              </div>
-              <div className="button is-light">
-                <Link to="/login">Login</Link>
-              </div>
+        <div className="navbar-item">
+          <div className="buttons">
+            <div className="button is-primary">
+              <strong>
+                <Link to="/signup">Sign Up</Link>
+              </strong>
+            </div>
+            <div className="button is-light">
+              <Link to="/login">Login</Link>
             </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
-
-  </nav >
+  </nav>
 )
 
 /**
@@ -115,8 +127,8 @@ const mapDispatch = dispatch => {
 export default connect(mapState, mapDispatch)(Navbar)
 
 /**
-* PROP TYPES
-*/
+ * PROP TYPES
+ */
 Navbar.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired
