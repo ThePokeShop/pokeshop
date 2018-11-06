@@ -1,44 +1,32 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 export class LandingPage extends Component {
   render() {
     return (
-      // <div className="hero-body is-centered">
-      //   <figure className="image is-2by1">
-      //     <img src="/poke-balls.jpg" />
-      //   </figure>
-
-      //   <div className="container has-text-centered">
-      //     <div className="column is-10 is-centered">
-      //       <h1 className="title">
-      //         Coming Soon ---- (╯°□°)╯︵◓
-      //         </h1>
-      //       <h2 className="subtitle">
-      //         Here we can put some info about our latest pokemons
-      //         </h2>
-      //       <div className="box">
-      //         <div className="field is-grouped">
-      //           <p className="control is-expanded">
-      //             <input className="input" type="text" placeholder="Enter your email" />
-      //           </p>
-      //           <p className="control">
-      //             <a className="button is-info">
-      //               Notify Me
-      //                     </a>
-      //           </p>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
-      <div>
-        <section className="hero is-info is-medium is-bold">
+      <div className='landing'>
+        <section >
 
           <div >
             <div className="container">
-              <figure className="image is-3by1">
-                <img src="/poke-balls.jpg" />
-              </figure>
+              <div className="media">
+                <div className="media-left">
+                  <figure className='logo'>
+                    <img src="https://fontmeme.com/permalink/181030/daad87fcebbaa61672816a5c6bb13e9c.png" />
+                  </figure>
+                </div>
+                <div className="media-content">
+                  <figure className="image is-5by3">
+                    <img src="/landing.gif" />
+                  </figure>
+                </div>
+                <div className="media-right">
+                  <figure className="image is-128x128">
+                    <img src="https://ubisafe.org/images/arrows-transparent-animated-gif-6.gif" />
+                  </figure>
+                </div>
+              </div>
+              {/* <Pikachu /> */}
             </div>
           </div>
         </section>
@@ -131,22 +119,26 @@ export class LandingPage extends Component {
             </div>
           </div>
           <div className="intro column is-8 is-offset-2">
-            <h2 className="title">Best place to get your Pokemons!</h2><br />
-            <p className="subtitle">Vel fringilla est ullamcorper eget nulla facilisi. Nulla facilisi nullam vehicula ipsum a. Neque egestas congue quisque egestas diam in arcu cursus.</p>
+            <h2 className="title" id='pokemon'>Best place to get your Pokemons!</h2><br />
           </div>
           <div className="sandbox">
             <div className="tile is-ancestor">
               <div className="tile is-parent is-shady">
                 <article className="tile is-child notification is-white">
-                  <p className="title">Hello World</p>
-                  <p className="subtitle">What is up?</p>
+                  <figure className='image is-256x256'>
+                    <img src='https://media.giphy.com/media/PGdd8hN2CKQYU/giphy.gif' />
+                  </figure>
                 </article>
               </div>
               <div className="tile is-parent is-shady">
-                <article className="tile is-child notification is-white">
-                  <p className="title">Foo</p>
-                  <p className="subtitle">Bar</p>
-                </article>
+                <Link to='/products/20'>
+                  <article className="tile is-child notification is-white">
+                    <p className="title">latest arrivals</p>
+                    <figure className='image is-2by1'>
+                      <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfPet6dVNIInnnBAQj4oCDB1dQqxL79bRwxtmYrik4bdieP9GJDA' />
+                    </figure>
+                  </article>
+                </Link>
               </div>
               <div className="tile is-parent is-shady">
                 <article className="tile is-child notification is-white">
@@ -213,7 +205,8 @@ export class LandingPage extends Component {
           </div>
 
         </section>
-      </div>
+        <iframe style={{ width: 0, height: 0, border: "none" }} scrolling="no" frameBorder="no" allow="autoplay" src="/music.mp3" />
+      </div >
 
     )
   }

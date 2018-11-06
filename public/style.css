@@ -32,7 +32,7 @@
 
 main {
   align-items: center;
-  margin-top: 100px;
+  margin-top: 52px;
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
@@ -325,3 +325,21 @@ button:hover {box-shadow: 0 0 20px 0 #C0D7DD;}
   display: grid;
   grid-template-columns: repeat(4,1fr);
   }
+
+
+  .landing{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+  }
+  .logo {
+    width: 200px;
+    height: 190px;
+    align-content: center;
+  }
+  #pokemon{
+    color: white;
+  }
+
+
+  /* ------------------------------------------ */
