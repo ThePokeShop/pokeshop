@@ -1,6 +1,7 @@
 import React from 'react'
 
 const Loading = () => {
+    
   return (
     <div className="overlay">
     <svg width="600" height="600" version="1.1" viewBox="0 0 178 206" xmlns="http://www.w3.org/2000/svg">

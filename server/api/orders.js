@@ -1,30 +1,30 @@
 
 const router = require('express').Router();
-const {Order, LineItem, Product} = require('../db/models');
-const {loginRequired, adminGateway} = require('../utils');
+const { Order, LineItem, Product } = require('../db/models');
+const { loginRequired, adminGateway } = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
-    
+
     if (!req.user) {
       let sid = req.session.id;
-      console.log('sid...', sid)
+
       let guestOrder = await Order.findAll({
         where: {
           sid: sid,
           status: 'active'
         },
-        include: [{model: LineItem}]
+        include: [{ model: LineItem }]
       })
       res.json(guestOrder);
       return
     }
-    
+
     let where = {};
     const orderStatus = req.query.status;
     const viewAsAdmin = req.query.viewAsAdmin === 'true';
     const statusVals = ['active', 'created', 'shipped', 'cancelled', 'delivered'];
-    if(orderStatus && !statusVals.includes(orderStatus)){
+    if (orderStatus && !statusVals.includes(orderStatus)) {
       res.sendStatus(400);
       return;
     }
@@ -41,7 +41,7 @@ router.get('/', async (req, res, next) => {
     }
     let options = {
       where,
-      include: [{model: LineItem}]
+      include: [{ model: LineItem }]
     }
 
     const orders = await Order.findAll(options)
@@ -54,31 +54,36 @@ router.get('/', async (req, res, next) => {
 router.get('/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
-    
+
     if (!req.user) {
       let sid = req.session.id;
-      console.log('sid...', sid)
+
       let guestOrder = await Order.findOne({
         where: {
           sid: sid,
           id: orderId,
           status: 'active'
         },
-        include: [{model: LineItem,
-        include: [{model: Product}]}]
+        include: [{
+          model: LineItem,
+          include: [{ model: Product }]
+        }]
       })
       res.json(guestOrder);
       return
     }
-    
+
     const userId = req.user.id;
     const isAdmin = req.user.isAdmin;
 
     let options = {
-      where: {id: orderId},
-      include: [{model: LineItem,
-        include:[{model: Product}]}]}
-    let {where} = options;
+      where: { id: orderId },
+      include: [{
+        model: LineItem,
+        include: [{ model: Product }]
+      }]
+    }
+    let { where } = options;
 
     if (!isAdmin) {
       where.userId = userId
@@ -99,23 +104,23 @@ router.get('/:orderId', async (req, res, next) => {
 
 router.put('/:orderId', async (req, res, next) => {
   const orderId = req.params.orderId;
-  let where = {id: orderId}
-    const viewAsAdmin = req.query.viewAsAdmin === 'true';
-    if (req.user) {
-      const isAdmin = req.user.isAdmin;
-      const userId = req.user.id;
-      if (!viewAsAdmin || !isAdmin) {
-        where.userId = userId;
-      }
-    } else {
-      where.userId = null;
-      // where.sessionId =
+  let where = { id: orderId }
+  const viewAsAdmin = req.query.viewAsAdmin === 'true';
+  if (req.user) {
+    const isAdmin = req.user.isAdmin;
+    const userId = req.user.id;
+    if (!viewAsAdmin || !isAdmin) {
+      where.userId = userId;
     }
+  } else {
+    where.userId = null;
+    // where.sessionId =
+  }
 
 
 
-  try{
-    const order = await Order.findOne({where});
+  try {
+    const order = await Order.findOne({ where });
     if (order) {
       await order.update(req.body);
       res.json(order);
@@ -127,30 +132,16 @@ router.put('/:orderId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const userId = req.user.id || null;
-    const sid = req.session.sid;
+    const sid = req.session.id;
+    console.log('POST orders/ sid = ', sid)
+    const userId = (req.user) ? req.user.id : null;
     let data = {
       userId,
       sid
     };
     const newOrder = await Order.create(data);
     res.status(200).send(newOrder);
-  } catch(err) {
-    next(err);
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  try {
-    const userId = req.user.id || null;
-    const sid = req.session.sid;
-    let data = {
-      userId,
-      sid
-    };
-    const newOrder = await Order.create(data);
-    res.status(200).send(newOrder);
-  } catch(err) {
+  } catch (err) {
     next(err);
   }
 });
