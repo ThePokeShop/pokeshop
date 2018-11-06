@@ -16,4 +16,4 @@ export { default as Review } from './review'
 export { default as SignupSuccess } from './SignupSuccess'
 export { default as SignupConfirm } from './SignupConfirm'
 export { default as SearchProductView } from './SearchProductView'
-
+export { default as PageSelector } from './PageSelector'

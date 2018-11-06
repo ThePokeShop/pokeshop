@@ -13,11 +13,13 @@ export class SearchBar extends Component {
     this.setState({ value: event.target.value })
   }
   handleClick = () => {
-    // this.props.searchedProduct(this.state.value);
+    const destroy = this.props.destroy;
     this.setState({
       value: ''
     })
-    history.push(`/products/search?key=${this.state.value}`)
+    if (!this.state.value) history.push(`/products`);
+    else history.push(`/products?key=${this.state.value}`)
+    destroy();
   }
   render() {
     return (
