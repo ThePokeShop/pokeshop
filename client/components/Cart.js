@@ -39,23 +39,23 @@ class Cart extends React.Component {
     const { currentOrderId, currentOrder } = this.props;
     if(currentOrder){
      if (currentOrder.lineItems[0].product) {
-      let total = 0
       return (
         <div>
           <ul>
             {currentOrder.lineItems.map(
               item => {
-                total += Number(item.totalPrice)
                 return (
 
                 <li key={item.id}>
-                  Title: {item.product.title}, Quantity:{item.quantity}, Total:{item.totalPrice}
+                  <img src={item.product.imageUrl}/>
+                  <strong>Pokemon: </strong> {item.product.title}
+                  <strong>Quantity: </strong>{item.quantity}<strong>Total: </strong>{item.totalPrice}
                 </li>
 
                 )
               }
             )}
-            <strong>SubTotal: {total}</strong>
+            <strong>SubTotal: {currentOrder.total}</strong>
           </ul>
           <Link to='/checkout'>
             <button type="button" >

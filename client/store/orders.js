@@ -18,13 +18,14 @@ export const setOrder = order => ({
   order
 });
 
-// export const calculateTotal = order => {
-//   let total
-//   if(order.lineItems){
-//   total= order.lineItems.reduce((sum, lineItem) => (+sum + (+lineItem.totalPrice)), 0);
-//   }
-//   return total;
-// };
+export const calculateTotal = order => {
+  let total
+  if(order.lineItems){
+  total= order.lineItems.reduce((sum, lineItem) =>
+  sum + +lineItem.totalPrice, 0);
+  }
+  return Number.parseFloat(total).toFixed(2);
+};
 
 export const setCurrentOrderId = currentOrderId => ({
     type: SET_CURRENT_ORDER_ID,
@@ -133,9 +134,8 @@ const orderReducer = (state = orderState, action) => {
         {
           let newObj = {...state};
           const {orders} = action;
-          console.log('action.orders console logging', action.orders);
           orders.forEach(order => {
-            //order.total = calculateTotal(order);
+            order.total = calculateTotal(order);
             newObj[order.id.toString()] = order;
           });
           return { ...newObj};
@@ -144,9 +144,8 @@ const orderReducer = (state = orderState, action) => {
         {
           const order = action.order;
           const id = order.id;
-          //order.total = calculateTotal(order);
+          order.total = calculateTotal(order);
           state[order.id.toString()] = order;
-          console.log('this is the state inside SET_ORDER', state);
           return { ...state, [id]: order };
         }
       case SET_CURRENT_ORDER_ID:

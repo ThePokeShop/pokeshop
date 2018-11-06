@@ -9,11 +9,6 @@ const Order = db.define('order', {
     allowNull: false,
     defaultValue: 'active'
   },
-  total: {
-    type: Sequelize.DECIMAL(10,2),
-    allowNull: true,
-    defaultValue: 0
-  },
   shippingAddress: {
     type: Sequelize.STRING,
     allowNull: true
@@ -27,9 +22,5 @@ const Order = db.define('order', {
     allowNull: true
   }
 })
-
-Order.prototype.totalAmountCalc = function () {
-
-}
 
 module.exports = Order;

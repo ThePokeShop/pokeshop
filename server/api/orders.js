@@ -54,7 +54,6 @@ router.get('/:orderId', async (req, res, next) => {
     }
 
     const order = await Order.findOne(options);
-    console.log('----> order from orders api--->>>', order)
     if (order) {
       res.status(200);
       res.send(order);
@@ -66,14 +65,27 @@ router.get('/:orderId', async (req, res, next) => {
   }
 })
 
-router.put('/:orderId', loginRequired, adminGateway, async (req, res, next) => {
+router.put('/:orderId', async (req, res, next) => {
   const orderId = req.params.orderId;
-  console.log('----->>>>>>>>>>>>>> orders api put', req.body);
-  const {status} = req.body;
+  let where = {id: orderId}
+    const viewAsAdmin = req.query.viewAsAdmin === 'true';
+    if (req.user) {
+      const isAdmin = req.user.isAdmin;
+      const userId = req.user.id;
+      if (!viewAsAdmin || !isAdmin) {
+        where.userId = userId;
+      }
+    } else {
+      where.userId = null;
+      // where.sessionId =
+    }
+
+
+
   try{
-    const order = await Order.findOne({where: {id: orderId}});
+    const order = await Order.findOne({where});
     if (order) {
-      await order.update(status);
+      await order.update(req.body);
       res.json(order);
     }
   } catch(err) {
