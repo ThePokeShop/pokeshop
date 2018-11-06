@@ -17,3 +17,5 @@ export { default as SignupConfirm } from './SignupConfirm'
 export { default as SearchProductView } from './SearchProductView'
 export { default as Cart } from './Cart'
 export { default as Checkout } from './Checkout'
+export { default as PageSelector } from './PageSelector'
+
