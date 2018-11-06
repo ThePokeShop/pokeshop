@@ -18,6 +18,8 @@ export default function productsReducer(state = initialState, action) {
     switch (action.type) {
       case SET_PRODUCTS:
         return action.products
+      case ADD_NEW_PRODUCT:
+        return [...state, action.product]
       default:
         return state
     }

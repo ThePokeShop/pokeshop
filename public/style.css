@@ -32,7 +32,7 @@
 
 main {
   align-items: center;
-  margin-top: 52px;
+  margin-top: 70px;
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
@@ -343,3 +343,46 @@ button:hover {box-shadow: 0 0 20px 0 #C0D7DD;}
 
 
   /* ------------------------------------------ */
+/* .cards {
+
+}
+$card-color: $text !default
+$card-background-color: $white !default
+$card-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default
+
+$card-header-background-color: transparent !default
+$card-header-color: $text-strong !default
+$card-header-shadow: 0 1px 2px rgba($black, 0.1) !default
+$card-header-weight: $weight-bold !default
+
+$card-content-background-color: transparent !default
+
+$card-footer-background-color: transparent !default
+$card-footer-border-top: 1px solid $border !default */
+.cards{
+ background-color: white;
+ box-shadow: 0 2px 3px rgba(black, 0.1), 0 0 0 1px rgba(black, 0.1);
+ color: text;
+ max-width: 100%;
+ position: relative;
+ height: 450px;
+width: 250px;
+border-color: gray solid 0.5
+}
+.badge {
+  background-color: #6394F8;
+  border-radius: 10px;
+  color: white;
+  display: inline-block;
+  font-size: 12px;
+  line-height: 1;
+  padding: 3px 7px;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.pricebox{
+  height: 250px;
+  width: 250px;
+}
