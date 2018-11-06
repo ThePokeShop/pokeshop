@@ -1,4 +1,3 @@
-
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
@@ -6,6 +5,7 @@ import {withRouter} from 'react-router'
 import {fetchSingleOrder, getCurrentOrder} from '../store'
 import Checkout from './Checkout'
 import history from '../history'
+import Loading from './loading'
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -46,7 +46,9 @@ class Cart extends React.Component {
       return (
         <div className="container box">
           <div className="container box">
-            <p className="title">Loading</p>
+            <p className="title">
+              <Loading />
+            </p>
           </div>
         </div>
       )
@@ -60,7 +62,6 @@ class Cart extends React.Component {
         </div>
       )
     }
-    let total = 0
     return (
       <div className="section">
         <p className="title">My Cart</p>
@@ -111,7 +112,9 @@ class Cart extends React.Component {
                 <td />
                 <td>
                   <div>
-                    <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
+                    <p className="is-size-4 has-text-weight-bold">
+                      ${currentOrder.total}
+                    </p>
                   </div>
                 </td>
               </tfoot>
@@ -122,11 +125,14 @@ class Cart extends React.Component {
               <p>Total: ${currentOrder.total}</p>
             </div>
             <div className="panel-block">
-               <Link to="/checkout">
-              <button type="button" className="button is-warning is-fullwidth">
-                Checkout
-              </button>
-</Link>
+              <Link to="/checkout">
+                <button
+                  type="button"
+                  className="button is-warning is-fullwidth"
+                >
+                  Checkout
+                </button>
+              </Link>
             </div>
           </div>
         </div>
