@@ -3,12 +3,17 @@ import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
 
 class TakeMoney extends Component {
+  data = {
+    dejan: 'dejan'
+  }
+
   onToken = async token => {
-    const data = await axios.post('/api/save-stripe-token', { token });
+    const data = await axios.post('/api/save-stripe-token', token);
     console.log('data ---->', data);
   }
 
   render() {
+
     return (
       <StripeCheckout
         name='Poke Shop'
@@ -18,7 +23,8 @@ class TakeMoney extends Component {
         currency='USD'
         token={this.onToken}
         stripeKey="pk_test_cxZnIOSOcldT8Iomlsx1h4bW"
-
+        billingAddress={true}
+        shippingAddress={true}
       />
     )
   }
