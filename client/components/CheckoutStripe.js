@@ -2,21 +2,33 @@ import React, { Component } from 'react'
 import StripeCheckout from 'react-stripe-checkout'
 import axios from 'axios'
 import history from '../history'
+import { getCurrentOrder, destroyOrder } from '../store/orders'
+import { connect } from 'react-redux'
+
+
+const mapDispatchToProps = dispatch => ({
+  getCurrentOrder: () => dispatch(getCurrentOrder()),
+})
 class TakeMoney extends Component {
 
+
+  //we need to change the action and transfer the thunk into redux
+  //cart staying present even after the purchasem until refresh
 
   onToken = async (token) => {
 
     let info = { ...this.props, token }
-    const data = await axios.post('/api/save-stripe-token', info);
-    if (data.status === 200) {
+    const { data } = await axios.post('/api/save-stripe-token', info);
+
+    if (data.message === 'success') {
+      await this.props.getCurrentOrder()
       history.push('/products')
     }
-    console.log('my data comming back', data);
+
   }
 
   render() {
-    console.log('my props', this.props);
+
     let price = this.props.price * 100
     return (
       <StripeCheckout
@@ -34,4 +46,4 @@ class TakeMoney extends Component {
   }
 }
 
-export default TakeMoney
+export default connect(null, mapDispatchToProps)(TakeMoney)

@@ -6,7 +6,7 @@ module.exports = router
 
 router.post('/', async (req, res, next) => {
   try {
-    // console.log('my body???? ---->>>>', req.body);
+
     const token = req.body.token
     const price = Math.floor(Number((req.body.price) * 100))
     const orderId = req.body.currentOrderId
@@ -36,17 +36,20 @@ router.post('/', async (req, res, next) => {
         shippingAddress: addres,
         billingAddress: addres
       })
-      //update the quantity of the products purchased.
-      //i have a line item array that's bunch of objects with product id and quantity.
-      let id = req.body.lineItems[0].productId
-      let quantity = req.body.lineItems[0].quantity
-      // let prevQuantity =
-      let product = await Product.findById(id);
-      console.log('---->>>>>', product);
 
+      let test = req.body.lineItems.map(async item => {
+        let id = item.productId;
+        let quantity = item.quantity;
+        let product = await Product.findById(id)
+        let prevQuantity = product.stockQuantity;
+        let updatedProduct = await product.update({
+          stockQuantity: prevQuantity - quantity
+        })
+
+      })
 
     }
-    res.json({ message: 'successfully paid balance' })
+    res.json({ message: 'success' })
   } catch (err) {
     next(err)
   }

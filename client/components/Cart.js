@@ -36,8 +36,10 @@ class Cart extends React.Component {
   async componentDidUpdate(prevProps) {
     if (prevProps.currentOrderId !== this.props.currentOrderId) {
       this.setState({ loading: true })
-      await this.props.fetchSingleOrder(this.props.currentOrderId)
-      this.setState({ loading: false })
+      if (this.props.currentOrderId) {
+        await this.props.fetchSingleOrder(this.props.currentOrderId)
+        this.setState({ loading: false })
+      }
     }
   }
   render() {
