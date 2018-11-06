@@ -112,16 +112,12 @@ class Cart extends React.Component {
                 <td>
                   <div>
                     <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
-                   
-                      {/* <button type="button">Checkout</button> */}
-                    </Link>
                   </div>
                 </td>
               </tfoot>
             </table>
           </div>
-          <div className="column is-2 is-offset-1 
-">
+          <div className="column is-2 is-offset-1">
             <div className="panel-block">
               <p>Total: ${currentOrder.total}</p>
             </div>
