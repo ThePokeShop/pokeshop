@@ -9,8 +9,10 @@ import categories from './categories'
 import categoriesAreSelected from './categoriesAreSelected'
 import signupToken from './signupToken'
 import searchProduct from './searchProducts'
+import orders from './orders'
 import paginatedProducts from './paginatedProducts'
-const reducer = combineReducers({ user, products, currentProduct, categories, categoriesAreSelected, signupToken, searchProduct , paginatedProducts})
+
+const reducer = combineReducers({ user, products, currentProduct, categories, categoriesAreSelected, signupToken, searchProduct, orders, paginatedProducts })
 
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({ collapsed: true }))
@@ -25,4 +27,5 @@ export * from './categories'
 export * from './categoriesAreSelected'
 export * from './signupToken'
 export * from './searchProducts'
+export * from './orders'
 export * from './paginatedProducts'

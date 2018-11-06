@@ -1,11 +1,10 @@
 const router = require('express').Router();
-const {Order, LineItem} = require('../db/models');
+const {Order, LineItem, Product} = require('../db/models');
 const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
     let where = {};
-
     const orderStatus = req.query.status;
     const viewAsAdmin = req.query.viewAsAdmin === 'true';
     const statusVals = ['active', 'created', 'shipped', 'cancelled', 'delivered'];
@@ -43,9 +42,11 @@ router.get('/:orderId', async (req, res, next) => {
     const orderId = req.params.orderId;
     const userId = req.user.id;
     const isAdmin = req.user.isAdmin;
+
     let options = {
-      where: {orderId},
-      include: [{model: LineItem}]};
+      where: {id: orderId},
+      include: [{model: LineItem,
+        include:[{model: Product}]}]}
     let {where} = options;
 
     if (!isAdmin) {
@@ -53,7 +54,6 @@ router.get('/:orderId', async (req, res, next) => {
     }
 
     const order = await Order.findOne(options);
-
     if (order) {
       res.status(200);
       res.send(order);
@@ -65,17 +65,46 @@ router.get('/:orderId', async (req, res, next) => {
   }
 })
 
-router.put('/:orderId', loginRequired, adminGateway, async (req, res, next) => {
+router.put('/:orderId', async (req, res, next) => {
   const orderId = req.params.orderId;
-  const {status} = req.body;
+  let where = {id: orderId}
+    const viewAsAdmin = req.query.viewAsAdmin === 'true';
+    if (req.user) {
+      const isAdmin = req.user.isAdmin;
+      const userId = req.user.id;
+      if (!viewAsAdmin || !isAdmin) {
+        where.userId = userId;
+      }
+    } else {
+      where.userId = null;
+      // where.sessionId =
+    }
+
+
+
   try{
-    const order = await Order.findOne({where: {id: orderId}});
+    const order = await Order.findOne({where});
     if (order) {
-      await order.update(status);
+      await order.update(req.body);
       res.json(order);
     }
   } catch(err) {
     next(err)
+  }
+});
+
+router.post('/', async (req, res, next) => {
+  try {
+    const userId = req.user.id || null;
+    const sid = req.session.sid;
+    let data = {
+      userId,
+      sid
+    };
+    const newOrder = await Order.create(data);
+    res.status(200).send(newOrder);
+  } catch(err) {
+    next(err);
   }
 });
 

@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
+const LineItem = require('./lineItem');
 
 
 const Order = db.define('order', {
@@ -15,6 +16,11 @@ const Order = db.define('order', {
   billingAddress: {
     type: Sequelize.STRING,
     allowNull: true
+  },
+  sid: {
+    type: Sequelize.STRING,
+    allowNull: true
   }
 })
+
 module.exports = Order;
