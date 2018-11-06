@@ -5,7 +5,7 @@ const {loginRequired, adminGateway} = require('../utils');
 
 router.get('/', async (req, res, next) => {
   try {
-    
+
     if (!req.user) {
       let sid = req.session.id;
       console.log('sid...', sid)
@@ -19,7 +19,7 @@ router.get('/', async (req, res, next) => {
       res.json(guestOrder);
       return
     }
-    
+
     let where = {};
     const orderStatus = req.query.status;
     const viewAsAdmin = req.query.viewAsAdmin === 'true';
@@ -54,7 +54,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:orderId', async (req, res, next) => {
   try {
     const orderId = req.params.orderId;
-    
+
     if (!req.user) {
       let sid = req.session.id;
       console.log('sid...', sid)
@@ -70,7 +70,7 @@ router.get('/:orderId', async (req, res, next) => {
       res.json(guestOrder);
       return
     }
-    
+
     const userId = req.user.id;
     const isAdmin = req.user.isAdmin;
 
@@ -127,23 +127,9 @@ router.put('/:orderId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const userId = req.user.id || null;
-    const sid = req.session.sid;
-    let data = {
-      userId,
-      sid
-    };
-    const newOrder = await Order.create(data);
-    res.status(200).send(newOrder);
-  } catch(err) {
-    next(err);
-  }
-});
-
-router.post('/', async (req, res, next) => {
-  try {
-    const userId = req.user.id || null;
-    const sid = req.session.sid;
+    const sid = req.session.id;
+    console.log('POST orders/ sid = ', sid)
+    const userId = (req.user) ? req.user.id : null;
     let data = {
       userId,
       sid
