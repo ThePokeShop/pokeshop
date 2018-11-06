@@ -63,7 +63,10 @@ export const updateOrder = (orderId, newData) => {
 //thunks for lineItems
 export const addToCart = (product, currentOrderId) => {
   let quantity = 1
-  return async dispatch => {
+  console.log('addtochart outer func');
+  return async (dispatch) => {
+    console.log('addtocart thunk hit')
+    axios.get('/api/orders')
     let orderId
     if (currentOrderId) {
       orderId = currentOrderId
