@@ -65,10 +65,13 @@ class ProductView extends React.Component {
             <div className="container">
               <p className="is-size-5 has-text-left">{foundResultsMessage}</p>
             </div>
-            <div id='listOfPokemons' className="section tile is-ancestor" >
-              {products.map(product => (
+            <div id='listOfPokemons' className="section tile is-ancestor"  >
+              {this.props.user.isAdmin ? products.map(product => (
                 <ProductCard key={product.id} product={product} />
-              ))}
+              )):(products.filter(product => (product.visibleToUser))
+                .map(product => (
+                <ProductCard key={product.id} product={product} />
+              )))}
             </div>
           </div>
         </div>
@@ -76,10 +79,11 @@ class ProductView extends React.Component {
     )
   }
 }
-const mapStateToProps = ({categoriesAreSelected, paginatedProducts}) => {
+const mapStateToProps = ({categoriesAreSelected, paginatedProducts, user}) => {
   return {
     categoriesAreSelected,
-    paginatedProducts
+    paginatedProducts,
+    user
   }
 }
 const mapDispatchToProps = dispatch => {

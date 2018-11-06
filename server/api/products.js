@@ -1,6 +1,6 @@
 const router = require('express').Router()
-const {Product, Category} = require('../db/models')
-const {loginRequired, adminGateway} = require('../utils')
+const {Product, Category, Review, User} = require('../db/models')
+const {loginRequired, adminGateway} = require('../utils');
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 
@@ -28,6 +28,8 @@ router.get('/', async (req, res, next) => {
         through: {
           attributes: []
         }
+      },{
+        model: Review
       }
     ],
     order: [['id', 'ASC']] // might be configurable?
@@ -45,6 +47,9 @@ router.get('/', async (req, res, next) => {
           title: {
             [Op.like]: `%${searchedItem}%`
           }
+        },
+         {
+          model: Review
         }
       }
       products = await Product.findAndCountAll(options)
