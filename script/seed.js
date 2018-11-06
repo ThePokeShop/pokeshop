@@ -8,8 +8,8 @@ async function seed() {
   console.log('db synced!')
 
   const users = await Promise.all([
-    User.create({ email: 'cody@email.com', password: '123', isAdmin: true }),
-    User.create({ email: 'murphy@email.com', password: '123' })
+    User.create({ email: 'cody@email.com', password: '123', isAdmin: true, isEmailVerified: true }),
+    User.create({ email: 'murphy@email.com', password: '123', isEmailVerified: true })
   ])
   const catTypes = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground',
     'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon'];
@@ -18,7 +18,8 @@ async function seed() {
 
   const orders = await Promise.all([
     Order.create({ status: 'active', userId: users[1].id }),
-    Order.create({ status: 'active', userId: users[0].id })
+    Order.create({ status: 'active', userId: users[0].id }),
+    Order.create({status: 'shipped', userId: users[1].id})
   ]);
 
 
@@ -39,10 +40,16 @@ async function seed() {
       productId: products[0].id,
       orderId: orders[1].id
     }),
+    LineItem.create({
+      quantity: 34,
+      totalPrice: ((products[0].price)*34),
+      productId: products[0].id,
+      orderId: orders[2].id
+    })
   ]);
 
   await Promise.all(products.map(product => {
-    return product.addCategory(categories[Math.ceil(Math.random() * 18)])
+    return product.addCategory(categories[Math.floor(Math.random() * catTypes.length)])
   }))
 
   console.log(`seeded ${users.length} users`)
