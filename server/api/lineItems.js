@@ -1,29 +1,19 @@
 const router = require('express').Router()
-const {LineItem} = require('../db/models')
+const {LineItem, Order} = require('../db/models')
 module.exports = router
 
 router.post('/', async (req, res, next) => {
   try {
-    const {quantity, totalPrice, productId, orderId} = req.body
-    const lineItem = await LineItem.findOne({where: {productId, orderId}})
+    const {quantity, totalPrice, productId, orderId} = req.body;
+    const lineItem = await LineItem.findOne({where:{productId, orderId}});
     if (lineItem) {
-      const qtyIncrement = quantity + lineItem.quantity
-      const newTotalPrice = qtyIncrement * (totalPrice / quantity)
-      const updatedItem = await lineItem.update({
-        quantity: qtyIncrement,
-        totalPrice: newTotalPrice,
-        productId,
-        orderId
-      })
-      res.json(updatedItem)
+      const qtyIncrement = quantity+lineItem.quantity;
+      const newTotalPrice = qtyIncrement * (totalPrice/quantity)
+      const updatedItem = await lineItem.update({quantity: qtyIncrement, totalPrice: newTotalPrice, productId, orderId});
+      res.json(updatedItem);
     } else {
-      const newItem = await LineItem.create({
-        quantity,
-        totalPrice,
-        productId,
-        orderId
-      })
-      res.json(newItem)
+      const newItem = await LineItem.create({quantity, totalPrice, productId, orderId});
+      res.json(newItem);
     }
   } catch (err) {
     next(err)
@@ -32,9 +22,10 @@ router.post('/', async (req, res, next) => {
 
 router.put('/:lineItemId', async (req, res, next) => {
   try {
-    const lineItemId = req.params.lineItemId
-    const {quantity, totalPrice, productId} = req.body
-    const lineItem = LineItem.findById(lineItemId)
+    const lineItemId = req.params.lineItemId;
+    const {quantity, totalPrice, productId} = req.body;
+
+    const lineItem = await LineItem.findOne({where: {id: lineItemId}}, {include: [{model: Order}, {where: {status: 'active'}}]});
     if (lineItem) {
       await lineItem.update(
         {quantity, totalPrice, productId},

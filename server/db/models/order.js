@@ -27,8 +27,4 @@ const Order = db.define('order', {
     allowNull: true
   }
 })
-
-Order.prototype.totalAmountCalc = function () {
-}
-
 module.exports = Order;

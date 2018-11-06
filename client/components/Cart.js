@@ -1,3 +1,4 @@
+
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
@@ -12,6 +13,7 @@ const mapDispatchToProps = dispatch => {
     getCurrentOrder: () => dispatch(getCurrentOrder())
   }
 }
+
 const mapStateToProps = state => {
   return {
     currentOrderId: state.orders.currentOrderId, //state.order.id,
@@ -75,7 +77,6 @@ class Cart extends React.Component {
               </thead>
               <tbody>
                 {currentOrder.lineItems.map(item => {
-                  total += Number(item.totalPrice)
                   let {product, quantity, totalPrice} = item
                   return (
                     <tr key={item.id}>
@@ -110,8 +111,8 @@ class Cart extends React.Component {
                 <td />
                 <td>
                   <div>
-                    <p className="is-size-4 has-text-weight-bold">${total}</p>
-                    <Link to="/checkout">
+                    <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
+                   
                       {/* <button type="button">Checkout</button> */}
                     </Link>
                   </div>
@@ -119,14 +120,17 @@ class Cart extends React.Component {
               </tfoot>
             </table>
           </div>
-          <div className="column is-2 is-offset-1 panel">
+          <div className="column is-2 is-offset-1 
+">
             <div className="panel-block">
-              <p>Total: ${total}</p>
+              <p>Total: ${currentOrder.total}</p>
             </div>
             <div className="panel-block">
+               <Link to="/checkout">
               <button type="button" className="button is-warning is-fullwidth">
                 Checkout
               </button>
+</Link>
             </div>
           </div>
         </div>

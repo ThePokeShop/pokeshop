@@ -3,19 +3,20 @@ import { connect } from 'react-redux'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute, SearchProductView, SignupSuccess, SignupConfirm, Cart, Checkout } from './components'
-import { me, fetchProducts, fetchCategories, getCurrentOrder} from './store'
+import { me, fetchProducts, fetchCategories, getCurrentOrder, fetchPaginatedProducts } from './store' // check back later
+
 
 /**
  * COMPONENT
  */
 class Routes extends Component {
   componentDidMount() {
-    this.props.loadInitialData()
-    this.props.getCurrentOrder()
+    this.props.loadInitialData();
+    this.props.getCurrentOrder();
   }
 
   render() {
-    const { isLoggedIn, isAdmin } = this.props
+    const { isLoggedIn, isAdmin } = this.props;
 
     return (
       <Switch>
@@ -60,9 +61,9 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     loadInitialData() {
-      dispatch(me())
-      dispatch(fetchProducts())
-      dispatch(fetchCategories())
+      dispatch(me());
+      dispatch(fetchProducts());
+      dispatch(fetchCategories());
     },
     getCurrentOrder: () => dispatch(getCurrentOrder())
   }
