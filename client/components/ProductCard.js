@@ -8,7 +8,7 @@ class ProductCard extends React.Component {
     const ratingArr = []
     let averageRating
     let fixRating
-    if (product.reviews.length) {
+    if (product.reviews) {
       product.reviews.forEach(review => ratingArr.push(review.rating))
       if (ratingArr.length) {
         averageRating = ratingArr.reduce((a, b) => a + b) / ratingArr.length

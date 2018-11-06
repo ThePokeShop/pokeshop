@@ -83,11 +83,11 @@ class CurrentProduct extends React.Component {
                   </p>
                 </div>
                 <div className="media-right">
-                  <div className="pricebox">
+                  <div className="card">
                     <div className="card-image content is-centered">
                       <p className="title is-4 is-centered">
                         {' '}
-                        Pirce: ${currentProduct.price}
+                        Price: ${currentProduct.price}
                       </p>
                     </div>
                     <div className="card-content is-centered">
