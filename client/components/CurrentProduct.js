@@ -4,7 +4,7 @@ import ProductCard from './ProductCard'
 import { connect } from 'react-redux';
 import { fetchSingleProduct } from '../store';
 import { Link } from 'react-router-dom'
-import TakeMoney from './CheckoutStripe'
+
 //keep as class instead of function component, since we will be adding more function later
 class CurrentProduct extends React.Component {
   componentDidMount() {
@@ -31,7 +31,7 @@ class CurrentProduct extends React.Component {
         <div className="section container">
           <ProductCard product={currentProduct} />
           <Link to={`/products/${productId}/edit`} >Edit this Product</Link>
-          <TakeMoney />
+
         </div>
 
       );

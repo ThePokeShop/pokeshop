@@ -1,25 +1,52 @@
 const router = require('express').Router()
+const Order = require('../db/models/order')
 const stripe = require("stripe")("sk_test_UyF9KXKXQufmVRQDCwU7Kewd");
+const Product = require('../db/models/product')
 module.exports = router
 
 router.post('/', async (req, res, next) => {
   try {
-    console.log('my body???? ---->>>>', req.body.stripeToken);
-    const token = req.body
+    // console.log('my body???? ---->>>>', req.body);
+    const token = req.body.token
+    const price = Math.floor(Number((req.body.price) * 100))
+    const orderId = req.body.currentOrderId
+
+
     const charge = await stripe.charges.create({
-      amount: 9999,
+      amount: price,
       currency: 'usd',
       description: 'Example',
       source: token.id
     })
-    console.log('------>>>>', charge)
     if (charge.status === 'succeeded') {
-      //update the inventory
-      //create a new cart for user
-      //change status of the order to paid
-      console.log('THIS HAPPENED???')
+      const { address_city, address_line1, address_state, address_zip } = charge.source
+      const shippingAddress = {
+        street: address_line1,
+        city: address_city,
+        state: address_state,
+        zip: address_zip
+      }
+      const addres = JSON.stringify(shippingAddress)
+      let order = await Order.findById(orderId)
+      //change status from active to created
+      let total = price / 100
+      let updatedOrder = await order.update({
+        total: total,
+        status: 'created',
+        shippingAddress: addres,
+        billingAddress: addres
+      })
+      //update the quantity of the products purchased.
+      //i have a line item array that's bunch of objects with product id and quantity.
+      let id = req.body.lineItems[0].productId
+      let quantity = req.body.lineItems[0].quantity
+      // let prevQuantity =
+      let product = await Product.findById(id);
+      console.log('---->>>>>', product);
+
+
     }
-    res.json(charge)
+    res.json({ message: 'successfully paid balance' })
   } catch (err) {
     next(err)
   }
