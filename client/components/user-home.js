@@ -16,7 +16,7 @@ class UserHome extends React.Component {
     await this.props.fetchOrders(status) // fetch results using URL
     this.setState({loading: false})
   }
-  handleClick(){
+  handleClick() {
     let currentState = this.state.active
     this.setState({
       active: !currentState
@@ -46,41 +46,77 @@ class UserHome extends React.Component {
     console.log('userOrder', this.props.userOrders)
     return (
       <div className="container">
-        <section className="hero is-info welcome is-small">
-          <div className="hero-body">
-            {isAdmin ? (
-              <div className="container">
-                <h1 className="title">Hello, admin {name}.</h1>
-                <h2 className="subtitle">
-                  I hope you are selling more pokémon!
-                </h2>
+        {isAdmin ? (
+          <div>
+            <section className="hero is-info welcome is-small">
+              <div className="hero-body">
+                <div className="container">
+                  <h1 className="title">Hello, admin {name}.</h1>
+                  <h2 className="subtitle">
+                    I hope you are selling more pokémon!
+                  </h2>
+                </div>
               </div>
-            ) : (
-              <div className="container">
-                <h1 className="title">Hello, {name}.</h1>
-                <h2 className="subtitle">
-                  I hope you are buying more pokémon!
-                </h2>
+            </section>
+            <section className="info-tiles">
+              <div className="tile is-ancestor has-text-centered">
+                <div className="tile is-parent">
+                  <article className="tile is-child box">
+                    <p className="title">{orderSize}</p>
+                    <p className="subtitle">Order Made</p>
+                  </article>
+                </div>
+                <div className="tile is-parent">
+                  <article className="tile is-child box">
+                    <p className="title">59k</p>
+                    <p className="subtitle">Pokémon Bought</p>
+                  </article>
+                </div>
+                <div className="tile is-parent">
+                  <article className="tile is-child box">
+                    <p className="title">20k</p>
+                    <p className="subtitle">Users Orders</p>
+                  </article>
+                </div>
+                <div className="tile is-parent">
+                  <article className="tile is-child box">
+                    <p className="title">109k</p>
+                    <p className="subtitle">Users Pokémon Bought</p>
+                  </article>
+                </div>
               </div>
-            )}
+            </section>
           </div>
-        </section>
-        <section className="info-tiles">
-          <div className="tile is-ancestor has-text-centered">
-            <div className="tile is-parent">
-              <article className="tile is-child box">
-                <p className="title">{orderSize}</p>
-                <p className="subtitle">Order Made</p>
-              </article>
-            </div>
-            <div className="tile is-parent">
-              <article className="tile is-child box">
-                <p className="title">59k</p>
-                <p className="subtitle">Products Bought</p>
-              </article>
-            </div>
+        ) : (
+          <div>
+            <section className="hero is-info welcome is-small">
+              <div className="hero-body">
+                <div className="container">
+                  <h1 className="title">Hello, {name}.</h1>
+                  <h2 className="subtitle">
+                    I hope you are buying more pokémon!
+                  </h2>
+                </div>
+              </div>
+            </section>
+            <section className="info-tiles">
+              <div className="tile is-ancestor has-text-centered">
+                <div className="tile is-parent">
+                  <article className="tile is-child box">
+                    <p className="title">{orderSize}</p>
+                    <p className="subtitle">Order Made</p>
+                  </article>
+                </div>
+                <div className="tile is-parent">
+                  <article className="tile is-child box">
+                    <p className="title">59k</p>
+                    <p className="subtitle">Pokémon Bought</p>
+                  </article>
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
+        )}
 
         {isAdmin ? (
           <section className="info-tiles">
@@ -90,8 +126,18 @@ class UserHome extends React.Component {
                   <div className="panel">
                     <div className="panel-heading">Past Orders</div>
                     <p className="panel-tabs">
-                      <a className={this.state.active ? 'is-active': null} onClick={this.handleClick}>Mine</a>
-                      <a className={this.state.active ? 'your_className': null} onClick={this.handleClick}>All User</a>
+                      <a
+                        className={this.state.active ? 'is-active' : null}
+                        onClick={this.handleClick}
+                      >
+                        Mine
+                      </a>
+                      <a
+                        className={this.state.active ? 'your_className' : null}
+                        onClick={this.handleClick}
+                      >
+                        All User
+                      </a>
                     </p>
                     <div className="panel-block">
                       <p className="control has-icons-left">
@@ -131,15 +177,15 @@ class UserHome extends React.Component {
                   <div className="panel">
                     <div className="panel-heading">Past Orders</div>
                     <p className="control has-icons-left">
-                        <input
-                          className="input is-small"
-                          type="text"
-                          placeholder="search by ID"
-                        />
-                        <span className="icon is-small is-left">
-                          <i className="fas fa-search" aria-hidden="true" />
-                        </span>
-                      </p>
+                      <input
+                        className="input is-small"
+                        type="text"
+                        placeholder="search by ID"
+                      />
+                      <span className="icon is-small is-left">
+                        <i className="fas fa-search" aria-hidden="true" />
+                      </span>
+                    </p>
                     <div className="tile is-child box">
                       {/* <div className="content" />  need to map with order item and total */}
                     </div>
