@@ -57,13 +57,13 @@ class ProductView extends React.Component {
     const endProdNum = offset + products.length;
     const foundResultsMessage = `Found ${count} products. Displaying results ${startProdNum} to ${endProdNum}`
     return (
-      <div className="main-content columns is-fullheight">
+      <div className="columns is-fullheight">
         <CategoryPanel location={this.props.location} searchKey={key} history = {this.props.history}/>
-        <div className="container column">
-          <div className="container">
+        <div className="column">
+          <div className="">
             <PageSelector />
-            <div className="container">
-              <p className="is-size-5 has-text-left">{foundResultsMessage}</p>
+            <div className="">
+              <p className="is-size-6 has-text-left">{foundResultsMessage}</p>
             </div>
             <div id='listOfPokemons' className="section tile is-ancestor"  >
               {this.props.user.isAdmin ? products.map(product => (
