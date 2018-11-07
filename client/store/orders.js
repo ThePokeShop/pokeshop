@@ -64,11 +64,28 @@ export const fetchSingleOrder = (orderId) => {
   }
 };
 
+export const fetchSingleOrderAsAdmin = (orderId) => {
+  return async (dispatch) => {
+
+    const { data } = await axios.get(`/api/orders/${orderId}?viewAsAdmin=true&%status=active`);
+    dispatch(setOrder(data));
+  }
+};
+
+
 export const createOrder = (newData) => {
   return async (dispatch) => {
     const { data } = await axios.post(`/api/orders`, newData);
     dispatch(setOrder(data));
     dispatch(setCurrentOrderId(data.id));
+  }
+}
+
+export const convertGuestOrderToUser = (orderId) => {
+  return async (dispatch) => {
+    console.log('hello')
+    const { data } = await axios.put(`api/orders/${orderId}?guestCart=true`);
+    dispatch(setOrder(data));
   }
 }
 
@@ -174,4 +191,9 @@ const orderReducer = (state = initialState, action) => {
 };
 
 export default orderReducer;
+
+
+
+
+
 

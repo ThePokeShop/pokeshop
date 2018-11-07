@@ -347,3 +347,109 @@ button:hover {box-shadow: 0 0 20px 0 #C0D7DD;}
   height: 250px;
   width: 250px;
 }
+
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #1B0034;
+	background-image: linear-gradient( 135deg, #1B0034 10%, #33265C 100%);
+	background-attachment: fixed;
+	background-size: cover;
+  z-index: 10;
+}
+svg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+}
+#marker {
+  fill: red;
+  animation: markerflash 30s linear infinite;
+}
+@keyframes markerflash {
+  0% { opacity: 1; }
+  1% { opacity: 0; }
+  100% { opacity: 0; }
+}
+.post {
+  fill: #64ff64;
+  opacity: 0.95;
+}
+.spoke {
+  fill: #64ff64;
+  transform-origin: center;
+  /* I was advised to try without the spokes being animated. Then I was advised to try it with double the original (5s) duration. */
+  animation: spoketwitch 10s ease infinite;
+}
+.gear {
+  transform-origin: center;
+  animation: gearturn 6s linear infinite;
+}
+.housing {
+  transform-origin: center;
+  animation: housingturn 6s linear infinite;
+}
+@keyframes gearturn {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes housingturn {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes spoketwitch {
+  0% { transform: rotate(3deg); }
+  50% { transform: rotate(3deg); }
+  60% { transform: rotate(8deg); }
+  70% { transform: rotate(8deg); }
+  80% { transform: rotate(-2deg); }
+  90% { transform: rotate(-2deg); }
+  100% { transform: rotate(3deg); }
+}
+@keyframes postfade {
+  0% { opacity: 0.95; }
+  12% { opacity: 0.6; }
+  25% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+  75% { opacity: 0.8; }
+  82% { opacity: 0.6; }
+  100% { opacity: 0.95; }
+}
+.post0 {
+    animation: postfade 5s 0s ease infinite;
+}
+.post1 {
+    animation: postfade 5s -4s ease infinite;
+}
+.post2 {
+    animation: postfade 5s -2s ease infinite;
+}
+.post3 {
+    animation: postfade 5s -4.5s ease infinite;
+}
+.post4 {
+    animation: postfade 5s -.5s ease infinite;
+}
+.post5 {
+    animation: postfade 5s -3.5s ease infinite;
+}
+.post6 {
+    animation: postfade 5s -4.75s ease infinite;
+}
+.post7 {
+    animation: postfade 5s -2.7s ease infinite;
+}
+.post8 {
+    animation: postfade 5s -3.875s ease infinite;
+}
+.post9 {
+    animation: postfade 5s 0s ease infinite;
+}
+
