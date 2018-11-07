@@ -49,7 +49,7 @@ class Cart extends React.Component {
         <div className="container box">
           <div className="container box">
             <p className="title">
-              <Loading />
+              Loading...
             </p>
           </div>
         </div>
@@ -115,7 +115,7 @@ class Cart extends React.Component {
                 <td>
                   <div>
                     <p className="is-size-4 has-text-weight-bold">
-                      ${currentOrder.total}
+                    Total: ${currentOrder.total}
                     </p>
                   </div>
                 </td>

@@ -64,6 +64,15 @@ export const fetchSingleOrder = (orderId) => {
   }
 };
 
+export const fetchSingleOrderAsAdmin = (orderId) => {
+  return async (dispatch) => {
+
+    const { data } = await axios.get(`/api/orders/${orderId}?viewAsAdmin=true&%status=active`);
+    dispatch(setOrder(data));
+  }
+};
+
+
 export const createOrder = (newData) => {
   return async (dispatch) => {
     const { data } = await axios.post(`/api/orders`, newData);
