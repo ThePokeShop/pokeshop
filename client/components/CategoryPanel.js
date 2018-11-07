@@ -18,8 +18,11 @@ const CategoryPanel = props => {
     id => categoriesAreSelected[id]
   )
   const linkBuilder = (currentParams, catIds) => {
-    let returnParams = currentParams.filter(param => !param.startsWith('catIds='))
-    if (catIds.length < categories.length) returnParams = returnParams.concat(`catIds=${JSON.stringify(catIds)}`)
+    let returnParams = currentParams.filter(
+      param => !param.startsWith('catIds=')
+    )
+    if (catIds.length < categories.length)
+      returnParams = returnParams.concat(`catIds=${JSON.stringify(catIds)}`)
     return `?${returnParams.join('&')}`
   }
   const submitUrl = linkBuilder(params, filteredCat)
@@ -32,7 +35,7 @@ const CategoryPanel = props => {
   const keyRemoveUrl = keyRemover(params)
 
   // disable apply filter btn if catIds empty
-  const applyBtnDisabled = filteredCat.length === 0;
+  const applyBtnDisabled = filteredCat.length === 0
   // handle events
   const handleCheck = event => {
     const id = event.target.name
@@ -53,13 +56,13 @@ const CategoryPanel = props => {
       <p className="panel-heading">Product Filter</p>
       {searchKey && (
         <p className="panel-block">
-          <p className="control has-icons-right">
-            Search Term: {searchKey}
-            <Link to={keyRemoveUrl}>
-              <span className="panel-icon is-right">
+          <p className="control has-icons-left">
+            <span className="panel-icon is-left">
+              <Link to={keyRemoveUrl}>
                 <i className="delete" />
-              </span>
-            </Link>
+              </Link>
+            </span>
+            {' '}"{searchKey}"
           </p>
         </p>
       )}
