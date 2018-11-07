@@ -7,10 +7,11 @@ import {
 } from '../store/index'
 import {Link} from 'react-router-dom'
 
+
 const CategoryPanel = props => {
   // util function to create a new query string
 
-  const {categoriesAreSelected, categories, location, searchKey} = props
+  const {categoriesAreSelected, categories, location, searchKey, isAdmin} = props
   const params = location.search.slice(1).split('&')
 
   // generate URLs
@@ -107,13 +108,22 @@ const CategoryPanel = props => {
           Apply Filter
         </button>
       </div>
+{ isAdmin  &&   <div className="panel-block">
+        <Link to="/products/add"><button
+          className="button is-danger is-fullwidth"
+          type="button"
+        >
+          Add Product
+        </button></Link>
+      </div>}
     </nav>
   )
 }
 const mapStateToProps = state => {
   return {
     categories: state.categories,
-    categoriesAreSelected: state.categoriesAreSelected
+    categoriesAreSelected: state.categoriesAreSelected,
+    isAdmin: state.user.isAdmin
   }
 }
 const mapDispatchToProps = dispatch => ({

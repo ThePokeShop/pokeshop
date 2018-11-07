@@ -12,8 +12,8 @@ class UserHome extends React.Component {
     active: false
   }
   async componentDidMount() {
-    let status = 'shipped'
-    await this.props.fetchOrders(status) // fetch results using URL
+    // let status = 'shipped'
+    await this.props.fetchOrders() // fetch results using URL
     this.setState({loading: false})
   }
   handleClick() {
@@ -62,7 +62,7 @@ class UserHome extends React.Component {
               <div className="tile is-ancestor has-text-centered">
                 <div className="tile is-parent">
                   <article className="tile is-child box">
-                    <p className="title">{orderSize}</p>
+                    <p className="title">{Object.keys(this.props.userOrders).length-2}</p>
                     <p className="subtitle">Order Made</p>
                   </article>
                 </div>
@@ -103,7 +103,7 @@ class UserHome extends React.Component {
               <div className="tile is-ancestor has-text-centered">
                 <div className="tile is-parent">
                   <article className="tile is-child box">
-                    <p className="title">{orderSize}</p>
+                    <p className="title">{Object.keys(this.props.userOrders).length-2}</p>
                     <p className="subtitle">Order Made</p>
                   </article>
                 </div>
@@ -151,7 +151,7 @@ class UserHome extends React.Component {
                         </span>
                       </p>
                     </div>
-                    <p className="panel-tabs"> map me</p>
+                    {Object.keys(this.props.userOrders).map(key=><p key={1}className="panel-tabs">Order ID: {key}</p>)}
                   </div>
                 </article>
               </div>
@@ -221,7 +221,7 @@ const mapState = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: status => dispatch(fetchOrders(status))
+    fetchOrders: () => dispatch(fetchOrders())
   }
 }
 
