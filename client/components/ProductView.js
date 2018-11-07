@@ -59,10 +59,10 @@ class ProductView extends React.Component {
     return (
       <div className="main-content columns is-fullheight">
         <CategoryPanel location={this.props.location} searchKey={key} history = {this.props.history}/>
-        <div className="container column">
-          <div className="container">
-            <PageSelector />
-            <div className="container">
+        <div className="column">
+          <div className="">
+            <PageSelector/>
+            <div className="">
               <p className="is-size-5 has-text-left">{foundResultsMessage}</p>
             </div>
             <div id='listOfPokemons' className="section tile is-ancestor"  >
