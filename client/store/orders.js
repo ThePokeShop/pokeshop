@@ -72,6 +72,14 @@ export const createOrder = (newData) => {
   }
 }
 
+export const convertGuestOrderToUser = (orderId) => {
+  return async (dispatch) => {
+    console.log('hello')
+    const { data } = await axios.put(`api/orders/${orderId}?guestCart=true`);
+    dispatch(setOrder(data));
+  }
+}
+
 export const updateOrder = (orderId, newData) => {
   return async (dispatch) => {
     const { data } = await axios.put(`/api/orders/${orderId}`, newData);
