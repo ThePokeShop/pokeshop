@@ -1,8 +1,8 @@
 import React from 'react'
 import ProductCard from './ProductCard'
-import {connect} from 'react-redux'
-import {fetchSingleProduct, fetchReview, addToCart} from '../store'
-import {Link} from 'react-router-dom'
+import { connect } from 'react-redux'
+import { fetchSingleProduct, fetchReview, addToCart } from '../store'
+import { Link } from 'react-router-dom'
 import Review from './review'
 //keep as class instead of function component, since we will be adding more function later
 class CurrentProduct extends React.Component {
@@ -22,8 +22,8 @@ class CurrentProduct extends React.Component {
     if (productId != Number(productId)) {
       return <div>404</div> //<Notfound/>
     }
-    const {currentProduct, reviews, isAdmin} = this.props
-    const enableView=(currentProduct.visibleToUser || isAdmin )
+    const { currentProduct, reviews, isAdmin } = this.props
+    const enableView = (currentProduct.visibleToUser || isAdmin)
 
     if (!currentProduct.title) {
       return <div>Loading...</div>
@@ -62,7 +62,7 @@ class CurrentProduct extends React.Component {
                       <p className="image is-128x128">
                         <img src={currentProduct.imageUrl} />
                       </p>
-                      
+
                       {isAdmin && <Link to={`/products/${productId}/edit`}>
                         <a className="button is-primary">Edit Product</a>
                       </Link>}
@@ -116,14 +116,14 @@ class CurrentProduct extends React.Component {
                             Add to Cart
                           </a>
                         ) : (
-                          <a
-                            className="button is-danger is-fullwidth"
-                            onClick={this.addProductOnClick}
-                            disabled
-                          >
-                            Out of Stock
+                            <a
+                              className="button is-danger is-fullwidth"
+                              onClick={this.addProductOnClick}
+                              disabled
+                            >
+                              Out of Stock
                           </a>
-                        )}
+                          )}
                       </div>
                     </div>
                   </article>
@@ -137,16 +137,16 @@ class CurrentProduct extends React.Component {
                 </div>
               </div>
             </div>
-          ):(<div>
+          ) : (<div>
             <figure className="image">
-            <img src= "/fixed.jpg" />
+              <img src="/fixed.jpg" />
             </figure>
           </div>)}
         </div>
       )
     }
   }
-  
+
 }
 const mapStateToProps = state => {
   return {

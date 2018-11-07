@@ -1,14 +1,14 @@
-import React, {Component} from 'react'
-import {connect} from 'react-redux'
-import {updateSingleProduct, fetchSingleProduct} from '../store/index'
-import {withRouter} from 'react-router-dom'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { updateSingleProduct, fetchSingleProduct } from '../store/index'
+import { withRouter } from 'react-router-dom'
 class EditProduct extends Component {
   constructor(props) {
     super(props)
-    
-  this.state = {
-    loading: true
-  }
+
+    this.state = {
+      loading: true
+    }
   }
   async componentDidMount() {
     // invoke fetch if navigate to this page directly:
@@ -19,7 +19,7 @@ class EditProduct extends Component {
     this.setState({
       loading: false
     })
-    console.log('currentEditProduct', this.props.currentProduct.title)
+
   }
   componentDidUpdate(prevProps) {
     if (prevProps.currentProduct !== this.props.currentProduct) {
@@ -61,7 +61,7 @@ class EditProduct extends Component {
     const categoryId = Object.keys(this.state.checkObj).filter(
       key => this.state.checkObj[key]
     )
-    const productData = {...this.state, categoryId}
+    const productData = { ...this.state, categoryId }
     await this.props.updateSingleProduct(productData)
     this.props.history.push(`/products/${this.state.id}`)
   }
@@ -69,7 +69,7 @@ class EditProduct extends Component {
   handleCheck = event => {
     // toggles state.checkObj[categoryid] boolean
     const categoryId = event.target.name
-    const previousCheckObj = {...this.state.checkObj}
+    const previousCheckObj = { ...this.state.checkObj }
     const prevCheckVal = previousCheckObj[categoryId]
     this.setState({
       checkObj: {
@@ -85,8 +85,8 @@ class EditProduct extends Component {
   }
 
   render() {
-    if(this.state.loading){
-    return <div>Loading</div>
+    if (this.state.loading) {
+      return <div>Loading</div>
     }
     const {
       name,
