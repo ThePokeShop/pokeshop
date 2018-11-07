@@ -32,6 +32,7 @@ router.get('/', async (req, res, next) => {
         model: Review
       }
     ],
+    distinct: true,
     order: [['id', 'ASC']] // might be configurable?
   }
   let searchedItem = req.query.key
