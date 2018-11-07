@@ -14,7 +14,7 @@ const LineItem = db.define('lineItem', {
     type: Sequelize.INTEGER,
     allowNull: false,
     validate: {
-      min: 0
+      min: 1
     }
   }
 })

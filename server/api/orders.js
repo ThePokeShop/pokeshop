@@ -87,11 +87,11 @@ router.get('/:orderId', async (req, res, next) => {
       include: [
         {
           model: LineItem,
-          include: [{model: Product}]
+          include:[{model: Product}]
         }
       ]
     }
-    let {where} = options
+    let {where} = options;
 
     if (!isAdmin) {
       where.userId = userId
