@@ -151,14 +151,6 @@ class Cart extends React.Component {
               <p>Total: ${currentOrder.total}</p>
             </div>
             <div className="panel-block">
-              <Link to="/checkout">
-                <button
-                  type="button"
-                  className="button is-warning is-fullwidth"
-                >
-                  Checkout
-                </button>
-              </Link>
               <TakeMoney price={currentOrder.total} currentOrderId={currentOrderId} lineItems={currentOrder.lineItems} />
             </div>
           </div>
