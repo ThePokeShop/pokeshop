@@ -129,8 +129,7 @@ export const updateQuantity = (quantity, lineItemId) => {
 export const removeItem = (lineItemId, orderId) => {
   return async (dispatch) => {
     await axios.delete(`/api/lineItems/${lineItemId}`);
-
-    const { data } = axios.get(`/api/orders/${orderId}`);
+    const { data } = await axios.get(`/api/orders/${orderId}`);
     dispatch(setOrder(data));
   }
 }
