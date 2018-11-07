@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom'
 class EditProduct extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
       loading: true
     }
@@ -16,8 +15,30 @@ class EditProduct extends Component {
     if (!this.props.currentProduct.id) {
       await this.props.fetchSingleProduct(productId)
     }
+    const {
+      id,
+      title,
+      price,
+      imageUrl,
+      stockQuantity,
+      Category,
+      visibleToUser
+    } = this.props.currentProduct
+    const categories = this.props.categories
+    const categoryId = Object.values(Category).map(cat => cat.id)
+    const checkObj = {}
+    categories.forEach(category => {
+      checkObj[category.id] = categoryId.indexOf(category.id) > -1
+    })
     this.setState({
-      loading: false
+      loading: false,
+      id,
+      title,
+      price,
+      imageUrl,
+      stockQuantity,
+      checkObj,
+      visibleToUser
     })
 
   }
@@ -79,6 +100,7 @@ class EditProduct extends Component {
     })
   }
   handleCheckAdmin = () => {
+
     this.setState({
       visibleToUser: !this.state.visibleToUser
     })
@@ -86,7 +108,7 @@ class EditProduct extends Component {
 
   render() {
     if (this.state.loading) {
-      return <div>Loading</div>
+      return <div>Loading...</div>
     }
     const {
       name,
@@ -95,7 +117,8 @@ class EditProduct extends Component {
       imageUrl,
       stockQuantity,
       displayName,
-      checkObj
+      checkObj,
+      visibleToUser
     } = this.state
     const handleChange = this.handleChange
     const handleSubmit = this.handleSubmit

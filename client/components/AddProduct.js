@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {createNewProduct} from '../store/index'
 import {withRouter} from 'react-router-dom';
+import Loading from './loading'
 
 class AddProduct extends Component {
   constructor(props) {

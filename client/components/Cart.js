@@ -1,4 +1,3 @@
-
 import React from 'react'
 
 import {Link} from 'react-router-dom'
@@ -66,7 +65,9 @@ class Cart extends React.Component {
       return (
         <div className="container box">
           <div className="container box">
-            <p className="title">Loading</p>
+            <p className="title">
+              Loading...
+            </p>
           </div>
         </div>
       )
@@ -131,16 +132,17 @@ class Cart extends React.Component {
                 })}
               </tbody>
               <tfoot>
-                <tr>
-                  <td />
-                  <td />
-                  <td />
-                  <td>
-                    <div>
-                      <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
-                    </div>
-                  </td>
-                </tr>
+
+                <td />
+                <td />
+                <td />
+                <td>
+                  <div>
+                    <p className="is-size-4 has-text-weight-bold">
+                    Total: ${currentOrder.total}
+                    </p>
+                  </div>
+                </td>
               </tfoot>
             </table>
           </div>
@@ -149,6 +151,14 @@ class Cart extends React.Component {
               <p>Total: ${currentOrder.total}</p>
             </div>
             <div className="panel-block">
+              <Link to="/checkout">
+                <button
+                  type="button"
+                  className="button is-warning is-fullwidth"
+                >
+                  Checkout
+                </button>
+              </Link>
               <TakeMoney price={currentOrder.total} currentOrderId={currentOrderId} lineItems={currentOrder.lineItems} />
             </div>
           </div>

@@ -19,9 +19,11 @@ async function seed() {
   const categories = await Promise.all(catTypes.sort().map(categoryType => Category.create({ categoryType })));
 
   const orders = await Promise.all([
-    Order.create({ status: 'active', userId: users[1].id }),
+    Order.create({ status: 'shipped', userId: users[1].id }),
+    Order.create({ status: 'shipped', userId: users[1].id }),
+    Order.create({ status: 'shipped', userId: users[1].id }),
     Order.create({ status: 'active', userId: users[0].id }),
-    Order.create({status: 'shipped', userId: users[1].id})
+    Order.create({status: 'active', userId: users[1].id})
   ]);
 
 
@@ -47,6 +49,24 @@ async function seed() {
       totalPrice: ((products[0].price)*34),
       productId: products[0].id,
       orderId: orders[2].id
+    }),
+    LineItem.create({
+      quantity: 2,
+      totalPrice: ((products[0].price) * 2),
+      productId: products[0].id,
+      orderId: orders[1].id
+    }),
+    LineItem.create({
+      quantity: 10,
+      totalPrice: ((products[0].price) * 10),
+      productId: products[0].id,
+      orderId: orders[1].id
+    }),
+    LineItem.create({
+      quantity: 34,
+      totalPrice: ((products[0].price)*34),
+      productId: products[0].id,
+      orderId: orders[1].id
     })
   ]);
 

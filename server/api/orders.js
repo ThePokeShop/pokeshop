@@ -32,7 +32,7 @@ router.get('/', async (req, res, next) => {
       res.sendStatus(400)
       return
     }
-
+//if user is login for both admin and users
     if (req.user) {
       const isAdmin = req.user.isAdmin
       const userId = req.user.id
