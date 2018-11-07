@@ -1,9 +1,9 @@
-
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
-import { fetchSingleOrder, getCurrentOrder } from '../store'
+
+import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {fetchSingleOrder, getCurrentOrder, updateQuantity, removeItem} from '../store'
+
 import Checkout from './Checkout'
 import history from '../history'
 import TakeMoney from './CheckoutStripe'
@@ -11,20 +11,25 @@ import TakeMoney from './CheckoutStripe'
 const mapDispatchToProps = dispatch => {
   return {
     fetchSingleOrder: orderId => dispatch(fetchSingleOrder(orderId)),
-    getCurrentOrder: () => dispatch(getCurrentOrder())
+    getCurrentOrder: () => dispatch(getCurrentOrder()),
+    updateQuantity: (quantity, lineItemId) => dispatch(updateQuantity(quantity, lineItemId)),
+    removeItem: (lineItemId, orderId) => dispatch(removeItem(lineItemId, orderId))
   }
 }
 
 const mapStateToProps = state => {
   return {
-    currentOrderId: state.orders.currentOrderId, //state.order.id,
-    currentOrder: state.orders[state.orders.currentOrderId]
+    currentOrderId: state.orders.currentOrderId,
+    currentOrder: state.orders[state.orders.currentOrderId],
   }
 }
+
 class Cart extends React.Component {
-  state = {
-    loading: true
-  }
+
+    state = {
+      loading: true
+    }
+
   async componentDidMount() {
     this.setState({ loading: true })
     await this.props.getCurrentOrder()
@@ -42,6 +47,17 @@ class Cart extends React.Component {
       }
     }
   }
+
+  handleQuantityChange = async (event) => {
+    event.preventDefault();
+    await this.props.updateQuantity(Number(event.target.value), Number(event.target.name));
+  }
+
+  handleRemoveItemClick = async (event) => {
+    event.preventDefault();
+    await this.props.removeItem(Number(event.target.name), this.props.currentOrderId);
+  }
+
   render() {
     const { currentOrderId, currentOrder } = this.props
     const loading = this.state.loading
@@ -49,7 +65,9 @@ class Cart extends React.Component {
       return (
         <div className="container box">
           <div className="container box">
-            <p className="title">Loading</p>
+            <p className="title">
+              Loading...
+            </p>
           </div>
         </div>
       )
@@ -63,7 +81,7 @@ class Cart extends React.Component {
         </div>
       )
     }
-    let total = 0
+
     return (
       <div className="section">
         <p className="title">My Cart</p>
@@ -80,9 +98,9 @@ class Cart extends React.Component {
               </thead>
               <tbody>
                 {currentOrder.lineItems.map(item => {
-                  let { product, quantity, totalPrice } = item
+                  let {product, quantity, totalPrice, id} = item
                   return (
-                    <tr key={item.id}>
+                    <tr key={id}>
                       <td>
                         <div className="media">
                           <img
@@ -101,20 +119,28 @@ class Cart extends React.Component {
                       </td>
                       <td>${product.price}</td>
                       <td>
-                        <input type="number" placeholder={quantity} />
+                        <input type="number" onChange={this.handleQuantityChange} name={id} value={quantity}/>
                       </td>
                       <td>${totalPrice}</td>
+                      <td>
+                        <button className="delete" type="button"
+                            onClick={this.handleRemoveItemClick} name={id}
+                        />
+                      </td>
                     </tr>
                   )
                 })}
               </tbody>
               <tfoot>
+
                 <td />
                 <td />
                 <td />
                 <td>
                   <div>
-                    <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
+                    <p className="is-size-4 has-text-weight-bold">
+                    Total: ${currentOrder.total}
+                    </p>
                   </div>
                 </td>
               </tfoot>
@@ -125,6 +151,14 @@ class Cart extends React.Component {
               <p>Total: ${currentOrder.total}</p>
             </div>
             <div className="panel-block">
+              <Link to="/checkout">
+                <button
+                  type="button"
+                  className="button is-warning is-fullwidth"
+                >
+                  Checkout
+                </button>
+              </Link>
               <TakeMoney price={currentOrder.total} currentOrderId={currentOrderId} lineItems={currentOrder.lineItems} />
             </div>
           </div>

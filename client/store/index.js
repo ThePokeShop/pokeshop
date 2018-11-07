@@ -22,14 +22,14 @@ const middleware = composeWithDevTools(
 const store = createStore(reducer, middleware)
 
 export default store
-export * from './user'
-export * from './products'
-export * from './currentProduct'
+//Keep these in alphabetical order to avoid duplicating
 export * from './categories'
 export * from './categoriesAreSelected'
+export * from './currentProduct'
 export * from './review'
-export * from './signupToken'
 export * from './searchProducts'
+export * from './signupToken'
 export * from './orders'
 export * from './paginatedProducts'
-export * from './orders'
+export * from './products'
+export * from './user'
