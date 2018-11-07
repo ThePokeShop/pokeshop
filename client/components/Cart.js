@@ -1,9 +1,10 @@
 
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router'
-import { fetchSingleOrder, getCurrentOrder } from '../store'
+
+import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {fetchSingleOrder, getCurrentOrder, updateQuantity} from '../store'
+
 import Checkout from './Checkout'
 import history from '../history'
 import TakeMoney from './CheckoutStripe'
@@ -11,20 +12,26 @@ import TakeMoney from './CheckoutStripe'
 const mapDispatchToProps = dispatch => {
   return {
     fetchSingleOrder: orderId => dispatch(fetchSingleOrder(orderId)),
-    getCurrentOrder: () => dispatch(getCurrentOrder())
+    getCurrentOrder: () => dispatch(getCurrentOrder()),
+    updateQuantity: (quantity, lineItemId) => dispatch(updateQuantity(quantity, lineItemId)),
+    // removeItem:
   }
 }
 
 const mapStateToProps = state => {
   return {
-    currentOrderId: state.orders.currentOrderId, //state.order.id,
-    currentOrder: state.orders[state.orders.currentOrderId]
+    currentOrderId: state.orders.currentOrderId,
+    currentOrder: state.orders[state.orders.currentOrderId],
+    lineItems: state.orders.lineItems
   }
 }
 class Cart extends React.Component {
-  state = {
-    loading: true
-  }
+
+    state = {
+      loading: true
+    }
+
+
   async componentDidMount() {
     this.setState({ loading: true })
     await this.props.getCurrentOrder()
@@ -42,6 +49,12 @@ class Cart extends React.Component {
       }
     }
   }
+
+  handleQuantityChange = (event) => {
+    event.preventDefault();
+    this.props.updateQuantity(Number(event.target.value), Number(event.target.name));
+  }
+
   render() {
     const { currentOrderId, currentOrder } = this.props
     const loading = this.state.loading
@@ -63,7 +76,7 @@ class Cart extends React.Component {
         </div>
       )
     }
-    let total = 0
+
     return (
       <div className="section">
         <p className="title">My Cart</p>
@@ -80,9 +93,9 @@ class Cart extends React.Component {
               </thead>
               <tbody>
                 {currentOrder.lineItems.map(item => {
-                  let { product, quantity, totalPrice } = item
+                  let {product, quantity, totalPrice, id} = item
                   return (
-                    <tr key={item.id}>
+                    <tr key={id}>
                       <td>
                         <div className="media">
                           <img
@@ -101,7 +114,7 @@ class Cart extends React.Component {
                       </td>
                       <td>${product.price}</td>
                       <td>
-                        <input type="number" placeholder={quantity} />
+                        <input type="number" onChange={this.handleQuantityChange} name={id} value={quantity}/>
                       </td>
                       <td>${totalPrice}</td>
                     </tr>
