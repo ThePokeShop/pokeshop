@@ -2,7 +2,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {fetchSingleOrder, getCurrentOrder, updateQuantity} from '../store'
+import {fetchSingleOrder, getCurrentOrder, updateQuantity, removeItem} from '../store'
 import Checkout from './Checkout'
 import history from '../history'
 
@@ -11,7 +11,7 @@ const mapDispatchToProps = dispatch => {
     fetchSingleOrder: orderId => dispatch(fetchSingleOrder(orderId)),
     getCurrentOrder: () => dispatch(getCurrentOrder()),
     updateQuantity: (quantity, lineItemId) => dispatch(updateQuantity(quantity, lineItemId)),
-    // removeItem:
+    removeItem: (lineItemId, orderId) => dispatch(removeItem(lineItemId, orderId))
   }
 }
 
@@ -19,7 +19,6 @@ const mapStateToProps = state => {
   return {
     currentOrderId: state.orders.currentOrderId,
     currentOrder: state.orders[state.orders.currentOrderId],
-    lineItems: state.orders.lineItems
   }
 }
 class Cart extends React.Component {
@@ -48,6 +47,12 @@ class Cart extends React.Component {
   handleQuantityChange = (event) => {
     event.preventDefault();
     this.props.updateQuantity(Number(event.target.value), Number(event.target.name));
+  }
+
+  handleRemoveItemClick = (event) => {
+    event.preventDefault();
+    this.props.removeItem(Number(event.target.name), this.props.currentOrderId);
+    this.props.fetchSingleOrder(this.props.currentOrderId);
   }
 
   render() {
@@ -112,19 +117,26 @@ class Cart extends React.Component {
                         <input type="number" onChange={this.handleQuantityChange} name={id} value={quantity}/>
                       </td>
                       <td>${totalPrice}</td>
+                      <td>
+                        <button className="delete" type="button"
+                            onClick={this.handleRemoveItemClick} name={id}
+                        />
+                      </td>
                     </tr>
                   )
                 })}
               </tbody>
               <tfoot>
-                <td />
-                <td />
-                <td />
-                <td>
-                  <div>
-                    <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
-                  </div>
-                </td>
+                <tr>
+                  <td />
+                  <td />
+                  <td />
+                  <td>
+                    <div>
+                      <p className="is-size-4 has-text-weight-bold">${currentOrder.total}</p>
+                    </div>
+                  </td>
+                </tr>
               </tfoot>
             </table>
           </div>
