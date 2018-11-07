@@ -48,7 +48,7 @@ class UserHome extends React.Component {
       <div className="container">
         {isAdmin ? (
           <div>
-            <section className="hero is-info welcome is-small">
+            <section className="hero is-info welcome is-small is-danger">
               <div className="hero-body">
                 <div className="container">
                   <h1 className="title">Hello, admin {name}.</h1>
