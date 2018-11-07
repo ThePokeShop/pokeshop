@@ -18,6 +18,8 @@ router.post('/', async (req, res, next) => {
       description: 'Example',
       source: token.id
     })
+
+
     if (charge.status === 'succeeded') {
       const {
         address_city,
@@ -53,7 +55,8 @@ router.post('/', async (req, res, next) => {
       })
 
       // email on checkout
-
+      const email = token.email
+      const name = token.card.name
       // WHAT IS USER EMAIL? GET FROM STRIPE
       const transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -66,18 +69,18 @@ router.post('/', async (req, res, next) => {
       // PUT MORE USER/ORDER INFORMATION HERE
       const mailOptions = {
         from: 'no-reply@the-poke-shop.herokuapp.com',
-        to: user.email, // PUT EMAIL HERE
+        to: email, // PUT EMAIL HERE
         subject: `Thank you for your purchase! (Order #${orderId})`,
         // PUT NAME HERE?
         html: `<p>Hello, ${
-          user.name
+          name
         }!</p><p>Thank you for purchasing some pokemon.</p>`
       }
       transporter.sendMail(mailOptions, err => {
         if (err) {
           res.status(500).send({msg: err.message})
         } else {
-          console.log('email sent successfully')
+          console.log(`email was sent successfully to ${email}`)
         }
       })
     }
