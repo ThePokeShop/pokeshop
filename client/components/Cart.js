@@ -21,12 +21,12 @@ const mapStateToProps = state => {
     currentOrder: state.orders[state.orders.currentOrderId],
   }
 }
+
 class Cart extends React.Component {
 
     state = {
       loading: true
     }
-
 
   async componentDidMount() {
     this.setState({loading: true})
@@ -49,10 +49,10 @@ class Cart extends React.Component {
     this.props.updateQuantity(Number(event.target.value), Number(event.target.name));
   }
 
-  handleRemoveItemClick = (event) => {
+  handleRemoveItemClick = async (event) => {
     event.preventDefault();
-    this.props.removeItem(Number(event.target.name), this.props.currentOrderId);
-    this.props.fetchSingleOrder(this.props.currentOrderId);
+    await this.props.removeItem(Number(event.target.name), this.props.currentOrderId);
+    await this.props.fetchSingleOrder(this.props.currentOrderId);
   }
 
   render() {

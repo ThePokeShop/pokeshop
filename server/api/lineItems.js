@@ -1,5 +1,6 @@
 const router = require('express').Router()
-const {LineItem, Order} = require('../db/models')
+const {LineItem, Order, Product} = require('../db/models');
+const Sequelize = require('sequelize');
 module.exports = router
 
 router.post('/', async (req, res, next) => {
@@ -23,12 +24,19 @@ router.post('/', async (req, res, next) => {
 router.put('/:lineItemId', async (req, res, next) => {
   try {
     const lineItemId = req.params.lineItemId;
-    // const {quantity, totalPrice, productId} = req.body;
+    const {quantity, productId} = req.body;
 
-    const lineItem = await LineItem.findOne({where: {id: lineItemId}}, {include: [{model: Order}, {where: {status: 'active'}}]});
+    const lineItem = await LineItem.findOne(
+      {where: {id: lineItemId},
+      include:
+        [
+          {model: Order, where: {status: 'active'}}, {model: Product, where: {stockQuantity: {[Sequelize.Op.gte]: quantity}}}
+        ]
+      }
+    );
     if (lineItem) {
       await lineItem.update(
-        req.body,
+        {quantity, totalPrice: lineItem.product.price * quantity, productId},
         {where: {id: lineItemId}}
       )
       res.json(lineItem)
