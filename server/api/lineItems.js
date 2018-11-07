@@ -23,12 +23,12 @@ router.post('/', async (req, res, next) => {
 router.put('/:lineItemId', async (req, res, next) => {
   try {
     const lineItemId = req.params.lineItemId;
-    const {quantity, totalPrice, productId} = req.body;
+    // const {quantity, totalPrice, productId} = req.body;
 
     const lineItem = await LineItem.findOne({where: {id: lineItemId}}, {include: [{model: Order}, {where: {status: 'active'}}]});
     if (lineItem) {
       await lineItem.update(
-        {quantity, totalPrice, productId},
+        req.body,
         {where: {id: lineItemId}}
       )
       res.json(lineItem)
