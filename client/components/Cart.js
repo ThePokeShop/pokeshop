@@ -44,15 +44,14 @@ class Cart extends React.Component {
     }
   }
 
-  handleQuantityChange = (event) => {
+  handleQuantityChange = async (event) => {
     event.preventDefault();
-    this.props.updateQuantity(Number(event.target.value), Number(event.target.name));
+    await this.props.updateQuantity(Number(event.target.value), Number(event.target.name));
   }
 
   handleRemoveItemClick = async (event) => {
     event.preventDefault();
     await this.props.removeItem(Number(event.target.name), this.props.currentOrderId);
-    await this.props.fetchSingleOrder(this.props.currentOrderId);
   }
 
   render() {

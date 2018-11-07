@@ -52,6 +52,7 @@ router.delete('/:lineItemId', async (req, res, next) => {
   try {
     const lineItemId = req.params.lineItemId
     await LineItem.destroy({where: {id: lineItemId}})
+    res.sendStatus(204);
   } catch (err) {
     next(err)
   }
