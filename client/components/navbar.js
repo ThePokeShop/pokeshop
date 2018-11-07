@@ -1,18 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import {NavLink, Link} from 'react-router-dom'
-import {logout} from '../store'
+import { connect } from 'react-redux'
+import { NavLink, Link } from 'react-router-dom'
+import { logout } from '../store'
 import SearchBar from './SearchBar'
-import {destroySearch, setCategoriesTrue} from '../store/'
-const Navbar = ({handleClick, isLoggedIn, destroy, orders}) => {
+import { destroySearch, setCategoriesTrue } from '../store/'
+const Navbar = ({ handleClick, isLoggedIn, destroy, orders }) => {
   const currentOrderId = orders.currentOrderId
   let total = 0
   if (currentOrderId) {
-    for(let i = 0; i< orders[currentOrderId].lineItems.length; i++){
+    for (let i = 0; i < orders[currentOrderId].lineItems.length; i++) {
       total += orders[currentOrderId].lineItems[i].quantity
     }
-  
+
   }
   return (
     <nav
@@ -22,7 +22,7 @@ const Navbar = ({handleClick, isLoggedIn, destroy, orders}) => {
     >
       <div className="navbar-brand">
         <div className="navbar-item">
-          <NavLink to="/home">
+          <NavLink to="/">
             <img
               src="https://fontmeme.com/permalink/181030/daad87fcebbaa61672816a5c6bb13e9c.png"
               width="112"
@@ -45,7 +45,7 @@ const Navbar = ({handleClick, isLoggedIn, destroy, orders}) => {
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-start">
           <div className="navbar-item">
-            <NavLink to="/home">Home</NavLink>
+            <NavLink to="/">Home</NavLink>
           </div>
 
           <div className="navbar-item">
@@ -55,7 +55,7 @@ const Navbar = ({handleClick, isLoggedIn, destroy, orders}) => {
           </div>
 
           <div className="navbar-item">
-            <NavLink to="/categories">Categories</NavLink>
+            <NavLink to="/home">User Home</NavLink>
           </div>
 
           <div className="navbar-item has-dropdown is-hoverable">
@@ -82,7 +82,7 @@ const Navbar = ({handleClick, isLoggedIn, destroy, orders}) => {
         <div className="navbar-item">
           <Link to="/cart">
             <div className="buttons">
-              <div className="fa fa-shopping-cart" style={{fontSize: '24px'}} />
+              <div className="fa fa-shopping-cart" style={{ fontSize: '24px' }} />
               <div className="badge">{total}</div>
             </div>
           </Link>
@@ -98,19 +98,19 @@ const Navbar = ({handleClick, isLoggedIn, destroy, orders}) => {
             </div>
           </div>
         ) : (
-          <div className="navbar-item">
-            <div className="buttons">
-              <div className="button is-primary">
-                <strong>
-                  <Link to="/signup">Sign Up</Link>
-                </strong>
-              </div>
-              <div className="button is-light">
-                <Link to="/login">Login</Link>
+            <div className="navbar-item">
+              <div className="buttons">
+                <div className="button is-primary">
+                  <strong>
+                    <Link to="/signup">Sign Up</Link>
+                  </strong>
+                </div>
+                <div className="button is-light">
+                  <Link to="/login">Login</Link>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     </nav>
   )

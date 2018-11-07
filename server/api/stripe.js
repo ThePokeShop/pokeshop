@@ -74,17 +74,17 @@ router.post('/', async (req, res, next) => {
         // PUT NAME HERE?
         html: `<p>Hello, ${
           name
-        }!</p><p>Thank you for purchasing some pokemon.</p>`
+          }!</p><p>Thank you for purchasing some pokemon.</p>`
       }
       transporter.sendMail(mailOptions, err => {
         if (err) {
-          res.status(500).send({msg: err.message})
+          res.status(500).send({ msg: err.message })
         } else {
           console.log(`email was sent successfully to ${email}`)
         }
       })
     }
-    res.json({message: 'success'})
+    res.json({ message: 'success' })
   } catch (err) {
     next(err)
   }

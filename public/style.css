@@ -32,7 +32,7 @@
 
 main {
   align-items: center;
-  margin-top: 100px;
+  margin-top: 70px;
   margin-bottom: 60px;
   display: flex;
   flex-direction: column;
@@ -326,9 +326,32 @@ button:hover {box-shadow: 0 0 20px 0 #C0D7DD;}
   grid-template-columns: repeat(4,1fr);
   }
 
-.card {
-  height: 450px;
-  width: 250px;
+
+  .landing{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+  }
+  .logo {
+    width: 200px;
+    height: 190px;
+    align-content: center;
+  }
+  #pokemon{
+    color: white;
+  }
+
+
+  /* ------------------------------------------ */
+.cards{
+ background-color: white;
+ box-shadow: 0 2px 3px rgba(black, 0.1), 0 0 0 1px rgba(black, 0.1);
+ color: text;
+ max-width: 100%;
+ position: relative;
+ height: 450px;
+width: 250px;
+border: gray solid 1;
 }
 .badge {
   background-color: #6394F8;
