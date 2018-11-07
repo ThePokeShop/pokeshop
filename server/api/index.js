@@ -7,7 +7,7 @@ router.use('/categories', require('./categories'));
 router.use('/review', require('./review'));
 router.use('/lineItems', require('./lineItems'));
 router.use('/orders', require('./orders'));
-
+router.use('/save-stripe-token', require('./stripe'))
 router.use((req, res, next) => {
   const error = new Error('Not Found')
   error.status = 404
