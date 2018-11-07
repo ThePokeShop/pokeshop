@@ -10,7 +10,7 @@ router.post('/', async (req, res, next) => {
     const token = req.body.token
     const price = Math.floor(Number((req.body.price) * 100))
     const orderId = req.body.currentOrderId
-
+    console.log('body---->>', req.body);
 
     const charge = await stripe.charges.create({
       amount: price,
@@ -18,6 +18,7 @@ router.post('/', async (req, res, next) => {
       description: 'Example',
       source: token.id
     })
+    console.log('charge- ---> ', charge);
     if (charge.status === 'succeeded') {
       const { address_city, address_line1, address_state, address_zip } = charge.source
       const shippingAddress = {

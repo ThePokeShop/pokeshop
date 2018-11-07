@@ -77,10 +77,13 @@ export class LandingPage extends Component {
                       <div className="media-content">
                         <div className="content">
                           <p>
-                            <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                            <strong>Tom Haverford</strong> <small>@swag</small> <small>31m</small>
                             <br />
-                            The Poke Shop is just the best!!
-                            I bought a pokemon last Monday and it's so dope! <strong>#thePokeShop #pokemon #YoLo</strong>
+                            [judge looks concerned]
+"so, u want a divorce because ur wife chose Bulbasaur as her starter Pokemon?"
+...
+"GRANTED"
+*Bangs gavel 500 times* <strong>#thePokeShop #pokemon #hahah #</strong>
                           </p>
                         </div>
                       </div>
@@ -99,16 +102,19 @@ export class LandingPage extends Component {
                     <article className="media">
                       <figure className="media-left">
                         <p className="image is-64x64">
-                          <img src="https://banner2.kisspng.com/20180813/ppv/kisspng-computer-icons-yelp-mike-s-at-the-crossroads-socia-yelp-social-network-icon-free-of-flat-gradient-so-5b720dd28623a9.5564940815342012985495.jpg" />
+                          <img src="https://banner2.kisspng.com/20180319/yeq/kisspng-social-media-computer-icons-tulane-university-face-drawing-vector-twitter-5ab02d6b2d2322.1683580215214954031849.jpg" />
                         </p>
                       </figure>
                       <div className="media-content">
                         <div className="content">
                           <p>
-                            <strong>John Smith</strong> <small>@johnsmith</small> <small>31m</small>
+                            <strong>Ash</strong> <small>@ashPokeMaster</small> <small>31m</small>
                             <br />
-                            The Poke Shop is just the best!!
-                            I bought a pokemon last Monday and it's so dope! <strong>#thePokeShop #pokemon #YoLo</strong>
+                            me: PIKACHU I CHOOSE YOU!
+                            Brock: Did you just say Pikachu?
+                            me: Yeah? So?
+                            Brock: Wow. I always thought he was called Pea Cashew.
+                            <strong>#thePokeShop #pokemon #pokemonbattle</strong>
                           </p>
                         </div>
                       </div>
@@ -130,23 +136,19 @@ export class LandingPage extends Component {
                   </figure>
                 </article>
               </div>
-              <div className="tile is-parent is-shady">
-                <Link to='/products/20'>
-                  <article className="tile is-child notification is-white">
-                    <p className="title">latest arrivals</p>
-                    <figure className='image is-2by1'>
-                      <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfPet6dVNIInnnBAQj4oCDB1dQqxL79bRwxtmYrik4bdieP9GJDA' />
-                    </figure>
-                  </article>
-                </Link>
-              </div>
+              {/* <div className="tile is-parent is-shady">
+
+              </div> */}
               <div className="tile is-parent is-shady">
                 <article className="tile is-child notification is-white">
-                  <p className="title">Third column</p>
-                  <p className="subtitle">With some content</p>
-                  <div className="content">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
-                  </div>
+                  <Link to='/products/20'>
+
+                    <p className="title">latest arrivals</p>
+                    <figure className='image is-2by1'>
+                      <img src='https://img.rankedboost.com/wp-content/uploads/2016/12/Pokemon-Sun-and-Moon-Pokeballs-List-300x300.png' />
+                    </figure>
+
+                  </Link>
                 </article>
               </div>
             </div>
@@ -155,30 +157,60 @@ export class LandingPage extends Component {
                 <div className="tile">
                   <div className="tile is-parent is-vertical">
                     <article className="tile is-child notification is-white">
-                      <p className="title">Vertical tiles</p>
-                      <p className="subtitle">Top box</p>
+                      <p className="title">Fun facts</p>
+                      <p className="subtitle">Some people think <strong>Pikachu</strong> is named after rabbit-like rodents called pikas, which live across Asia, North America and Eastern Europe. Not so!
+"Pikachu" is actually a combination of two Japanese onomatopoeias, or words named after the sounds they make. In Japan, the crackle of electricity is said to make a "pika pika" sound, and the sound mice make is "chu."
+Put them together, and you've got everyone's favorite electric-type mouse!</p>
                     </article>
-                    <article className="tile is-child notification is-white">
-                      <p className="title">Vertical tiles</p>
-                      <p className="subtitle">Bottom box</p>
-                    </article>
+
                   </div>
                   <div className="tile is-parent">
                     <article className="tile is-child notification is-white">
-                      <p className="title">Middle box</p>
-                      <p className="subtitle">With an image</p>
+                      <p className="title">Poké trainer of the month</p>
+
                       <figure className="image is-4by3">
-                        <img src="https://picsum.photos/640/480/?random" alt="Description" />
+                        <img src="https://vignette.wikia.nocookie.net/ideas/images/9/9f/Ash_ketchum_render_by_tzblacktd-da9k0wb.png/revision/latest?cb=20180427162023" alt="Description" />
                       </figure>
                     </article>
                   </div>
                 </div>
                 <div className="tile is-parent is-shady">
                   <article className="tile is-child notification is-white">
-                    <p className="title">Wide column</p>
-                    <p className="subtitle">Aligned with the right column</p>
-                    <div className="content">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.</p>
+                    <p className="title">Authors</p>
+                    <p className="subtitle">GS 1809</p>
+                    <div className="columns">
+                      <div className="column">
+                        Dilan
+                        <figure className="image ">
+                          <img className=' is-rounded' src="/dilan.png" />
+                        </figure>
+                      </div>
+                      <div className="column">
+                        Roy
+                        <figure className="image">
+                          <img className=' is-rounded' src="/roy.png" />
+                        </figure>
+                      </div>
+                      <div className="column">
+                        David
+                        <figure className="image ">
+                          <img className=' is-rounded' src="/david.png" />
+                        </figure>
+                      </div>
+                      <div className="column">
+                        Dan
+                        <figure className="image">
+                          <img className=' is-rounded' src="/dan.png" />
+                        </figure>
+
+                      </div>
+                      <div className="column">
+                        Josh
+                        <figure className="image">
+                          <img className=' is-rounded' src="/josh.png" />
+                        </figure>
+
+                      </div>
                     </div>
                   </article>
                 </div>
@@ -186,15 +218,10 @@ export class LandingPage extends Component {
               <div className="tile is-parent is-shady">
                 <article className="tile is-child notification is-white">
                   <div className="content">
-                    <p className="title">Tall column</p>
+                    <p className="title">History of Pokemon</p>
                     <p className="subtitle">With even more content</p>
                     <div className="content">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula
-                              eleifend, nunc dui porta orci, quis semper odio felis ut quam.</p>
-                      <p>Suspendisse varius ligula in molestie lacinia. Maecenas varius eget ligula a sagittis. Pellentesque interdum, nisl nec interdum maximus, augue diam porttitor lorem, et sollicitudin felis neque sit amet erat. Maecenas imperdiet
-                              felis nisi, fringilla luctus felis hendrerit sit amet. Aenean vitae gravida diam, finibus dignissim turpis. Sed eget varius ligula, at volutpat tortor.</p>
-                      <p>Integer sollicitudin, tortor a mattis commodo, velit urna rhoncus erat, vitae congue lectus dolor consequat libero. Donec leo ligula, maximus et pellentesque sed, gravida a metus. Cras ullamcorper a nunc ac porta. Aliquam
-                              ut aliquet lacus, quis faucibus libero. Quisque non semper leo.</p>
+                      <p>The history of the Pokémon media franchise spans over two decades from when work began officially on the first game to now, and has roots even older.</p>  <p>It started simply enough as a hobby of Satoshi Tajiri, who as a child had a fondness for catching insects and tadpoles near his home in suburban Tokyo. Over time, Tajiri decided to put his idea of catching creatures into practice, to give children the same thrills he had as a child.</p> <p>With the help of Ken Sugimori and other friends, Tajiri formed Game Freak and much later the design studio known as Creatures. When Tajiri discovered the Game Boy and the Game Boy Game Link Cable, it gave him the image of insects traveling along the wire. Tajiri was also heavily influenced by the Ultraman fantasy television show, Ultra Seven, in which the protagonist used giant monsters contained within small capsules to help him fight. Together, these two sources gave him the idea for a new game called Capsule Monsters. After several failed attempts at pitching this idea to Nintendo, Tajiri's new friend Shigeru Miyamoto pitched it to the company, and Nintendo began to fund the project, spending six years developing the games that would become a worldwide sensation. Due to trademarking issues, the name "Capsule Monsters" was changed to "Pocket Monsters".</p>
                     </div>
                   </div>
                 </article>

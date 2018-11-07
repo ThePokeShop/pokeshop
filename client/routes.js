@@ -26,7 +26,7 @@ class Routes extends Component {
         <Route path="/signup/confirm" component={SignupConfirm} />
         <Route path='/products/search' component={SearchProductView} />
         <Route exact path="/products" component={ProductView} />
-        <Route exact path='/home' component={LandingPage} />
+        <Route exact path='/' component={LandingPage} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
         {isAdmin &&
