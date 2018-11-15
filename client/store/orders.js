@@ -64,11 +64,11 @@ export const fetchSingleOrder = (orderId) => {
   }
 };
 
-export const fetchSingleOrderAsAdmin = (orderId) => {
+export const fetchOrderAsAdmin = () => {
   return async (dispatch) => {
 
-    const { data } = await axios.get(`/api/orders/${orderId}?viewAsAdmin=true&%status=active`);
-    dispatch(setOrder(data));
+    const { data } = await axios.get(`/api/orders/?viewAsAdmin=true`);
+    dispatch(setOrders(data));
   }
 };
 
