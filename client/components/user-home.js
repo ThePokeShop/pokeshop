@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {fetchOrders} from '../store'
+import {fetchOrders, fetchOrderAsAdmin} from '../store'
 
 /**
  * COMPONENT
@@ -13,6 +13,7 @@ class UserHome extends React.Component {
   }
   async componentDidMount() {
     // let status = 'shipped'
+    await this.props.fetchOrderAsAdmin()
     await this.props.fetchOrders() // fetch results using URL
     this.setState({loading: false})
   }
@@ -221,7 +222,8 @@ const mapState = state => {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    fetchOrders: () => dispatch(fetchOrders())
+    fetchOrders: () => dispatch(fetchOrders()),
+    fetchOrderAsAdmin: ()=> dispatch(fetchOrderAsAdmin())
   }
 }
 
