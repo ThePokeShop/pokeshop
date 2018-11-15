@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute, SearchProductView, SignupSuccess, SignupConfirm, Cart, Checkout, Loading } from './components'
+import { Login, Signup, UserHome, ProductView, CurrentProduct, AddProduct, EditProduct, UnmatchedRoute, SearchProductView, SignupSuccess, SignupConfirm, Cart, Checkout, Loading, LandingPage } from './components'
 import { me, fetchProducts, fetchCategories, getCurrentOrder, fetchPaginatedProducts } from './store' // check back later
 
 
@@ -26,6 +26,7 @@ class Routes extends Component {
         <Route path="/signup/confirm" component={SignupConfirm} />
         <Route path='/products/search' component={SearchProductView} />
         <Route exact path="/products" component={ProductView} />
+        <Route exact path='/' component={LandingPage} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkout" component={Checkout} />
         {isAdmin &&
@@ -39,7 +40,7 @@ class Routes extends Component {
           <Route path="/home" component={UserHome} />
         }
 
-        <Route component={Loading} />
+        <Route component={UnmatchedRoute} />
 
       </Switch>
     )

@@ -81,6 +81,14 @@ export const createOrder = (newData) => {
   }
 }
 
+export const convertGuestOrderToUser = (orderId) => {
+  return async (dispatch) => {
+    console.log('hello')
+    const { data } = await axios.put(`api/orders/${orderId}?guestCart=true`);
+    dispatch(setOrder(data));
+  }
+}
+
 export const updateOrder = (orderId, newData) => {
   return async (dispatch) => {
     const { data } = await axios.put(`/api/orders/${orderId}`, newData);
@@ -138,8 +146,7 @@ export const updateQuantity = (quantity, lineItemId) => {
 export const removeItem = (lineItemId, orderId) => {
   return async (dispatch) => {
     await axios.delete(`/api/lineItems/${lineItemId}`);
-
-    const { data } = axios.get(`/api/orders/${orderId}`);
+    const { data } = await axios.get(`/api/orders/${orderId}`);
     dispatch(setOrder(data));
   }
 }
