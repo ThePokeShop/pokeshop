@@ -3,9 +3,6 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {fetchSingleOrder, getCurrentOrder, updateQuantity, removeItem} from '../store'
-
-import Checkout from './Checkout'
-import history from '../history'
 import TakeMoney from './CheckoutStripe'
 
 const mapDispatchToProps = dispatch => {

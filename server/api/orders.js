@@ -4,6 +4,8 @@ const {loginRequired, adminGateway} = require('../utils')
 
 router.get('/', async (req, res, next) => {
   try {
+
+    //for merging guest orders
     if (!req.user) {
       let sid = req.session.id
 
@@ -18,7 +20,9 @@ router.get('/', async (req, res, next) => {
       return
     }
 
-    let where = {}
+    //we change what we put inside where for .findAll
+    let where = {};
+
     const orderStatus = req.query.status
     const viewAsAdmin = req.query.viewAsAdmin === 'true'
     const statusVals = [
@@ -32,7 +36,8 @@ router.get('/', async (req, res, next) => {
       res.sendStatus(400)
       return
     }
-//if user is login for both admin and users
+
+//if user is loggedin, (admin or not), make sure we get userId inside where
     if (req.user) {
       const isAdmin = req.user.isAdmin
       const userId = req.user.id
@@ -40,9 +45,11 @@ router.get('/', async (req, res, next) => {
         where.userId = userId
       }
     }
+
     if (orderStatus) {
       where.status = orderStatus
     }
+
     let options = {
       where,
       include: [{model: LineItem}]
@@ -54,6 +61,8 @@ router.get('/', async (req, res, next) => {
     next(err)
   }
 })
+
+// ------------------------
 
 router.get('/:orderId', async (req, res, next) => {
   try {
